@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Helpers\login;
+use App\Http\Controllers\LoginController;
 use Closure;
 
 class Authentication
@@ -16,15 +17,8 @@ class Authentication
      */
     public function handle($request, Closure $next)
     {
-        if ($request->has('token')) {
-            $token = $request->input('token');
-            login::storage($token);
-        }
         if (!$request->session()->has('data')) {
-//            $link = $request->path();
-
-            $link = "http://survey.twtstudio.com/";
-            login::login($link);
+            LoginController::login();
         }
         return $next($request);
     }

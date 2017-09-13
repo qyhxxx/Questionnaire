@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\Authentication;
 use App\Http\Middleware\CheckToken;
+use App\Http\Middleware\StartSession;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -22,6 +23,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        CheckToken::class,
     ];
 
     /**
@@ -38,7 +40,6 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-//            Authentication::class,
         ],
 
         'api' => [

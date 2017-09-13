@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Helpers\login;
+use App\Http\Controllers\LoginController;
 use Closure;
 
 class CheckToken
@@ -18,7 +18,7 @@ class CheckToken
     {
         if ($request->has('token')) {
             $token = $request->input('token');
-            login::storage($token);
+            LoginController::storage($token);
         }
         return $next($request);
     }

@@ -50,22 +50,22 @@ class Answer extends Model {
                 break;
             case 2:
                 $answer = self::create([
-                    'answer' => $data['answer'],
-                    'okey' => $data['okey'],
+                    'answer' => $data->answer,
+                    'okey' => $data->okey,
                     'qid' => $qid
                 ]);
                 break;
             case 3:
                 $answer = self::create([
-                    'answer' => $data['answer'],
-                    'order' => $data['order'],
+                    'answer' => $data->answer,
+                    'order' => $data->order,
                     'qid' => $qid
                 ]);
                 break;
             case 4:
                 $answer = self::create([
-                    'answer' => $data['answer'],
-                    'pkey' => $data['pkey'],
+                    'answer' => $data->answer,
+                    'pkey' => $data->pkey,
                     'qid' => $qid
                 ]);
                 break;

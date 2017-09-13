@@ -3,22 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Answer;
+use App\Helpers\functions;
 use App\Option;
 use App\Question;
 use App\Questionnaire;
 use App\Submit;
+use BaconQrCode\Encoder\QrCode;
 use Illuminate\Http\Request;
 
 class QuestionnaireController extends Controller {
     public function add(Request $request) {
         if ($request->isMethod('POST')) {
             $data_questionnaire = $request->input('questionnaire');
-            $data_questionnaire = (array)$data_questionnaire;
-            dd($data_questionnaire);
-//            $data_questionnaire['user_number'] = $request->session()->get('data')['user_number'];
-//            $questionnaire = Questionnaire::add($data_questionnaire);
-//            $qnid = $questionnaire->qnid;
-//            return redirect('edit/qnid/' . $qnid);
+//            $data_questionnaire = functions::objectToArr($data_questionnaire);
+            $data_questionnaire['user_number'] = $request->session()->get('data')['user_number'];
+            $questionnaire = Questionnaire::add($data_questionnaire);
+            $qnid = $questionnaire->qnid;
+            return redirect('edit/qnid/' . $qnid);
+//            return response()->json([
+//                'qnid' => $qnid
+//            ]);
         }
         return view('Questionnaire.add');
     }
@@ -51,6 +55,21 @@ class QuestionnaireController extends Controller {
             'questionnaire' => $questionnaire,
             'question' => new Question()
         ]);
+//        return response()->json([
+//            'questionnaire' => $questionnaire,
+//            'question' => new Question()
+//        ]);
+    }
+
+    public function publish($qnid) {
+        $data = ['status' => 1];
+        $questionnaire = Questionnaire::updateByQnid($qnid, $data);
+        $name = $questionnaire->name;
+        $link = "http://localhost/submit/qnid/ . $qnid";
+        return response()->json([
+            'name' => $name,
+            'link' => $link
+        ]);
     }
 
     public function submit(Request $request, $qnid) {
@@ -58,7 +77,7 @@ class QuestionnaireController extends Controller {
             if ($request->session()->has('data')) {
                 $user_number = $request->session()->get('data')['user_number'];
             }
-            $ip = $request->getClientIp();
+            $ip = functions::getIp();
             $data = [
                 'qnid' => $qnid,
                 'user_number' => $user_number ?? null,
@@ -77,5 +96,10 @@ class QuestionnaireController extends Controller {
             'questionnaire' => $questionnaire,
             'questions' => $questions
         ]);
+    }
+
+    public function test() {
+        return view('test');
+
     }
 }

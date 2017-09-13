@@ -18,12 +18,12 @@
     <input type="text" name="option[1]"><br>
     option3:
     <input type="text" name="option[2]"><br>
-    problem1:
-    <input type="text" name="problem[0]"><br>
-    problem2:
-    <input type="text" name="problem[1]"><br>
-    problem3:
-    <input type="text" name="problem[2]"><br>
+    {{--problem1:--}}
+    {{--<input type="text" name="problem[0]"><br>--}}
+    {{--problem2:--}}
+    {{--<input type="text" name="problem[1]"><br>--}}
+    {{--problem3:--}}
+    {{--<input type="text" name="problem[2]"><br>--}}
     类型
     <select name="question[qtype]">
         @foreach($question->qtype() as $qtype => $value)

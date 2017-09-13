@@ -11,21 +11,25 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('login', ['uses' => 'LoginController@login']);
-Route::get('loginStatus', ['uses' => 'LoginController@loginStatus']);
-Route::get('index', function () {
-    return view('index');
+Route::get('/', function () {
+    //
 })->middleware('CheckToken');
+
+Route::get('login', 'LoginController@login');
+Route::get('loginStatus', 'LoginController@loginStatus');
 
 Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'edit'], function () {
-        Route::any('/', ['uses' => 'QuestionnaireController@add']);
-        Route::any('qnid/{qnid}', ['uses' => 'QuestionnaireController@addQuestion']);
+        Route::any('/', 'QuestionnaireController@add');
+        Route::any('qnid/{qnid}', 'QuestionnaireController@addQuestion');
     });
-    Route::any('submit/qnid/{qnid}', ['uses' => 'QuestionnaireController@submit']);
-    Route::get('logout', ['uses' => 'LogoutController@logout']);
+    Route::any('submit/qnid/{qnid}', 'QuestionnaireController@submit');
+    Route::group(['prefix' => 'stat/qnid{qnid}'], function () {
+        Route::any('select', 'StatisticsController@statistics');
+        Route::any('statistics', 'StatisticsController@statistics');
+    });
+    Route::get('logout', 'LogoutController@logout');
 });
+
+Route::get('test', 'QuestionnaireController@test');
