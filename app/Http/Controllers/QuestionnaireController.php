@@ -29,23 +29,31 @@ class QuestionnaireController extends Controller {
 
     public function addQuestion(Request $request, $qnid) {
         if ($request->isMethod('POST')) {
-            $data_questionnaire = $request->input('questionnaire');
-            $data_question = $request->input('question');
-            $data_option = $request->input('option');
-            $data_questionnaire['qcount'] = Questionnaire::getCount($qnid) + 1;
+            $data = $request->all();
+            $data_questionnaire = functions::objectToArr($data['questionnaire']);
+            $questions = $data['questions'];
+            $qcount = count($questions);
+            $data_questionnaire['user_number'] = $request->session()->get('data')['user_number'];
+            $data_questionnaire['qcount'] = $qcount;
             $questionnaire = Questionnaire::updateByQnid($qnid, $data_questionnaire);
-            $data_question['qnid'] = $qnid;
-            $data_question['qnum'] = $questionnaire->qcount;
-            $question = Question::add($data_question);
-            $qtype = $data_question['qtype'];
-            if ($qtype != 3 && $qtype != 4 && $qtype != 5) {
-                $qid = $question->qid;
-                $data_problem = $request->input('problem') ?? null;
-                Option::add($data_option, $data_problem, $qid, $qtype);
+            for ($i = 0; $i < $qcount; $i++) {
+                $data_question = functions::objectToArr($questions[$i]->question);
+                $data_question['qnid'] = $qnid;
+                $data_question['qnum'] = $i + 1;
+                $question = Question::add($data_question);
+                $qtype = $data_question['qtype'];
+                if ($qtype != 3 && $qtype != 4 && $qtype != 5) {
+                    $data_option = functions::objectToArr($questions[$i]->option);
+                    if (!is_null($questions[$i]->problem)) {
+                        $data_problem = functions::objectToArr($questions[$i]->problem);
+                    }
+                    $qid = $question->qid;
+                    Option::add($data_option, $data_problem ?? null, $qid, $qtype);
+                }
             }
             $questions = Question::getAllQuestions($qnid);
             return response()->json([
-                'questionnaire' => $questionnaire,
+                'questionnaire' => $questionnaire ?? null,
                 'questions' => $questions,
                 'question' => new Question()
             ]);
@@ -61,11 +69,18 @@ class QuestionnaireController extends Controller {
 //        ]);
     }
 
+    public function update(Request $request, $qnid) {
+        Question::deleteAll($qnid);
+        Option::deleteAll($qnid);
+        $newQuestionnaire = $this->addQuestion($request, $qnid);
+        return $newQuestionnaire;
+    }
+
     public function publish($qnid) {
         $data = ['status' => 1];
-        $questionnaire = Questionnaire::updateByQnid($qnid, $data);
+        $questionnaire = Questionnaire::getQuestionnaire($qnid);
         $name = $questionnaire->name;
-        $link = "http://localhost/submit/qnid/ . $qnid";
+        $link = url('submit/qnid/' . $qnid);
         return response()->json([
             'name' => $name,
             'link' => $link
@@ -78,16 +93,23 @@ class QuestionnaireController extends Controller {
                 $user_number = $request->session()->get('data')['user_number'];
             }
             $ip = functions::getIp();
-            $data = [
+            $data_submit = [
                 'qnid' => $qnid,
                 'user_number' => $user_number ?? null,
-                'ip' => $ip ?? null
+                'ip' => $ip
             ];
-            $submit = Submit::add($data);
-            $data = $request->all();
-            $answer = Answer::add($data, $qnid);
+            $submit = Submit::add($data_submit);
+            $sid = $submit->sid;
+            $data_answers = $request->all();
+            for ($i = 0; $i < count($data_answers); $i++) {
+                $qid = $data_answers[$i]->qid;
+                $question = Question::getQuestionByQid($qid);
+                $qtype = $question->qtype;
+                $data_answer = functions::objectToArr($data_answers[$i]->answers);
+                $answers[$i] = Answer::add($data_answer, $sid, $qid, $qtype);
+            }
             return response()->json([
-                'answer' => $answer
+                'answers' => $answers ?? null
             ]);
         }
         $questionnaire = Questionnaire::getQuestionnaire($qnid);

@@ -9,7 +9,7 @@ class Questionnaire extends Model {
 
     protected $primaryKey = 'qnid';
 
-    protected $fillable = ['user_number', 'name', 'qcount', 'status'];
+    protected $fillable = ['user_number', 'name', 'remark', 'qcount', 'status'];
 
     public $timestamps = true;
 
@@ -18,16 +18,15 @@ class Questionnaire extends Model {
         return $questionnaire;
     }
 
-    public static function getQuestionnaire($qnid) {
-        $questionnaire = self::find($qnid);
+    public static function updateByQnid($qnid, $data) {
+        self::getQuestionnaire($qnid)
+            ->update($data);
+        $questionnaire = self::getQuestionnaire($qnid);
         return $questionnaire;
     }
 
-    public static function updateByQnid($qnid, $data) {
+    public static function getQuestionnaire($qnid) {
         $questionnaire = self::find($qnid);
-        $questionnaire->name = $data['name'];
-        $questionnaire->qcount = $data['qcount'];
-        $questionnaire->save();
         return $questionnaire;
     }
 

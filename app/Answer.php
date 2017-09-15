@@ -17,7 +17,7 @@ class Answer extends Model {
 
     protected $primaryKey = 'aid';
 
-    protected $fillable = ['answer', 'order', 'okey', 'pkey', 'qid'];
+    protected $fillable = ['answer', 'sid', 'okey', 'pkey', 'qid'];
 
     public static function getAnswerType($qtype) {
         if (in_array($qtype, self::arr1)) {
@@ -40,16 +40,18 @@ class Answer extends Model {
         }
     }
 
-    public static function addAnswer($data, $qid, $atype) {
+    public static function addAnswer($data, $sid, $qid, $atype) {
         switch ($atype) {
             case 1:
                 $answer = self::create([
+                    'sid' => $sid,
                     'answer' => $data,
                     'qid' => $qid
                 ]);
                 break;
             case 2:
                 $answer = self::create([
+                    'sid' => $sid,
                     'answer' => $data->answer,
                     'okey' => $data->okey,
                     'qid' => $qid
@@ -57,6 +59,7 @@ class Answer extends Model {
                 break;
             case 3:
                 $answer = self::create([
+                    'sid' => $sid,
                     'answer' => $data->answer,
                     'order' => $data->order,
                     'qid' => $qid
@@ -64,6 +67,7 @@ class Answer extends Model {
                 break;
             case 4:
                 $answer = self::create([
+                    'sid' => $sid,
                     'answer' => $data->answer,
                     'pkey' => $data->pkey,
                     'qid' => $qid
@@ -73,69 +77,90 @@ class Answer extends Model {
         return $answer ?? null;
     }
 
-    public static function add($data, $qnid) {
-        for ($i = 0; $i < count($data); $i++) {
-            $qnum = $i + 1;
-            $question = Question::getQuestionByQnum($qnum);
-            $qid = $question->qid;
-            $qtype = $question->qtype;
-            $data_answer = $data[$i];
-            switch (self::getAnswerType($qtype)) {
-                case 1:
-                    $answer[$i] = self::addAnswer($data_answer, $qid, 1);
-                    break;
-                case 2:
-                    for ($j = 0; $j < count($data_answer); $j++) {
-                        $oneAns[$j] = self::addAnswer($data_answer[$j], $qid, 1);
-                    }
-                    $answer[$i] = $oneAns ?? null;
-                    break;
-                case 3:
-                    for ($j = 0; $j < count($data_answer); $j++) {
+    public static function add($data, $sid, $qid, $qtype) {
+        switch (self::getAnswerType($qtype)) {
+            case 1:
+                $answers = self::addAnswer($data, $sid, $qid, 1);
+                break;
+            case 2:
+                for ($i = 0; $i < count($data); $i++) {
+                    $answers[$i] = self::addAnswer($data[$i], $sid, $qid, 1);
+                }
+                break;
+            case 3:
+                for ($i = 0; $i < count($data); $i++) {
+                    $data_oneAns = [
+                        'okey' => $data[$i]->okey,
+                        'answer' => $data[$i]->answer
+                    ];
+                    $answers[$i] = self::addAnswer($data_oneAns, $sid, $qid, 2);
+                }
+                break;
+            case 4:
+                for ($i = 0; $i < count($data); $j++) {
+                    $data_oneAns = [
+                        'order' => $i,
+                        'answer' => $data[$i]
+                    ];
+                    $answers[$i] = self::addAnswer($data_oneAns, $sid, $qid, 3);
+                }
+                break;
+            case 5:
+                for ($i = 0; $i < count($data); $i++) {
+                    $data_oneAns = [
+                        'pkey' => $data[$i]->pkey,
+                        'answer' => $data[$i]->answer
+                    ];
+                    $answers[$i] = self::addAnswer($data_oneAns, $sid, $qid, 4);
+                }
+                break;
+            case 6:
+                for ($i = 0; $i < count($data); $i++) {
+                    $dataOfSinglePro = $data[$i];
+                    for ($j = 0; $j < count($dataOfSinglePro); $j++) {
                         $data_oneAns = [
-                            'okey' => $j,
-                            'answer' => $data_answer[$j]
+                            'answer' => $dataOfSinglePro[$j]->answer,
+                            'pkey' => $dataOfSinglePro[$j]->pkey
                         ];
-                        $oneAns[$j] = self::addAnswer($data_oneAns, $qid, 2);
+                        $oneAns[$i] = self::addAnswer($data_oneAns, $sid, $qid, 4);
                     }
-                    $answer[$i] = $oneAns ?? null;
-                    break;
-                case 4:
-                    for ($j = 0; $j < count($data_answer); $j++) {
-                        $data_oneAns = [
-                            'answer' => $data_answer[$j],
-                            'order' => $j
-                        ];
-                        $oneAns[$j] = self::addAnswer($data_oneAns, $qid, 3);
-                    }
-                    $answer[$i] = $oneAns ?? null;
-                    break;
-                case 5:
-                    for ($j = 0; $j < count($data_answer); $j++) {
-                        $data_oneAns = [
-                            'pkey' => $j,
-                            'answer' => $data_answer[$j]
-                        ];
-                        $oneAns = self::addAnswer($data_oneAns, $qid, 4);
-                    }
-                    $answer[$i] = $oneAns ?? null;
-                    break;
-                case 6:
-                    for ($j = 0; $j < count($data_answer); $j++) {
-                        $dataOfSinglePro = $data_answer[$j];
-                        for ($k = 0; $k < count($dataOfSinglePro); $k++) {
-                            $data_oneAns = [
-                                'answer' => $dataOfSinglePro[$k],
-                                'pkey' => $j
-                            ];
-                            $oneAns[$j] = self::addAnswer($data_oneAns, $qid, 4);
-                        }
-                        $ansOfSinglePro[$j] = $oneAns ?? null;
-                    }
-                    $answer[$i] = $ansOfSinglePro ?? null;
-                    break;
-            }
+                    $answers[$i] = $oneAns ?? null;
+                }
+                break;
         }
         return $answer ?? null;
+    }
+
+    public static function getAnswers($sid, $qid) {
+        $answers = self::where([
+            'sid' => $sid,
+            'qid' => $qid
+        ])->get();
+        return $answers;
+    }
+
+    public static function getSubmits($selects) {
+        $query = new Answer();
+        foreach ($selects as $select){
+            if ($select->para) {
+                $query = $query->where('qid', $select['qid'])
+                    ->whereIn('answer', $select['options']);
+            }
+        }
+        $answers = $query->get();
+        for ($i = 0; $i < count($answers); $i++) {
+            $sidArr[$i] = $answers[$i]->sid;
+        }
+        $submits = Submit::getSubmitsBySidArr($sidArr ?? null);
+        return $submits;
+    }
+
+    public static function statistics($sid, $okey) {
+        $options = self::where([
+            'sid' => $sid,
+            'answer' => $okey
+        ])->get();
+        $count = count($options);
+        return $count;
     }
 }

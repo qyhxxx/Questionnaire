@@ -15,4 +15,11 @@ class Submit extends Model {
         $submit = self::add($data);
         return $submit;
     }
+
+    public static function getSubmitsBySidArr($sidArr) {
+        $submits = self::whereIn('sid', $sidArr)
+            ->distinct()
+            ->get();
+        return $submits;
+    }
 }

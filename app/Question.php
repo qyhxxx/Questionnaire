@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\stem;
 use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model {
@@ -43,6 +44,7 @@ class Question extends Model {
         $question = self::find($qid);
         return $question;
     }
+
     public static function getQuestionByQnum($qnum) {
         $question = self::where('qnum', $qnum)->first();
         return $question;
@@ -60,5 +62,25 @@ class Question extends Model {
             );
         }
         return $questions ?? null;
+    }
+
+    public static function deleteAll($qnid) {
+        self::where('qnid', $qnid)->delete();
+        return 1;
+    }
+
+    public static function getStemsOfChoiceQuestions($qnid) {
+        $questions = self::where('qnid', $qnid)
+            ->whereIn('qtype', [0, 1, 2, 8])
+            ->orderBy('qnum')
+            ->get();
+        for ($i = 0; $i < count($questions); $i++) {
+            $stems[$i] = new stem(
+                $questions[$i]->qnum,
+                $questions[$i]->qid,
+                $questions[$i]->topic
+            );
+        }
+        return $stems ?? null;
     }
 }

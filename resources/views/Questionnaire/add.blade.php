@@ -7,6 +7,8 @@
     {{ csrf_field() }}
     name：
     <input type="text" name="questionnaire[name]"><br>
+    remark:
+    <input type="text" name="questionnaire[remark]"><br>
     <button type="submit">submit</button>
 </form>
 </body>

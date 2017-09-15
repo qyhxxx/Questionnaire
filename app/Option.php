@@ -13,7 +13,7 @@ class Option extends Model {
 
     protected $primaryKey = 'oid';
 
-    protected $fillable = ['qid', 'okey', 'option', 'pkey', 'problem'];
+    protected $fillable = ['qid', 'qnid', 'okey', 'option', 'pkey', 'problem'];
 
     public $timestamps = false;
 
@@ -39,13 +39,14 @@ class Option extends Model {
         return ['options' => $options, 'problems' => $problems];
     }
 
-    public static function batchAdd($data, $qid, $isOption) {
+    public static function batchAdd($data, $qnid, $qid, $isOption) {
         $count = count($data);
         $keys = array_keys($data);
         if ($isOption) {
             for ($i = 0; $i < $count; $i++) {
                 $options[$i] = self::create([
                     'qid' => $qid,
+                    'qnid' => $qnid,
                     'okey' => $keys[$i],
                     'option' => $data[$keys[$i]]
                 ]);
@@ -56,6 +57,7 @@ class Option extends Model {
             for ($i = 0; $i < $count; $i++) {
                 $problems[$i] = self::create([
                     'qid' => $qid,
+                    'qnid' => $qnid,
                     'pkey' => $keys[$i],
                     'problem' => $data[$keys[$i]]
                 ]);
@@ -64,17 +66,17 @@ class Option extends Model {
         }
     }
 
-    public static function add($data_option, $data_problem = null, $qid, $qtype) {
+    public static function add($data_option, $data_problem = null, $qnid, $qid, $qtype) {
         switch (self::getFormType($qtype)) {
             case 1:
-                $options = self::batchAdd($data_option, $qid, 1);
+                $options = self::batchAdd($data_option, $qnid, $qid, 1);
                 break;
             case 2:
-                $options = self::batchAdd($data_option, $qid, 1);
-                $problems = self::batchAdd($data_problem, $qid, 0);
+                $options = self::batchAdd($data_option, $qnid, $qid, 1);
+                $problems = self::batchAdd($data_problem, $qnid, $qid, 0);
                 break;
             case 3:
-                $problems = self::batchAdd($data_problem, $qid, 0);
+                $problems = self::batchAdd($data_problem, $qnid, $qid, 0);
                 break;
         }
         $contents = [
@@ -82,5 +84,15 @@ class Option extends Model {
             'problems' => $problems ?? null
         ];
         return $contents;
+    }
+
+    public static function getOptionsByQid($qid) {
+        $options = self::where('qid', $qid)->all();
+        return $options;
+    }
+
+    public static function deleteAll($qnid) {
+        self::where('qnid', $qnid)->delete();
+        return 1;
     }
 }
