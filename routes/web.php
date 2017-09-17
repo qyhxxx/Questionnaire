@@ -11,10 +11,9 @@
 |
 */
 
-
 Route::get('/', function () {
     //
-})->middleware('CheckToken');
+})->middleware('VerifyToken');
 
 Route::get('login', 'LoginController@login');
 Route::get('loginStatus', 'LoginController@loginStatus');
@@ -34,4 +33,8 @@ Route::group(['middleware' => ['Authentication']], function () {
     Route::get('logout', 'LogoutController@logout');
 });
 
-Route::get('test', 'QuestionnaireController@test');
+
+Route::post('test', function (\Illuminate\Http\Request $request) {
+    $questionnaire = $request->input('questionnaire');
+    dd($questionnaire);
+});

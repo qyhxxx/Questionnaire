@@ -16,3 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('test', function (Request $request) {
+    $questionnaire = $request->input('questionnaire');
+//    $questionnaire = \App\Helpers\functions::objectToArr($questionnaire);
+    return $questionnaire;
+});

@@ -9,7 +9,7 @@ class Questionnaire extends Model {
 
     protected $primaryKey = 'qnid';
 
-    protected $fillable = ['user_number', 'name', 'remark', 'qcount', 'status'];
+    protected $fillable = ['twt_name', 'name', 'remark', 'qcount', 'status'];
 
     public $timestamps = true;
 
@@ -19,8 +19,7 @@ class Questionnaire extends Model {
     }
 
     public static function updateByQnid($qnid, $data) {
-        self::getQuestionnaire($qnid)
-            ->update($data);
+        self::getQuestionnaire($qnid)->update($data);
         $questionnaire = self::getQuestionnaire($qnid);
         return $questionnaire;
     }

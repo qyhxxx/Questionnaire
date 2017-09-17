@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use App\Http\Controllers\LoginController;
 use Closure;
 
-class CheckToken
+class VerifyToken
 {
     /**
      * Handle an incoming request.

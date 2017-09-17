@@ -3,7 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\Authentication;
-use App\Http\Middleware\CheckToken;
+use App\Http\Middleware\VerifyToken;
 use App\Http\Middleware\StartSession;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -23,7 +23,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        CheckToken::class,
+        VerifyToken::class,
     ];
 
     /**
@@ -63,6 +63,6 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'Authentication' => Authentication::class,
-        'CheckToken' => CheckToken::class,
+        'VerifyToken' => VerifyToken::class,
     ];
 }

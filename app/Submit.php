@@ -22,4 +22,19 @@ class Submit extends Model {
             ->get();
         return $submits;
     }
+
+    public static function verifyRepeat($twt_name = null, $ip) {
+        if ($twt_name != null) {
+            $submit = self::where('twt_name', $twt_name)->get();
+        }
+        else {
+            $submit = self::where('ip', $ip)->get();
+        }
+        if (empty($submit)) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
 }

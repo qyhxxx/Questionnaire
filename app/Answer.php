@@ -7,11 +7,10 @@ use Illuminate\Http\Request;
 
 class Answer extends Model {
     const arr1 = [0, 3, 4, 5];
-    const arr2 = [1];
-    const arr3 = [2];
-    const arr4 = [6];
-    const arr5 = [7, 9];
-    const arr6 = [8];
+    const arr2 = [1, 2];
+    const arr3 = [6];
+    const arr4 = [7, 9];
+    const arr5 = [8];
 
     protected $table = 'answers';
 
@@ -32,18 +31,16 @@ class Answer extends Model {
         else if (in_array($qtype, self::arr4)) {
             return 4;
         }
-        else if (in_array($qtype, self::arr5)) {
-            return 5;
-        }
         else {
-            return 6;
+            return 5;
         }
     }
 
-    public static function addAnswer($data, $sid, $qid, $atype) {
+    public static function addAnswer($data, $qnid, $sid, $qid, $atype) {
         switch ($atype) {
             case 1:
                 $answer = self::create([
+                    'qnid' => $qnid,
                     'sid' => $sid,
                     'answer' => $data,
                     'qid' => $qid
@@ -51,22 +48,16 @@ class Answer extends Model {
                 break;
             case 2:
                 $answer = self::create([
-                    'sid' => $sid,
-                    'answer' => $data->answer,
-                    'okey' => $data->okey,
-                    'qid' => $qid
-                ]);
-                break;
-            case 3:
-                $answer = self::create([
+                    'qnid' => $qnid,
                     'sid' => $sid,
                     'answer' => $data->answer,
                     'order' => $data->order,
                     'qid' => $qid
                 ]);
                 break;
-            case 4:
+            case 3:
                 $answer = self::create([
+                    'qnid' => $qnid,
                     'sid' => $sid,
                     'answer' => $data->answer,
                     'pkey' => $data->pkey,
@@ -77,52 +68,43 @@ class Answer extends Model {
         return $answer ?? null;
     }
 
-    public static function add($data, $sid, $qid, $qtype) {
+    public static function add($data, $qnid, $sid, $qid, $qtype) {
         switch (self::getAnswerType($qtype)) {
             case 1:
-                $answers = self::addAnswer($data, $sid, $qid, 1);
+                $answers = self::addAnswer($data, $qnid, $sid, $qid, 1);
                 break;
             case 2:
                 for ($i = 0; $i < count($data); $i++) {
-                    $answers[$i] = self::addAnswer($data[$i], $sid, $qid, 1);
+                    $answers[$i] = self::addAnswer($data[$i], $qnid, $sid, $qid, 1);
                 }
                 break;
             case 3:
                 for ($i = 0; $i < count($data); $i++) {
                     $data_oneAns = [
-                        'okey' => $data[$i]->okey,
-                        'answer' => $data[$i]->answer
+                        'answer' => $data[$i],
+                        'order' => $i
                     ];
-                    $answers[$i] = self::addAnswer($data_oneAns, $sid, $qid, 2);
+                    $answers[$i] = self::addAnswer($data_oneAns, $qnid, $sid, $qid, 2);
                 }
                 break;
             case 4:
-                for ($i = 0; $i < count($data); $j++) {
+                for ($i = 0; $i < count($data); $i++) {
                     $data_oneAns = [
-                        'order' => $i,
-                        'answer' => $data[$i]
+                        'answer' => $data[$i]->answer,
+                        'pkey' => $i
                     ];
-                    $answers[$i] = self::addAnswer($data_oneAns, $sid, $qid, 3);
+                    $answers[$i] = self::addAnswer($data_oneAns, $qnid, $sid, $qid, 3);
                 }
                 break;
             case 5:
-                for ($i = 0; $i < count($data); $i++) {
-                    $data_oneAns = [
-                        'pkey' => $data[$i]->pkey,
-                        'answer' => $data[$i]->answer
-                    ];
-                    $answers[$i] = self::addAnswer($data_oneAns, $sid, $qid, 4);
-                }
-                break;
-            case 6:
                 for ($i = 0; $i < count($data); $i++) {
                     $dataOfSinglePro = $data[$i];
                     for ($j = 0; $j < count($dataOfSinglePro); $j++) {
                         $data_oneAns = [
                             'answer' => $dataOfSinglePro[$j]->answer,
-                            'pkey' => $dataOfSinglePro[$j]->pkey
+                            'pkey' => $j
                         ];
-                        $oneAns[$i] = self::addAnswer($data_oneAns, $sid, $qid, 4);
+                        $oneAns[$i] = self::addAnswer($data_oneAns, $qnid, $sid, $qid, 3);
                     }
                     $answers[$i] = $oneAns ?? null;
                 }
