@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\functions;
 use Illuminate\Database\Eloquent\Model;
 
 class Option extends Model {
@@ -13,7 +14,7 @@ class Option extends Model {
 
     protected $primaryKey = 'oid';
 
-    protected $fillable = ['qid', 'qnid', 'okey', 'option', 'pkey', 'problem'];
+    protected $fillable = ['qid', 'qnid', 'okey', 'option', 'test', 'pkey', 'problem'];
 
     public $timestamps = false;
 
@@ -41,14 +42,14 @@ class Option extends Model {
 
     public static function batchAdd($data, $qnid, $qid, $isOption) {
         $count = count($data);
-        $keys = array_keys($data);
         if ($isOption) {
             for ($i = 0; $i < $count; $i++) {
                 $options[$i] = self::create([
                     'qid' => $qid,
                     'qnid' => $qnid,
-                    'okey' => $keys[$i],
-                    'option' => $data[$keys[$i]]
+                    'okey' => functions::numToChar($i),
+                    'option' => $data[$i]['option'],
+                    'test' => $data[$i]['test'] ?? null
                 ]);
             }
             return $options ?? null;
@@ -58,8 +59,8 @@ class Option extends Model {
                 $problems[$i] = self::create([
                     'qid' => $qid,
                     'qnid' => $qnid,
-                    'pkey' => $keys[$i],
-                    'problem' => $data[$keys[$i]]
+                    'pkey' => $i + 1,
+                    'problem' => $data[$i]['problem']
                 ]);
             }
             return $problems ?? null;

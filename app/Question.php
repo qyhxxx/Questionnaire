@@ -12,7 +12,7 @@ class Question extends Model {
 
     protected $primaryKey = 'qid';
 
-    protected $fillable = ['qnid', 'qnum', 'topic', 'remark', 'qtype', 'isrequired', 'stype', 'srange', 'min', 'max'];
+    protected $fillable = ['qnid', 'qnum', 'topic', 'remark', 'qtype', 'isrequired', 'stype', 'srange', 'min', 'max', 'test'];
 
     public $timestamps = false;
 
@@ -69,18 +69,27 @@ class Question extends Model {
         return 1;
     }
 
-    public static function getStemsOfChoiceQuestions($qnid) {
+    public static function getChoiceQuestions($qnid) {
         $questions = self::where('qnid', $qnid)
             ->whereIn('qtype', [0, 1, 2, 8])
             ->orderBy('qnum')
             ->get();
-        for ($i = 0; $i < count($questions); $i++) {
-            $stems[$i] = new stem(
-                $questions[$i]->qnum,
-                $questions[$i]->qid,
-                $questions[$i]->topic
-            );
-        }
-        return $stems ?? null;
+        return $questions;
+    }
+
+    public static function getonequestion($qnid,$qid){
+        $data = self::where(['qnid' => $qnid,'qid' => $qid])->get();
+        return $data;
+    }
+
+    public static function getquestions($qnid){
+        $data = self::where('qnid',$qnid)->get();
+        return $data;
+    }
+
+    public static function getQuestionsBySid($sid) {
+        $qnid = Submit::getQnidBySid($sid);
+        $questions = self::where('qnid', $qnid)->get();
+        return $questions;
     }
 }

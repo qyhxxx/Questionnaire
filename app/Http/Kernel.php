@@ -3,6 +3,8 @@
 namespace App\Http;
 
 use App\Http\Middleware\Authentication;
+use App\Http\Middleware\Cors;
+use App\Http\Middleware\test;
 use App\Http\Middleware\VerifyToken;
 use App\Http\Middleware\StartSession;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -24,6 +26,7 @@ class Kernel extends HttpKernel
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         VerifyToken::class,
+        Cors::class,
     ];
 
     /**
@@ -64,5 +67,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'Authentication' => Authentication::class,
         'VerifyToken' => VerifyToken::class,
+        'Cors' => Cors::class,
     ];
 }

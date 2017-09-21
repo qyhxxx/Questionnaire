@@ -20,4 +20,10 @@ class functions {
         }
         return $ip;
     }
+
+    public static function numToChar($num) {
+        $arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        return $arr[$num];
+    }
 }

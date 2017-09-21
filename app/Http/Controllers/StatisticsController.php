@@ -10,26 +10,24 @@ use Illuminate\Support\Facades\DB;
 
 class StatisticsController extends Controller {
     public function getStems($qnid) {
-        $stems = Question::getStemsOfChoiceQuestions($qnid);
+        $quesions = Question::getChoiceQuestions($qnid);
         return response()->json([
-            'stems' => $stems ?? null
+            'questions' => $quesions
         ]);
     }
 
     public function getOptions(Request $request) {
-        $qid = $request->input('qid');
-        $question = Question::getQuestionByQid($qid);
-        $qtype = $question->qtype;
-        if ($qtype == 5) {
+        $question = $request->input('question');
+        if ($question['qtype'] == 5) {
             $options = [
-                'stype' => $question->stype,
-                'srange' => $question->srange,
-                'min' => $question->min,
-                'max' => $question->max
+                'stype' => $question['stype'],
+                'srange' => $question['srang'],
+                'min' => $question['min'],
+                'max' => $question['max']
             ];
         }
         else {
-            $options = Option::getOptionsByQid($qid);
+            $options = Option::getOptionsByQid($question['qid']);
         }
         return response()->json([
             'options' => $options
@@ -40,17 +38,14 @@ class StatisticsController extends Controller {
         $data = $request->all();
         $selects = $data['selects'];
         $showQid = $data['showQid'];
-        $submits = Answer::getSubmits($selects);
+        $sidArr = Answer::getSidArr($selects);
         $question = Question::getQuestionByQid($showQid);
         $qid = $question->qid;
         $options = Option::getOptionsByQid($qid);
         foreach ($options as $option) {
             $okey = $option->okey;
             $statistics[$okey] = 0;
-            foreach ($submits as $submit) {
-                $sid = $submit->sid;
-                $statistics[$okey] += Answer::statistics($sid, $okey);
-            }
+            $statistics[$okey] += Answer::statistics($sidArr, $qid, $okey);
         }
         return $statistics ?? null;
     }

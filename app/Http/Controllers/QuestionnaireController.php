@@ -21,10 +21,10 @@ class QuestionnaireController extends Controller {
             $data_questionnaire['status'] = 1;
             $questionnaire = Questionnaire::add($data_questionnaire);
             $qnid = $questionnaire->qnid;
-            return redirect('edit/qnid/' . $qnid);
-//            return response()->json([
-//                'qnid' => $qnid
-//            ]);
+//            return redirect('edit/qnid/' . $qnid);
+            return response()->json([
+                'qnid' => $qnid
+            ]);
         }
         return view('Questionnaire.add');
     }
@@ -32,29 +32,29 @@ class QuestionnaireController extends Controller {
     public function addQuestion(Request $request, $qnid) {
         if ($request->isMethod('POST')) {
             $data = $request->all();
-            $data_questionnaire = functions::objectToArr($data['questionnaire']);
-            $data_questions = functions::objectToArr($data['questions']);
+            $data_questionnaire = $data['questionnaire'];
+            $data_questions = $data['questions'];
             $qcount = count($data_questions);
             $data_questionnaire['qcount'] = $qcount;
             $questionnaire = Questionnaire::updateByQnid($qnid, $data_questionnaire);
             for ($i = 0; $i < $qcount; $i++) {
-                $data_question = functions::objectToArr($data_questions[$i]->question);
+                $data_question = $data_questions[$i]['question'];
                 $data_question['qnid'] = $qnid;
                 $data_question['qnum'] = $i + 1;
                 $question = Question::add($data_question);
                 $qtype = $data_question['qtype'];
                 if ($qtype != 3 && $qtype != 4 && $qtype != 5) {
-                    $data_option = functions::objectToArr($data_questions[$i]->option);
-                    $data_problem = functions::objectToArr($data_questions[$i]->problem ?? null);
+                    $data_option = $data_questions[$i]['options'];
+                    $data_problem = $data_questions[$i]['problem'] ?? null;
                     $qid = $question->qid;
-                    Option::add($data_option, $data_problem, $qid, $qtype);
+                    Option::add($data_option, $data_problem, $qnid, $qid, $qtype);
                 }
             }
             $questions = Question::getAllQuestions($qnid);
             return response()->json([
                 'questionnaire' => $questionnaire ?? null,
                 'questions' => $questions,
-                'question' => new Question()
+//                'question' => new Question()
             ]);
         }
         $questionnaire = Questionnaire::getQuestionnaire($qnid);

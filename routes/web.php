@@ -13,7 +13,7 @@
 
 Route::get('/', function () {
     //
-})->middleware('VerifyToken');
+});
 
 Route::get('login', 'LoginController@login');
 Route::get('loginStatus', 'LoginController@loginStatus');
@@ -30,11 +30,28 @@ Route::group(['middleware' => ['Authentication']], function () {
         Route::post('getOptions', 'StatisticsController@getOptions');
         Route::post('statistics', 'StatisticsController@statistics');
     });
+
+    //我的问卷
+    Route::group(['prefix' => 'minequestion'], function () {
+
+        //问卷缩略图页面
+        Route::post('/mine', 'MineQuestionController@reach');
+        Route::get('/mine', 'MineQuestionController@mine');
+
+        //问卷展开[概述、设置]
+        Route::any('/overview/{id}', 'MineQuestionController@overview');
+//        Route::get('/overview/{id}', function () {
+//            return view('minequestion.overview');
+//        });
+
+        //问卷展开[数据]
+        Route::get('/answerdata/{id}','MineQuestionController@answerdata');
+    });
+
     Route::get('logout', 'LogoutController@logout');
 });
 
 
-Route::post('test', function (\Illuminate\Http\Request $request) {
-    $questionnaire = $request->input('questionnaire');
-    dd($questionnaire);
+Route::get('test', function () {
+   return \App\Helpers\functions::numToChar(5);
 });

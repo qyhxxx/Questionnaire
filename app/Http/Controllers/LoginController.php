@@ -28,17 +28,13 @@ class LoginController extends Controller {
             $result = $userinfo->result;
             $data['user_number'] = $result->user_number;
             $data['twt_name'] = $result->twt_name;
-            $usr = Usr::add($data);
+            Usr::add($data);
             $data['token'] = $token;
             session(['data' => $data]);
-            return response()->json([
-                'status' => 1
-            ]);
+            return 1;
         }
         else {
-            return response()->json([
-                'status' => 0
-            ]);
+            return 0;
         }
     }
 
