@@ -32,4 +32,11 @@ class Editor extends Model{
         return $data;
     }
 
+    public static function geteid($twt_name){
+        $data = self::where('twt_name', $twt_name)->get();
+        for ($i = 0; $i < count($data); $i++) {
+            $eid[$i] = $data[$i]->id;
+        }
+        return $eid ?? null;
+    }
 }

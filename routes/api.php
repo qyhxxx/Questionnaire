@@ -23,6 +23,7 @@ Route::get('/', function () {
 
 Route::get('login', 'LoginController@login');
 Route::get('loginStatus', 'LoginController@loginStatus');
+Route::any('submit/qnid/{qnid}', 'QuestionnaireController@submit');
 
 Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'edit'], function () {
@@ -30,7 +31,6 @@ Route::group(['middleware' => ['Authentication']], function () {
         Route::any('qnid/{qnid}', 'QuestionnaireController@addQuestion');
         Route::post('updata/qnid/{qnid}', 'QuestionnaireController@update');
     });
-    Route::any('submit/qnid/{qnid}', 'QuestionnaireController@submit');
     Route::group(['prefix' => 'stat/qnid/{qnid}'], function () {
         Route::get('getStems', 'StatisticsController@getStems');
         Route::post('getOptions', 'StatisticsController@getOptions');
@@ -41,8 +41,8 @@ Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'minequestion'], function () {
 
         //问卷缩略图页面
-        Route::post('/mine', 'MineQuestionController@reach');
-        Route::get('/mine', 'MineQuestionController@mine');
+        Route::post('/mine', 'MineQuestionController@mine');
+        Route::get('/mine', 'MineQuestionController@questionnaire');
 
         //问卷展开[概述、设置]
         Route::any('/overview/{id}', 'MineQuestionController@overview');

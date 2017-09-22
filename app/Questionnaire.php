@@ -56,77 +56,94 @@ class Questionnaire extends Model {
         $reach = self::where('name','like','%'.$data.'%')->get();
         return $reach;
     }
-    //缩略图排序
+
+    //缩略图页面搜索相应问卷
     public static function sequence($order_status = null,$order_sequence,$id){
         if($order_status == null){
             if($order_sequence==1) {
-                $questionnaire = self::where('qnid', $id)
-                    ->orderBy('created_at','desc')
-                    ->get();
+                foreach ($id as $key=>$val){
+                    $questionnaire = self::where('qnid', $val)
+                        ->orderBy('created_at','desc')
+                        ->get();
+                }
             }
             else {
-                $questionnaire = self::where('qnid', $id)
-                    ->orderBy('created_at','asc')
-                    ->get();
+                foreach ($id as $key=>$val){
+                    $questionnaire = self::where('qnid', $val)
+                        ->orderBy('created_at','asc')
+                        ->get();
+                }
             }
-            return $questionnaire;
+            return $questionnaire ?? null;
         }
         elseif ($order_status ==0){
             if($order_sequence==1) {
-                $questionnaire = self::where([
-                    'status' => 0,
-                    'qnid' => $id,
-                ])
-                    ->orderBy('created_at','desc')
-                    ->get();
+                foreach ($id as $key=>$val){
+                    $questionnaire = self::where([
+                        'status' => 0,
+                        'qnid' => $val,
+                    ])
+                        ->orderBy('created_at','desc')
+                        ->get();
+                }
             }
             else {
-                $questionnaire = self::where([
-                    'status' => 0,
-                    'qnid' => $id,
-                ])
-                    ->orderBy('created_at','asc')
-                    ->get();
+                foreach ($id as $key=>$val){
+                    $questionnaire = self::where([
+                        'status' => 0,
+                        'qnid' => $val,
+                    ])
+                        ->orderBy('created_at','asc')
+                        ->get();
+                }
             }
-            return $questionnaire;
+            return $questionnaire ?? null;
         }
         elseif ($order_status == 1){
             if($order_sequence==1) {
-                $questionnaire = self::where([
-                    'status' => 1,
-                    'qnid' =>$id,
-                ])
-                    ->orderBy('created_at','desc')
-                    ->get();
+                foreach ($id as $key=>$val){
+                    $questionnaire = self::where([
+                        'status' => 1,
+                        'qnid' =>$val,
+                    ])
+                        ->orderBy('created_at','desc')
+                        ->get();
+                }
             }
             else {
-                $questionnaire = self::where([
-                    'status' => 1,
-                    'qnid' => $id,
-                ])
-                    ->orderBy('created_at','asc')
-                    ->get();
+                foreach ($id as $key=>$val){
+                    $questionnaire = self::where([
+                        'status' => 1,
+                        'qnid' => $id,
+                    ])
+                        ->orderBy('created_at','asc')
+                        ->get();
+                }
             }
-            return $questionnaire;
+            return $questionnaire ?? null;
         }
         else{
             if($order_sequence==1) {
-                $questionnaire = self::where([
-                    'status' => 2,
-                    'qnid' => $id,
-                ])
-                    ->orderBy('created_at','desc')
-                    ->get();
+                foreach ($id as $key=>$val){
+                    $questionnaire = self::where([
+                        'status' => 2,
+                        'qnid' => $id,
+                    ])
+                        ->orderBy('created_at','desc')
+                        ->get();
+                }
             }
             else {
-                $questionnaire = self::where([
-                    'status' => 2,
-                    'qnid' => $id,
-                ])
-                    ->orderBy('created_at','asc')
-                    ->get();
+                foreach ($id as $key=>$val){
+                    $questionnaire = self::where([
+                        'status' => 2,
+                        'qnid' => $id,
+                    ])
+                        ->orderBy('created_at','asc')
+                        ->get();
+                }
             }
-            return $questionnaire;
+            return $questionnaire ?? null;
         }
     }
 
@@ -139,5 +156,8 @@ class Questionnaire extends Model {
         }
     }
 
-
+    public static function getQuestionnaires($eid){
+        $questionnaires = self::where('eid', $eid)->get();
+        return $questionnaires;
+    }
 }

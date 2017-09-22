@@ -14,24 +14,36 @@ use BaconQrCode\Encoder\QrCode;
 
 class MineQuestionController extends Controller
 {
+    //初始返回数据
+    public function questionnaire(Request $request){
+        $twt_name = $request->session()->get('data')['twt_name'];
+        $eid = Editor::geteid($twt_name);
+        for ($i = 0; $i < count($eid); $i++) {
+            $questionnaire[$i] = Questionnaire::getQuestionnaires($eid[$i]);
+        }
+        return response()->json([
+            'questionnaire' => $questionnaire ?? null
+        ]);
+    }
+
     //问卷缩略图页面
     public function mine(Request $request){
         $order_status = $request->input('order_status');
         $order_sequence = $request->input('order_sequence');
         $twt_name = $request->session()->get('data')['twt_name'];
-        $questionnaires =Editor::questionnaires($twt_name);
-        $id = null;
-        $questionnaire = null;
-        foreach ($questionnaires as $val) {
-            $id = $val->qnid;
+        $questionnaires = Editor::questionnaires($twt_name);
+        $id = array();
+        if ($questionnaires) {
+            foreach ($questionnaires as $key=>$val) {
+                $id[$key] = $val->qnid;
+            }
         }
-        if($id != null) {
+        if($id) {
             $questionnaire = Questionnaire::sequence($order_status, $order_sequence, $id);
             return response()->json([
                 'questionnaire' => $questionnaire,
             ]);
         }
-        // return view('minequestion.mine');
     }
     //问卷缩略图页面搜索问卷
     public function reach(Request $request){

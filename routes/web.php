@@ -34,9 +34,11 @@ Route::group(['middleware' => ['Authentication']], function () {
     //我的问卷
     Route::group(['prefix' => 'minequestion'], function () {
 
+        Route::get('/mine', 'MineQuestionController@questionnaire');
+
         //问卷缩略图页面
-        Route::post('/mine', 'MineQuestionController@reach');
-        Route::get('/mine', 'MineQuestionController@mine');
+    //    Route::post('/mine', 'MineQuestionController@reach');
+        Route::post('/mine', 'MineQuestionController@mine');
 
         //问卷展开[概述、设置]
         Route::any('/overview/{id}', 'MineQuestionController@overview');
