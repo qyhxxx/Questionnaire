@@ -14,33 +14,28 @@ use Illuminate\Http\Request;
 
 class QuestionnaireController extends Controller {
     public function add(Request $request) {
-        if ($request->isMethod('POST')) {
-            $data_questionnaire = $request->input('questionnaire');
-//            $data_questionnaire = functions::objectToArr($data_questionnaire);
-            $data_questionnaire['twt_name'] = $request->session()->get('data')['twt_name'];
-            $data_questionnaire['qcount'] = 0;
-            $data_questionnaire['status'] = 1;
-            $questionnaire = Questionnaire::add($data_questionnaire);
-            $qnid = $questionnaire->qnid;
-            $editor = Editor::add($request->session()->get('data')['twt_name'], $qnid);
-            $eid = $editor->id;
-            $data = ['eid' => $eid];
-            Questionnaire::updateByQnid($qnid, $data);
-//            return redirect('edit/qnid/' . $qnid);
-            return response()->json([
-                'qnid' => $qnid
-            ]);
-        }
-        return view('Questionnaire.add');
+        $data = $request->all();
+        $twt_name = $request->session()->get('data')['twt_name'];
+        $qnid = $this->store($data, $twt_name);
+        $link = 'http://http://survey.twtstudio.com/submit/qnid/' . $qnid;
+        return response()->json([
+            'link' => $link
+        ]);
     }
 
-    public function store($data, $qnid) {
+    public function store($data, $twt_name) {
         $data_questionnaire = $data['questionnaire'];
         $data_questions = $data['questions'];
         $qcount = count($data_questions);
+        $data_questionnaire['twt_name'] = $twt_name;
         $data_questionnaire['qcount'] = $qcount;
         $data_questionnaire['status'] = 1;
-        Questionnaire::updateByQnid($qnid, $data_questionnaire);
+        $questionnaire = Questionnaire::add($data_questionnaire);
+        $qnid = $questionnaire->qnid;
+        $editor = Editor::add($twt_name, $qnid);
+        $eid = $editor->id;
+        $data = ['eid' => $eid];
+        Questionnaire::updateByQnid($qnid, $data);
         for ($i = 0; $i < $qcount; $i++) {
             $data_question = $data_questions[$i]['question'];
             $data_question['qnid'] = $qnid;
@@ -49,56 +44,12 @@ class QuestionnaireController extends Controller {
             $qtype = $data_question['qtype'];
             if ($qtype != 3 && $qtype != 4 && $qtype != 5) {
                 $data_option = $data_questions[$i]['options'];
-                $data_problem = $data_questions[$i]['problem'] ?? null;
+                $data_problem = $data_questions[$i]['problems'] ?? null;
                 $qid = $question->qid;
                 Option::add($data_option, $data_problem, $qnid, $qid, $qtype);
             }
         }
-    }
-
-    public function addQuestion(Request $request, $qnid) {
-        if ($request->isMethod('POST')) {
-            $data = $request->all();
-            $this->store($data, $qnid);
-//            $data_questionnaire = $data['questionnaire'];
-//            $data_questions = $data['questions'];
-//            $qcount = count($data_questions);
-//            $data_questionnaire['qcount'] = $qcount;
-//            $data_questionnaire['status'] = 1;
-//            Questionnaire::updateByQnid($qnid, $data_questionnaire);
-//            for ($i = 0; $i < $qcount; $i++) {
-//                $data_question = $data_questions[$i]['question'];
-//                $data_question['qnid'] = $qnid;
-//                $data_question['qnum'] = $i + 1;
-//                $question = Question::add($data_question);
-//                $qtype = $data_question['qtype'];
-//                if ($qtype != 3 && $qtype != 4 && $qtype != 5) {
-//                    $data_option = $data_questions[$i]['options'];
-//                    $data_problem = $data_questions[$i]['problem'] ?? null;
-//                    $qid = $question->qid;
-//                    Option::add($data_option, $data_problem, $qnid, $qid, $qtype);
-//                }
-//            }
-            $link = 'http://http://survey.twtstudio.com/submit/qnid/' . $qnid;
-            return response()->json([
-                'link' => $link
-            ]);
-//            $questions = Question::getAllQuestions($qnid);
-//            return response()->json([
-//                'questionnaire' => $questionnaire ?? null,
-//                'questions' => $questions,
-////                'question' => new Question()
-//            ]);
-        }
-        $questionnaire = Questionnaire::getQuestionnaire($qnid);
-        return view('Question.add', [
-            'questionnaire' => $questionnaire,
-            'question' => new Question()
-        ]);
-//        return response()->json([
-//            'questionnaire' => $questionnaire,
-//            'question' => new Question()
-//        ]);
+        return $qnid;
     }
 
     public function update(Request $request, $qnid) {
@@ -121,17 +72,6 @@ class QuestionnaireController extends Controller {
             'questions' => $questions
         ]);
     }
-
-//    public function publish($qnid) {
-//        $data = ['status' => 1];
-//        $questionnaire = Questionnaire::updateByQnid($qnid, $data);
-//        $name = $questionnaire->name;
-//        $link = url('submit/qnid/' . $qnid);
-//        return response()->json([
-//            'name' => $name,
-//            'link' => $link
-//        ]);
-//    }
 
     public function submit(Request $request, $qnid) {
         if ($request->isMethod('POST')) {

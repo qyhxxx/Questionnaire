@@ -87,9 +87,9 @@ class Question extends Model {
         return $data;
     }
 
-    public static function getQuestionsBySid($sid) {
-        $qnid = Submit::getQnidBySid($sid);
-        $questions = self::where('qnid', $qnid)->get();
-        return $questions;
-    }
+//    public static function getQuestionsBySid($sid) {
+//        $qnid = Submit::getQnidBySid($sid);
+//        $questions = self::where('qnid', $qnid)->get();
+//        return $questions;
+//    }
 }

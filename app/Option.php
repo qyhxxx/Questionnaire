@@ -67,7 +67,7 @@ class Option extends Model {
         }
     }
 
-    public static function add($data_option, $data_problem = null, $qnid, $qid, $qtype) {
+    public static function add($data_option, $data_problem, $qnid, $qid, $qtype) {
         switch (self::getFormType($qtype)) {
             case 1:
                 $options = self::batchAdd($data_option, $qnid, $qid, 1);

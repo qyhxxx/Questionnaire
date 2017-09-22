@@ -22,7 +22,8 @@ class MineQuestionController extends Controller
             $questionnaire[$i] = Questionnaire::getQuestionnaires($eid[$i]);
         }
         return response()->json([
-            'questionnaire' => $questionnaire ?? null
+            'questionnaire' => $questionnaire ?? null,
+            'eid' => $eid
         ]);
     }
 
