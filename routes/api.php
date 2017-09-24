@@ -27,9 +27,8 @@ Route::any('submit/qnid/{qnid}', 'QuestionnaireController@submit');
 
 Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'edit'], function () {
-        Route::any('/', 'QuestionnaireController@add');
-        Route::any('qnid/{qnid}', 'QuestionnaireController@addQuestion');
-        Route::post('updata/qnid/{qnid}', 'QuestionnaireController@update');
+        Route::post('status/{status}', 'QuestionnaireController@add');
+        Route::any('updata/qnid/{qnid}/status/{status}', 'QuestionnaireController@update');
     });
     Route::group(['prefix' => 'stat/qnid/{qnid}'], function () {
         Route::get('getStems', 'StatisticsController@getStems');

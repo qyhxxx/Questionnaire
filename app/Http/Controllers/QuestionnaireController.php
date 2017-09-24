@@ -13,57 +13,40 @@ use BaconQrCode\Encoder\QrCode;
 use Illuminate\Http\Request;
 
 class QuestionnaireController extends Controller {
-    public function add(Request $request) {
+    public function add(Request $request, $status) {
         $data = $request->all();
         $twt_name = $request->session()->get('data')['twt_name'];
-        $qnid = $this->store($data, $twt_name);
-        $link = 'http://http://survey.twtstudio.com/submit/qnid/' . $qnid;
-        return response()->json([
-            'link' => $link
-        ]);
-    }
-
-    public function store($data, $twt_name) {
         $data_questionnaire = $data['questionnaire'];
         $data_questions = $data['questions'];
         $qcount = count($data_questions);
         $data_questionnaire['twt_name'] = $twt_name;
         $data_questionnaire['qcount'] = $qcount;
-        $data_questionnaire['status'] = 1;
+        $data_questionnaire['status'] = $status;
         $questionnaire = Questionnaire::add($data_questionnaire);
         $qnid = $questionnaire->qnid;
         $editor = Editor::add($twt_name, $qnid);
         $eid = $editor->id;
-        $data = ['eid' => $eid];
-        Questionnaire::updateByQnid($qnid, $data);
-        for ($i = 0; $i < $qcount; $i++) {
-            $data_question = $data_questions[$i]['question'];
-            $data_question['qnid'] = $qnid;
-            $data_question['qnum'] = $i + 1;
-            $question = Question::add($data_question);
-            $qtype = $data_question['qtype'];
-            if ($qtype != 3 && $qtype != 4 && $qtype != 5) {
-                $data_option = $data_questions[$i]['options'];
-                $data_problem = $data_questions[$i]['problems'] ?? null;
-                $qid = $question->qid;
-                Option::add($data_option, $data_problem, $qnid, $qid, $qtype);
-            }
-        }
-        return $qnid;
+        $data_editor = ['eid' => $eid];
+        Questionnaire::updateByQnid($qnid, $data_editor);
+        $this->store($data, $qnid);
+        $response = $status ? ['qnid' => $qnid] : null;
+        return response()->json($response);
     }
 
-    public function update(Request $request, $qnid) {
+    public function update(Request $request, $qnid, $status) {
         if ($request->isMethod('POST')) {
+            $data = $request->all();
+            $data_questionnaire = $data['questionnaire'];
+            $data_questions = $data['questions'];
+            $qcount = count($data_questions);
+            $data_questionnaire['qcount'] = $qcount;
+            $data_questionnaire['status'] = $status;
+            $questionnaire = Questionnaire::updateByQnid($data_questionnaire, $qnid);
             Question::deleteAll($qnid);
             Option::deleteAll($qnid);
-            $data = $request->all();
             $this->store($data, $qnid);
-            $questionnaire = Questionnaire::getQuestionnaire($qnid);
-            $questions = Question::getAllQuestions($qnid);
-            return response()->json([
-                'questionnaire' => $questionnaire,
-                'questions' => $questions
-            ]);
+            $response = $status ? ['qnid' => $qnid] : null;
+            return response()->json($response);
         }
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
         $questions = Question::getAllQuestions($qnid);
@@ -71,6 +54,24 @@ class QuestionnaireController extends Controller {
             'questionnaire' => $questionnaire,
             'questions' => $questions
         ]);
+    }
+
+    public function store($data, $qnid) {
+        $data_questions = $data['questions'];
+        $qcount = count($data_questions);
+        for ($i = 0; $i < $qcount; $i++) {
+            $data_question = $data_questions[$i]['question'];
+            $data_question['qnid'] = $qnid;
+            $data_question['qnum'] = $i + 1;
+            $question = Question::add($data_question);
+            $qtype = $data_question['qtype'];
+            if ($qtype != 3 && $qtype != 4 && $qtype != 5) {
+                $data_option = $data_questions[$i]['options'] ?? null;
+                $data_problem = $data_questions[$i]['problems'] ?? null;
+                $qid = $question->qid;
+                Option::add($data_option, $data_problem, $qnid, $qid, $qtype);
+            }
+        }
     }
 
     public function submit(Request $request, $qnid) {
