@@ -59,5 +59,5 @@ Route::group(['middleware' => ['Authentication']], function () {
 });
 
 Route::get('test', function () {
-
+    return view('test');
 });

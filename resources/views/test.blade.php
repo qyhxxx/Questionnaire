@@ -1,5 +1,7 @@
 <html>
 <body>
-{!! QrCode::size(100)->generate('Hello,LaravelAcademy!'); !!}
+<div style="border: 2px solid red">
+    hhh
+</div>
 </body>
 </html>

@@ -86,10 +86,4 @@ class Question extends Model {
         $data = self::where('qnid',$qnid)->get();
         return $data;
     }
-
-//    public static function getQuestionsBySid($sid) {
-//        $qnid = Submit::getQnidBySid($sid);
-//        $questions = self::where('qnid', $qnid)->get();
-//        return $questions;
-//    }
 }

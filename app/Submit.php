@@ -41,5 +41,6 @@ class Submit extends Model {
 
     public static function answers($qnid){
         $data = self::where('qnid',$qnid)->get();
+        return $data;
     }
 }

@@ -23,7 +23,7 @@ class MineQuestionController extends Controller
         }
         return response()->json([
             'questionnaire' => $questionnaire ?? null,
-            'eid' => $eid
+            'eid' => $eid,
         ]);
     }
 
@@ -32,6 +32,16 @@ class MineQuestionController extends Controller
         $order_status = $request->input('order_status');
         $order_sequence = $request->input('order_sequence');
         $twt_name = $request->session()->get('data')['twt_name'];
+        $data = $request->input('data');
+        if($data){
+            $find = Questionnaire::reach($data);
+            if(!$find){
+                return redirect('/minequestion/false');
+            }  //报错页面
+            return response()->json([
+                'find' => $find,
+            ]);
+        }
         $questionnaires = Editor::questionnaires($twt_name);
         $id = array();
         if ($questionnaires) {
@@ -42,36 +52,50 @@ class MineQuestionController extends Controller
         if($id) {
             $questionnaire = Questionnaire::sequence($order_status, $order_sequence, $id);
             return response()->json([
-                'questionnaire' => $questionnaire,
+                'questionnaire' => $questionnaire ?? null,
             ]);
         }
     }
-    //问卷缩略图页面搜索问卷
-    public function reach(Request $request){
-        $data = $request->input('data');
-        $find = Questionnaire::reach($data);
-        if(!$find){
-            return redirect('/minequestion/false');
-        }  //报错页面
-        return response()->json([
-            'find' => $find,
-        ]);
-    }
+//    //问卷缩略图页面搜索问卷
+//    public function reach(Request $request){
+//        $data = $request->input('data');
+//        $find = Questionnaire::reach($data);
+//        if(!$find){
+//            return redirect('/minequestion/false');
+//        }  //报错页面
+//        return response()->json([
+//            'find' => $find,
+//        ]);
+//    }
     //问卷展开[概述、设置]
     public function overview($qnid, Request $request){
         $questionnaire_data = Questionnaire::getdata($qnid);
         $questions = Question::getquestions($qnid);
         $editors = Editor::getdata($qnid);
-        $submit_answers = Submit::answers($qnid);     //qu的有问题！
+        $submit_answers = Submit::answers($qnid);
         $count_answers = count($submit_answers);
-        $answers = Answer::getanswers($qnid);
+   //     $answers = Answer::getanswers($qnid);
         $everyday_ans = 0;
+//        $answer = null;
+//        if(!empty($answers)){
+//            foreach ($answers as $val){
+//                $addtime = $val->created_at;
+//                $everyday_ans["$addtime"]++;
+//                $answer[$val->twt_name] = new \app\Common\answer($val->answer);  //hhh
+//            }
+//        }
         $answer = null;
+        $answers = Answer::getmanyanswers($qnid);
         if(!empty($answers)){
             foreach ($answers as $val){
-                $addtime = $val->created_at;
-                $everyday_ans["$addtime"]++;
-                $answer[$val->twt_name] = new \app\Common\answer($val->answer);  //hhh
+                $answer[$val->sid] = $val;
+            }
+            foreach ($answer as $key=>$value){
+                $question = Question::getonequestion($qnid, $value->qid);
+                $option = Option::getQcontentsByQid($value->qid);
+                $oneanswer =  Answer::getoneanswer($key, $value->qid);
+                $qtype = $question->qtype;
+                $answers[$key][$value->qid] = new \app\Helpers\answer($question, $option, $oneanswer, $qtype);
             }
         }
         if($request->isMethod('POST')){
@@ -123,14 +147,4 @@ class MineQuestionController extends Controller
             'answers_amount' => $answers_amount,
         ]);
     }
-    //发布(二维码)
-    public function publish($qnid){
-        $QrCode = QrCode::encoding('UTF-8')->size(100)->generate(public_path('/submit/qnid/{qnid}'));
-        return response()->json([
-            'QrCode' => $QrCode,
-        ]);
-    }
-
-
-
 }

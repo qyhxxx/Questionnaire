@@ -10,6 +10,12 @@ class Answer extends Model {
     const arr2 = [1, 2, 6, 7, 8];
     const arr4 = [9];
 
+    protected $table = 'answers';
+
+    protected $primaryKey = 'aid';
+
+    protected $fillable = ['sid', 'qnid', 'qid', 'answer', 'okey', 'option', 'pkey', 'problem'];
+
     public static function getAnswerType($qtype) {
         if (in_array($qtype, self::arr1)) {
             return 1;
@@ -105,5 +111,16 @@ class Answer extends Model {
     public static function allkilled(){
         $allkilled = self::delete();
         return $allkilled;
+    }
+
+
+    public static function getmanyanswers($qnid){
+        $answers = self::where('qnid', $qnid)->get()->toArray();
+        return $answers;
+    }
+
+    public static function getoneanswer($sid, $qid){
+        $answer = self::where(['sid'=>$sid, 'qid'=>$qid]);
+        return $answer;
     }
 }
