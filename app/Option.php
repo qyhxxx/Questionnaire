@@ -43,12 +43,11 @@ class Option extends Model {
     public static function batchAdd($data, $qnid, $qid, $isOption) {
         $count = count($data);
         if ($isOption) {
-            $qtype = Question::getQuestionByQid($qid);
             for ($i = 0; $i < $count; $i++) {
                 $options[$i] = self::create([
                     'qid' => $qid,
                     'qnid' => $qnid,
-                    'okey' => $qtype == 2 ? ($i + 1) : functions::numToChar($i),
+                    'okey' => functions::numToChar($i),
                     'option' => $data[$i]['option'],
                     'test' => $data[$i]['test'] ?? null
                 ]);

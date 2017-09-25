@@ -17,13 +17,10 @@ class Submit extends Model {
     }
 
     public static function verifyRepeat($twt_name = null, $ip) {
-        if ($twt_name != null) {
-            $submit = self::where('twt_name', $twt_name)->get();
-        }
-        else {
-            $submit = self::where('ip', $ip)->get();
-        }
-        if (empty($submit)) {
+        $submit = self::where('twt_name', $twt_name)
+            ->orWhere('ip', $ip)
+            ->get();
+        if ($submit != null) {
             return 1;
         }
         else {

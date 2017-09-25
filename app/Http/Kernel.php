@@ -2,9 +2,11 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Answer;
 use App\Http\Middleware\Authentication;
 use App\Http\Middleware\Cors;
 use App\Http\Middleware\test;
+use App\Http\Middleware\Update;
 use App\Http\Middleware\VerifyToken;
 use App\Http\Middleware\StartSession;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -68,5 +70,6 @@ class Kernel extends HttpKernel
         'Authentication' => Authentication::class,
         'VerifyToken' => VerifyToken::class,
         'Cors' => Cors::class,
+        'Update' => Update::class,
     ];
 }

@@ -71,7 +71,7 @@ class Question extends Model {
 
     public static function getChoiceQuestions($qnid) {
         $questions = self::where('qnid', $qnid)
-            ->whereIn('qtype', [0, 1, 2, 8])
+            ->whereIn('qtype', [0, 1])
             ->orderBy('qnum')
             ->get();
         return $questions;

@@ -9,7 +9,6 @@ use App\Option;
 use App\Question;
 use App\Questionnaire;
 use App\Submit;
-use BaconQrCode\Encoder\QrCode;
 use Illuminate\Http\Request;
 
 class QuestionnaireController extends Controller {
@@ -34,26 +33,18 @@ class QuestionnaireController extends Controller {
     }
 
     public function update(Request $request, $qnid, $status) {
-        if ($request->isMethod('POST')) {
-            $data = $request->all();
-            $data_questionnaire = $data['questionnaire'];
-            $data_questions = $data['questions'];
-            $qcount = count($data_questions);
-            $data_questionnaire['qcount'] = $qcount;
-            $data_questionnaire['status'] = $status;
-            $questionnaire = Questionnaire::updateByQnid($data_questionnaire, $qnid);
-            Question::deleteAll($qnid);
-            Option::deleteAll($qnid);
-            $this->store($data, $qnid);
-            $response = $status ? ['qnid' => $qnid] : null;
-            return response()->json($response);
-        }
-        $questionnaire = Questionnaire::getQuestionnaire($qnid);
-        $questions = Question::getAllQuestions($qnid);
-        return response()->json([
-            'questionnaire' => $questionnaire,
-            'questions' => $questions
-        ]);
+        $data = $request->all();
+        $data_questionnaire = $data['questionnaire'];
+        $data_questions = $data['questions'];
+        $qcount = count($data_questions);
+        $data_questionnaire['qcount'] = $qcount;
+        $data_questionnaire['status'] = $status;
+        Questionnaire::updateByQnid($qnid, $data_questionnaire);
+        Question::deleteAll($qnid);
+        Option::deleteAll($qnid);
+        $this->store($data, $qnid);
+        $response = $status ? ['qnid' => $qnid] : null;
+        return response()->json($response);
     }
 
     public function store($data, $qnid) {
@@ -72,6 +63,15 @@ class QuestionnaireController extends Controller {
                 Option::add($data_option, $data_problem, $qnid, $qid, $qtype);
             }
         }
+    }
+
+    public function show($qnid) {
+        $questionnaire = Questionnaire::getQuestionnaire($qnid);
+        $questions = Question::getAllQuestions($qnid);
+        return response()->json([
+            'questionnaire' => $questionnaire,
+            'questions' => $questions
+        ]);
     }
 
     public function submit(Request $request, $qnid) {
@@ -94,11 +94,16 @@ class QuestionnaireController extends Controller {
             $sid = $submit->sid;
             $data_answers = $request->all();
             for ($i = 0; $i < count($data_answers); $i++) {
-                $qid = $data_answers[$i]->qid;
+                $qid = $data_answers[$i]['qid'];
                 $question = Question::getQuestionByQid($qid);
                 $qtype = $question->qtype;
-                $data_answer = functions::objectToArr($data_answers[$i]->answers);
-                $answers[$i] = Answer::add($data_answer, $qnid, $sid, $qid, $qtype);
+                $data_answer = $data_answers[$i]['answers'];
+                $info = [
+                    'sid' => $sid,
+                    'qnid' => $qnid,
+                    'qid' => $qid
+                ];
+                $answers[$i] = Answer::add($data_answer, $info, $qtype);
             }
             return response()->json([
                 'answers' => $answers ?? null
