@@ -39,4 +39,17 @@ class Editor extends Model{
         }
         return $eid ?? null;
     }
+
+    public static function hasPower($qnid, $twt_name) {
+        $editors = self::where([
+            'qnid' => $qnid,
+            'twt_name' => $twt_name
+        ])->get()->toArray();
+        if ($editors) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
 }

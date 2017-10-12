@@ -17,6 +17,7 @@ class MineQuestionController extends Controller
     //初始返回数据
     public function questionnaire(Request $request){
         $twt_name = $request->session()->get('data')['twt_name'];
+//        $twt_name = 'll';
         $eid = Editor::geteid($twt_name);
         for ($i = 0; $i < count($eid); $i++) {
             $questionnaire[$i] = Questionnaire::getQuestionnaires($eid[$i]);

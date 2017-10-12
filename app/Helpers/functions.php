@@ -3,9 +3,14 @@
 namespace App\Helpers;
 
 class functions {
-    public static function objectToArr($object) {
+    public static function objToArr($object) {
         $arr = json_decode(json_encode($object, true));
         return $arr;
+    }
+
+    public static function arrToObj($arr) {
+        $obj = (object)$arr;
+        return $obj;
     }
 
     public static function getIp() {

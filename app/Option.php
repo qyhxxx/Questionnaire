@@ -88,12 +88,28 @@ class Option extends Model {
     }
 
     public static function getOptionsByQid($qid) {
-        $options = self::where('qid', $qid)->all();
+        $options = self::where('qid', $qid)->get();
         return $options;
     }
 
     public static function deleteAll($qnid) {
         self::where('qnid', $qnid)->delete();
         return 1;
+    }
+
+    public static function getOption($qid, $okey) {
+        $option = self::where([
+            'qid' => $qid,
+            'okey' => $okey
+        ])->first()->option;
+        return $option;
+    }
+
+    public static function getProblem($qid, $pkey) {
+        $problem = self::where([
+            'qid' => $qid,
+            'pkey' => $pkey
+        ])->first()->problem;
+        return $problem;
     }
 }

@@ -80,11 +80,11 @@ class QuestionnaireController extends Controller {
                 $twt_name = $request->session()->get('data')['twt_name'];
             }
             $ip = functions::getIp();
-            if (!Submit::verifyRepeat($twt_name ?? null, $ip)) {
-                return response()->json([
-                    'status' => 0
-                ]);
-            }
+//            if (Submit::isRepeat($qnid, $twt_name ?? null, $ip)) {
+//                return response()->json([
+//                    'status' => 0
+//                ]);
+//            }
             $data_submit = [
                 'qnid' => $qnid,
                 'twt_name' => $twt_name ?? null,
@@ -92,18 +92,10 @@ class QuestionnaireController extends Controller {
             ];
             $submit = Submit::add($data_submit);
             $sid = $submit->sid;
-            $data_answers = $request->all();
+            $data_answers = $request->input('answers');
             for ($i = 0; $i < count($data_answers); $i++) {
-                $qid = $data_answers[$i]['qid'];
-                $question = Question::getQuestionByQid($qid);
-                $qtype = $question->qtype;
-                $data_answer = $data_answers[$i]['answers'];
-                $info = [
-                    'sid' => $sid,
-                    'qnid' => $qnid,
-                    'qid' => $qid
-                ];
-                $answers[$i] = Answer::add($data_answer, $info, $qtype);
+                $data_answer = $data_answers[$i];
+                $answers[$i] = Answer::add($data_answer, $sid);
             }
             return response()->json([
                 'answers' => $answers ?? null

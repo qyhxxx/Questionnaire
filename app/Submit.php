@@ -9,23 +9,46 @@ class Submit extends Model {
 
     protected $primaryKey = 'sid';
 
-    protected $fillable = ['qnid', 'user_number', 'ip', 'created_at'];
+    protected $fillable = ['qnid', 'twt_name', 'ip'];
+
+    public $timestamps = true;
 
     public static function add($data) {
-        $submit = self::add($data);
+        $submit = self::create($data);
         return $submit;
     }
 
-    public static function verifyRepeat($twt_name = null, $ip) {
-        $submit = self::where('twt_name', $twt_name)
-            ->orWhere('ip', $ip)
-            ->get();
-        if ($submit != null) {
-            return 1;
+    public static function isRepeat($qnid, $twt_name = null, $ip) {
+        $questionnaire = Questionnaire::getQuestionnaire($qnid);
+        if ($questionnaire->onceanswer) {
+            if ($twt_name) {
+                $submit = self::where([
+                    'qnid' => $qnid,
+                    'twt_name' => $twt_name
+                ])->get()->toArray();
+            }
+            else {
+                $submit = self::where([
+                    'qnid' => $qnid,
+                    'ip' => $ip
+                ])->get()->toArray();
+            }
+            if (!empty($submit)) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
         }
-        else {
-            return 0;
+        return 0;
+    }
+
+    public static function getSidArr() {
+        $submits = self::all();
+        foreach ($submits as $submit) {
+            $sidArr[] = $submit->sid;
         }
+        return $sidArr ?? null;
     }
 
     public static function getdata($qnid, $twt_name){

@@ -3,11 +3,15 @@
 namespace App\Helpers;
 
 class question {
-    var $question, $options, $problems;
+    var $question, $answer, $options, $problems;
 
-    public function __construct($data_question, $data_options = null, $data_problem = null) {
+    public function __construct($data_question, $data_options = null, $data_problems = null) {
         $this->question = $data_question;
+        $this->answer = null;
         $this->options = $data_options;
-        $this->problems = $data_problem;
+        foreach ($data_problems as $item) {
+            $item->answer = array();
+        }
+        $this->problems = $data_problems;
     }
 }

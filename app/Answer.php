@@ -3,18 +3,20 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 
 class Answer extends Model {
-    const arr1 = [0, 3, 4, 5];
-    const arr2 = [1, 2, 6, 7, 8];
-    const arr4 = [9];
+    const arr1 = [0];
+    const arr2 = [1, 6, 7, 9];
+    const arr3 = [3, 4, 5];
+    const arr4 = [8];
 
     protected $table = 'answers';
 
     protected $primaryKey = 'aid';
 
     protected $fillable = ['sid', 'qnid', 'qid', 'answer', 'okey', 'option', 'pkey', 'problem'];
+
+    public $timestamps = false;
 
     public static function getAnswerType($qtype) {
         if (in_array($qtype, self::arr1)) {
@@ -23,45 +25,120 @@ class Answer extends Model {
         else if (in_array($qtype, self::arr2)) {
             return 2;
         }
-        else {
+        else if (in_array($qtype, self::arr3)) {
             return 3;
+        }
+        else {
+            return 4;
         }
     }
 
-    public function batchAdd($data, $info) {
-        $data['sid'] = $info['sid'];
-        $data['qnid'] = $info['qnid'];
-        $data['qid'] = $info['qid'];
-        $data['pkey'] = $info['pkey'] ?? null;
-        $data['problem'] = $info['problem'] ?? null;
-        return $data;
-    }
-
-    public static function add($data, $info, $qtype) {
+    public static function add($data, $sid) {
+        $qid = $data['qid'];
+        $submit_answer = $data['answer'];
+        $qtype = Question::getQuestionByQid($qid)->qtype;
+        if (self::getAnswerType($qtype) != 3) {
+            unset($data['answer']);
+        }
         switch (self::getAnswerType($qtype)) {
             case 1:
-                $data = self::batchAdd($data, $info);
-                $answers = self::create($data);
+                $data['sid'] = $sid;
+                $okey = $submit_answer;
+                $data['okey'] = $okey;
+                $data['option'] = Option::getOption($qid, $okey);
+                $answer = self::create($data);
                 break;
             case 2:
-                for ($i = 0; $i < count($data); $i++) {
-                    $data[$i] = self::batchAdd($data[$i], $info);
-                    $answers[$i] = self::create($data[$i]);
+                for ($i = 0; $i < count($submit_answer); $i++) {
+                    $data['sid'] = $sid;
+                    if ($qtype != 9) {
+                        $okey = $submit_answer[$i];
+                        $data['okey'] = $okey;
+                        $data['option'] = Option::getOption($qid, $okey);
+                    }
+                    if ($qtype == 6) {
+                        $data['answer'] = $i + 1;
+                    }
+                    if ($qtype == 7 || $qtype == 9) {
+                        $pkey = $i + 1;
+                        $data['pkey'] = $pkey;
+                        $data['problem'] = Option::getProblem($qid, $pkey);
+                        if ($qtype == 9) {
+                            $data['answer'] = $submit_answer[$i];
+                        }
+                    }
+                    $answer[$i] = self::create($data);
                 }
                 break;
             case 3:
-                for ($i = 0; $i < count($data); $i++) {
-                    $info['pkey'] = $data[$i]['pkey'];
-                    $info['problem'] = $data[$i]['problem'];
-                    $options = $data[$i]['options'];
-                    for ($j = 0; $j < count($options); $j++) {
-                        $options[$j] = self::batchAdd($options[$j], $info);
+                $data['sid'] = $sid;
+                $answer = self::create($data);
+                break;
+            case 4:
+                for ($i = 0; $i < count($submit_answer); $i++) {
+                    for ($j = 0; $j < count($submit_answer[$i]); $j++) {
+                        $data['sid'] = $sid;
+                        $okey = $submit_answer[$i][$j];
+                        $data['okey'] = $okey;
+                        $data['option'] = Option::getOption($qid, $okey);
+                        $pkey = $i + 1;
+                        $data['pkey'] = $pkey;
+                        $data['problem'] = Option::getProblem($qid, $pkey);
+                        $answerOfOnePro[$j] = self::create($data);
                     }
-                    $answers[$i] = $options;
+                    $answer[$i] = $answerOfOnePro ?? null;
                 }
                 break;
         }
-        return $answers ?? null;
+//        if ($qtype == 0) {
+//            $data['sid'] = $sid;
+//            $okey = $submit_answer;
+//            $data['okey'] = $okey;
+//            $data['option'] = Option::getOption($qid, $okey);
+//            $answer = self::create($data);
+//        }
+//        else if ($qtype == 1 || $qtype == 6 || $qtype == 7 || $qtype == 9) {
+//            for ($i = 0; $i < count($submit_answer); $i++) {
+//                $data['sid'] = $sid;
+//                if ($qtype != 9) {
+//                    $okey = $submit_answer[$i];
+//                    $data['okey'] = $okey;
+//                    $data['option'] = Option::getOption($qid, $okey);
+//                }
+//                if ($qtype == 6) {
+//                    $data['answer'] = $i + 1;
+//                }
+//                if ($qtype == 7 || $qtype == 9) {
+//                    $pkey = $i + 1;
+//                    $data['pkey'] = $pkey;
+//                    $data['problem'] = Option::getProblem($qid, $pkey);
+//                    if ($qtype == 9) {
+//                        $data['answer'] = $submit_answer[$i];
+//                    }
+//                }
+//                $answer[$i] = self::create($data);
+//            }
+//        }
+//        else if ($qtype == 3 || $qtype == 4 || $qtype == 5) {
+//            $data['sid'] = $sid;
+//            $answer = self::create($data);
+//        }
+//        else {
+//            for ($i = 0; $i < count($submit_answer); $i++) {
+//                for ($j = 0; $j < count($submit_answer[$i]); $j++) {
+//                    $data['sid'] = $sid;
+//                    $okey = $submit_answer[$i][$j];
+//                    $data['okey'] = $okey;
+//                    $data['option'] = Option::getOption($qid, $okey);
+//                    $pkey = $i + 1;
+//                    $data['pkey'] = $pkey;
+//                    $data['problem'] = Option::getProblem($qid, $pkey);
+//                    $answerOfOnePro[$j] = self::create($data);
+//                }
+//                $answer[$i] = $answerOfOnePro ?? null;
+//            }
+//        }
+        return $answer ?? null;
     }
 
     public static function getAnswers($sid, $qid) {
@@ -72,19 +149,29 @@ class Answer extends Model {
         return $answers;
     }
 
-    public static function getSidArr($selects) {
-        $query = new Answer();
-        foreach ($selects as $select){
-            if ($select['pare']) {
-                $query = $query->where('qid', $select['question']['qid'])
-                    ->whereIn('okey', $select['options']['okey']);
+    public static function getSidArr($requirements) {
+        if ($requirements) {
+            $query = new Answer();
+            foreach ($requirements as $requirement){
+                if ($requirement['para']) {
+                    $query = $query->where('qid', $requirement['qid'])
+                        ->whereIn('okey', $requirement['okey']);
+                }
+                else {
+                    $query = $query->where('qid', $requirement['qid'])
+                        ->whereNotIn('okey', $requirement['okey']);
+                }
             }
+            $answers = $query->get();
+            $sidArr = array();
+            for ($i = 0; $i < count($answers); $i++) {
+                $sidArr[$i] = $answers[$i]->sid;
+            }
+            $sidArr = array_unique($sidArr);
         }
-        $answers = $query->get();
-        for ($i = 0; $i < count($answers); $i++) {
-            $sidArr[$i] = $answers[$i]->sid;
+        else {
+            $sidArr = Submit::getSidArr();
         }
-        $sidArr = array_unique($sidArr ?? null);
         return $sidArr;
     }
 
@@ -95,7 +182,11 @@ class Answer extends Model {
                 'okey' => $okey
             ])->get();
         $count = count($answer);
-        return $count;
+        $proportion = doubleval($count / count($sidArr));
+        return [
+            'count' => $count,
+            'proportion' => $proportion
+        ];
     }
 
     public static function getdata($qid){
