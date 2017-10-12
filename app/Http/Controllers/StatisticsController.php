@@ -36,7 +36,7 @@ class StatisticsController extends Controller {
             $data = Answer::statistics($sidArr, $qid, $okey);
             $count = $data['count'];
             $proportion = $data['proportion'];
-            $statistics[] = new \statistics($okey, $option, $count, $proportion);g
+            $statistics[] = new \statistics($okey, $option, $count, $proportion);
         }
         return response()->json([
             'options' => $options,
