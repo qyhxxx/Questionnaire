@@ -149,34 +149,39 @@ class Answer extends Model {
         return $answers;
     }
 
-    public static function getSidArr($requirements) {
-        $query = new Answer();
-        foreach ($requirements as $requirement){
-            $qid = isset($requirement['okey']) ? $requirement['qid'] : null;
-            $para = isset($requirement['para']) ? $requirement['para'] : null;
-            $okey = isset($requirement['okey']) ? $requirement['okey'] : null;
-            if ($qid == null || $para == null || $okey == null) {
-                if (count($requirements)) {
-                    $sidArr = Submit::getSidArr();
-                    return $sidArr;
+    public static function getSidArr($requirements = null) {
+        if ($requirements == null) {
+            $query = new Answer();
+            foreach ($requirements as $requirement){
+                $qid = isset($requirement['okey']) ? $requirement['qid'] : null;
+                $para = isset($requirement['para']) ? $requirement['para'] : null;
+                $okey = isset($requirement['okey']) ? $requirement['okey'] : null;
+                if ($qid == null || $para == null || $okey == null) {
+                    if (count($requirements)) {
+                        $sidArr = Submit::getSidArr();
+                        return $sidArr;
+                    }
+                    continue;
                 }
-                continue;
+                if ($para) {
+                    $query = $query->where('qid', $qid)
+                        ->whereIn('okey', $okey);
+                }
+                else {
+                    $query = $query->where('qid', $qid)
+                        ->whereNotIn('okey', $okey);
+                }
             }
-            if ($para) {
-                $query = $query->where('qid', $qid)
-                    ->whereIn('okey', $okey);
+            $answers = $query->get();
+            $sidArr = array();
+            for ($i = 0; $i < count($answers); $i++) {
+                $sidArr[$i] = $answers[$i]->sid;
             }
-            else {
-                $query = $query->where('qid', $qid)
-                    ->whereNotIn('okey', $okey);
-            }
+            $sidArr = array_unique($sidArr);
         }
-        $answers = $query->get();
-        $sidArr = array();
-        for ($i = 0; $i < count($answers); $i++) {
-            $sidArr[$i] = $answers[$i]->sid;
+        else {
+            $sidArr = Submit::getSidArr();
         }
-        $sidArr = array_unique($sidArr);
         return $sidArr;
     }
 

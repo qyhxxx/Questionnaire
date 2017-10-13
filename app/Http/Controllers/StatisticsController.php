@@ -15,7 +15,8 @@ class StatisticsController extends Controller {
         $questions = Question::getChoiceQuestions($qnid);
         return response()->json([
             'questionnaire' => $questionnaire,
-            'questions' => $questions
+            'questions' => $questions,
+            'statistics' => $this->statisticsOfAllQuestions($qnid)
         ]);
     }
 
@@ -26,10 +27,7 @@ class StatisticsController extends Controller {
         ]);
     }
 
-    public function statistics(Request $request, $qid) {
-        $data = $request->all();
-        $requirements = $data['requirements'];
-        $sidArr = Answer::getSidArr($requirements);
+    public function statistics($sidArr, $qid) {
         $options = Option::getOptionsByQid($qid);
         foreach ($options as $option) {
             $okey = $option->okey;
@@ -40,9 +38,27 @@ class StatisticsController extends Controller {
             $proportion = $data['proportion'];
             $statistics[] = new statistics($okey, $option, $count, $sum, $proportion);
         }
-        return response()->json([
+        return [
             'options' => $options,
             'statistics' => $statistics ?? null
-        ]);
+        ];
+    }
+
+    public function statisticsOfOneQuestion(Request $request, $qid) {
+        $data = $request->all();
+        $requirements = $data['requirements'];
+        $sidArr = Answer::getSidArr($requirements);
+        $statistics = $this->statistics($sidArr, $qid);
+        return response()->json($statistics);
+    }
+
+    public function statisticsOfAllQuestions($qnid) {
+        $sidArr = Answer::getSidArr();
+        $questions = Question::getquestions($qnid);
+        foreach ($questions as $question) {
+            $qid = $question->qid;
+            $statistics[] = $this->statistics($sidArr, $qid);
+        }
+        return $statistic ?? null;
     }
 }
