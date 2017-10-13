@@ -149,16 +149,16 @@ class Answer extends Model {
         return $answers;
     }
 
-    public static function getSidArr($requirements = null) {
-        if ($requirements == null) {
+    public static function getSidArr($requirements, $qnid) {
+        if ($requirements != null) {
             $query = new Answer();
             foreach ($requirements as $requirement){
                 $qid = isset($requirement['okey']) ? $requirement['qid'] : null;
                 $para = isset($requirement['para']) ? $requirement['para'] : null;
                 $okey = isset($requirement['okey']) ? $requirement['okey'] : null;
                 if ($qid == null || $para == null || $okey == null) {
-                    if (count($requirements)) {
-                        $sidArr = Submit::getSidArr();
+                    if (count($requirements) == 1) {
+                        $sidArr = Submit::getSidArr($qnid);
                         return $sidArr;
                     }
                     continue;
@@ -180,7 +180,7 @@ class Answer extends Model {
             $sidArr = array_unique($sidArr);
         }
         else {
-            $sidArr = Submit::getSidArr();
+            $sidArr = Submit::getSidArr($qnid);
         }
         return $sidArr;
     }

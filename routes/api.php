@@ -34,7 +34,7 @@ Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'statistics'], function () {
         Route::get('qnid/{qnid}/init', 'StatisticsController@init');
         Route::get('qid/{qid}/getOptions', 'StatisticsController@getOptions');
-        Route::post('qid/{qid}/data', 'StatisticsController@statistics');
+        Route::post('qid/{qid}/data', 'StatisticsController@statisticsOfOneQuestion');
     });
 
     //我的问卷

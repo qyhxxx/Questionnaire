@@ -43,12 +43,16 @@ class Submit extends Model {
         return 0;
     }
 
-    public static function getSidArr() {
-        $submits = self::all();
-        foreach ($submits as $submit) {
-            $sidArr[] = $submit->sid;
+    public static function getSidArr($qnid) {
+        $submits = self::where('qnid', $qnid)->get()->toArray();
+        $sidArr = array();
+        if (!empty($submits)) {
+            foreach ($submits as $submit) {
+                $sidArr[] = $submit['sid'];
+            }
+            $sidArr = array_unique($sidArr);
         }
-        return $sidArr ?? null;
+        return $sidArr;
     }
 
     public static function getdata($qnid, $twt_name){
