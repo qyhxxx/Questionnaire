@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\Answer;
 use App\Http\Middleware\Authentication;
 use App\Http\Middleware\Cors;
+use App\Http\Middleware\GetDataMiddleware;
 use App\Http\Middleware\test;
 use App\Http\Middleware\Update;
 use App\Http\Middleware\VerifyToken;
@@ -69,5 +70,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'Authentication' => Authentication::class,
         'Update' => Update::class,
+        'GetDataMiddleware' => GetDataMiddleware::class,
     ];
 }

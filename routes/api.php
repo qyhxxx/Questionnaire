@@ -21,20 +21,18 @@ Route::get('/', function () {
     //
 });
 
-//Route::get('qnid/{qnid}', 'QuestionnaireController@show');
-
 Route::get('login', 'LoginController@login');
 Route::get('loginStatus', 'LoginController@loginStatus');
-Route::any('submit/qnid/{qnid}', 'QuestionnaireController@submit');
+Route::get('qnid/{qnid}', 'QuestionnaireController@getDataOfQuestionnaire')->middleware('GetDataMiddleware');
+Route::post('submit/qnid/{qnid}', 'QuestionnaireController@submit');
 
 Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'status/{status}'], function () {
         Route::post('edit', 'QuestionnaireController@add');
         Route::post('update/qnid/{qnid}', 'QuestionnaireController@update');
     });
-    Route::get('qnid/{qnid}', 'QuestionnaireController@show');
     Route::group(['prefix' => 'statistics'], function () {
-        Route::get('qnid/{qnid}/getChoiceQuestions', 'StatisticsController@getChoiceQuestions');
+        Route::get('qnid/{qnid}/init', 'StatisticsController@init');
         Route::get('qid/{qid}/getOptions', 'StatisticsController@getOptions');
         Route::post('qid/{qid}/data', 'StatisticsController@statistics');
     });
@@ -60,6 +58,5 @@ Route::group(['middleware' => ['Authentication']], function () {
 });
 
 Route::get('test', function () {
-    $option = \App\Option::getOption(246, 'A');
-    return $option;
+    phpinfo();
 });

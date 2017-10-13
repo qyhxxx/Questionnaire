@@ -44,8 +44,8 @@ class Editor extends Model{
         $editors = self::where([
             'qnid' => $qnid,
             'twt_name' => $twt_name
-        ])->get()->toArray();
-        if ($editors) {
+        ])->first();
+        if ($editors != null) {
             return 1;
         }
         else {

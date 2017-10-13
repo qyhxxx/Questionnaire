@@ -150,28 +150,33 @@ class Answer extends Model {
     }
 
     public static function getSidArr($requirements) {
-        if ($requirements) {
-            $query = new Answer();
-            foreach ($requirements as $requirement){
-                if ($requirement['para']) {
-                    $query = $query->where('qid', $requirement['qid'])
-                        ->whereIn('okey', $requirement['okey']);
+        $query = new Answer();
+        foreach ($requirements as $requirement){
+            $qid = isset($requirement['okey']) ? $requirement['qid'] : null;
+            $para = isset($requirement['para']) ? $requirement['para'] : null;
+            $okey = isset($requirement['okey']) ? $requirement['okey'] : null;
+            if ($qid == null || $para == null || $okey == null) {
+                if (count($requirements)) {
+                    $sidArr = Submit::getSidArr();
+                    return $sidArr;
                 }
-                else {
-                    $query = $query->where('qid', $requirement['qid'])
-                        ->whereNotIn('okey', $requirement['okey']);
-                }
+                continue;
             }
-            $answers = $query->get();
-            $sidArr = array();
-            for ($i = 0; $i < count($answers); $i++) {
-                $sidArr[$i] = $answers[$i]->sid;
+            if ($para) {
+                $query = $query->where('qid', $qid)
+                    ->whereIn('okey', $okey);
             }
-            $sidArr = array_unique($sidArr);
+            else {
+                $query = $query->where('qid', $qid)
+                    ->whereNotIn('okey', $okey);
+            }
         }
-        else {
-            $sidArr = Submit::getSidArr();
+        $answers = $query->get();
+        $sidArr = array();
+        for ($i = 0; $i < count($answers); $i++) {
+            $sidArr[$i] = $answers[$i]->sid;
         }
+        $sidArr = array_unique($sidArr);
         return $sidArr;
     }
 
@@ -182,13 +187,17 @@ class Answer extends Model {
                 'okey' => $okey
             ])->get();
         $count = count($answer);
-        $proportion = doubleval($count / count($sidArr));
+        $sum = count($sidArr);
+        $proportion = doubleval($count / $sum);
         return [
             'count' => $count,
+            'sum' => $sum,
             'proportion' => $proportion
         ];
     }
 
+
+    //gh
     public static function getdata($qid){
         $data = self::where('qid', $qid)->get();
         return $data;

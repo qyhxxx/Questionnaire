@@ -65,7 +65,7 @@ class QuestionnaireController extends Controller {
         }
     }
 
-    public function show($qnid) {
+    public function getDataOfQuestionnaire($qnid) {
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
         $questions = Question::getAllQuestions($qnid);
         return response()->json([
@@ -75,37 +75,29 @@ class QuestionnaireController extends Controller {
     }
 
     public function submit(Request $request, $qnid) {
-        if ($request->isMethod('POST')) {
-            if ($request->session()->has('data')) {
-                $twt_name = $request->session()->get('data')['twt_name'];
-            }
-            $ip = functions::getIp();
-//            if (Submit::isRepeat($qnid, $twt_name ?? null, $ip)) {
-//                return response()->json([
-//                    'status' => 0
-//                ]);
-//            }
-            $data_submit = [
-                'qnid' => $qnid,
-                'twt_name' => $twt_name ?? null,
-                'ip' => $ip
-            ];
-            $submit = Submit::add($data_submit);
-            $sid = $submit->sid;
-            $data_answers = $request->input('answers');
-            for ($i = 0; $i < count($data_answers); $i++) {
-                $data_answer = $data_answers[$i];
-                $answers[$i] = Answer::add($data_answer, $sid);
-            }
-            return response()->json([
-                'answers' => $answers ?? null
-            ]);
+        if ($request->session()->has('data')) {
+            $twt_name = $request->session()->get('data')['twt_name'];
         }
-        $questionnaire = Questionnaire::getQuestionnaire($qnid);
-        $questions = Question::getAllQuestions($qnid);
+        $ip = functions::getIp();
+//        if (Submit::isRepeat($qnid, $twt_name ?? null, $ip)) {
+//            retrn response()->json([
+//                    'status' => 0
+//            ]);
+//        }
+        $data_submit = [
+            'qnid' => $qnid,
+            'twt_name' => $twt_name ?? null,
+            'ip' => $ip
+        ];
+        $submit = Submit::add($data_submit);
+        $sid = $submit->sid;
+        $data_answers = $request->input('answers');
+        for ($i = 0; $i < count($data_answers); $i++) {
+            $data_answer = $data_answers[$i];
+            $answers[$i] = Answer::add($data_answer, $sid);
+        }
         return response()->json([
-            'questionnaire' => $questionnaire,
-            'questions' => $questions
+            'answers' => $answers ?? null
         ]);
     }
 }

@@ -17,7 +17,7 @@ class Update
     public function handle($request, Closure $next, $qnid)
     {
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
-        if ($questionnaire->status == 0) {
+        if ($questionnaire->status == 1) {
             return response()->json([
                 'status' => 0
             ]);
