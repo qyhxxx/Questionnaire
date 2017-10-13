@@ -7,16 +7,23 @@ use App\Helpers\statistics;
 use App\Option;
 use App\Question;
 use App\Questionnaire;
+use App\Submit;
 use Illuminate\Http\Request;
 
 class StatisticsController extends Controller {
     public function init($qnid) {
         $questionnaire = Questionnaire::getQuestionnaire($qnid)->name;
         $questions = Question::getChoiceQuestions($qnid);
+        if ($questionnaire->status == 0 || Submit::count_answers($qnid) == 0) {
+            $statistics = null;
+        }
+        else {
+            $statistics = $this->statisticsOfAllQuestions($qnid);
+        }
         return response()->json([
             'questionnaire' => $questionnaire,
             'questions' => $questions,
-            'statistics' => $this->statisticsOfAllQuestions($qnid)
+            'statistics' => $statistics
         ]);
     }
 

@@ -82,6 +82,7 @@ class Question extends Model {
         return $data;
     }
 
+    //用了，别删
     public static function getquestions($qnid){
         $data = self::where('qnid',$qnid)->get();
         return $data;
