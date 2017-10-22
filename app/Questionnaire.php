@@ -11,7 +11,7 @@ class Questionnaire extends Model {
     protected $primaryKey = 'qnid';
 
     protected $fillable = ['twt_name', 'name', 'remark', 'qcount', 'status', 'hasnumber',
-        'recover_at', 'ischecked', 'onceanswer', 'num', 'eid'];
+        'recover_at', 'ischecked', 'onceanswer', 'num', 'eid', 'recovery'];
 
     public $timestamps = true;
 
@@ -37,7 +37,7 @@ class Questionnaire extends Model {
     }
 
     public static function getdata($qnid){
-        $data = self::where('qnid',$qnid)->get();
+        $data = self::where('qnid',$qnid)->first();
         return $data;
     }
 
@@ -62,14 +62,14 @@ class Questionnaire extends Model {
         if($order_status == null){
             if($order_sequence==1) {
                 foreach ($id as $key=>$val){
-                    $questionnaire = self::where('qnid', $val)
+                    $questionnaire[$key] = self::where('qnid', $val)
                         ->orderBy('created_at','desc')
                         ->get();
                 }
             }
             else {
                 foreach ($id as $key=>$val){
-                    $questionnaire = self::where('qnid', $val)
+                    $questionnaire[$key] = self::where('qnid', $val)
                         ->orderBy('created_at','asc')
                         ->get();
                 }
@@ -79,7 +79,7 @@ class Questionnaire extends Model {
         elseif ($order_status ==0){
             if($order_sequence==1) {
                 foreach ($id as $key=>$val){
-                    $questionnaire = self::where([
+                    $questionnaire[$key] = self::where([
                         'status' => 0,
                         'qnid' => $val,
                     ])
@@ -89,7 +89,7 @@ class Questionnaire extends Model {
             }
             else {
                 foreach ($id as $key=>$val){
-                    $questionnaire = self::where([
+                    $questionnaire[$key] = self::where([
                         'status' => 0,
                         'qnid' => $val,
                     ])
@@ -102,7 +102,7 @@ class Questionnaire extends Model {
         elseif ($order_status == 1){
             if($order_sequence==1) {
                 foreach ($id as $key=>$val){
-                    $questionnaire = self::where([
+                    $questionnaire[$key] = self::where([
                         'status' => 1,
                         'qnid' =>$val,
                     ])
@@ -112,7 +112,7 @@ class Questionnaire extends Model {
             }
             else {
                 foreach ($id as $key=>$val){
-                    $questionnaire = self::where([
+                    $questionnaire[$key] = self::where([
                         'status' => 1,
                         'qnid' => $id,
                     ])
@@ -125,7 +125,7 @@ class Questionnaire extends Model {
         else{
             if($order_sequence==1) {
                 foreach ($id as $key=>$val){
-                    $questionnaire = self::where([
+                    $questionnaire[$key] = self::where([
                         'status' => 2,
                         'qnid' => $id,
                     ])
@@ -135,7 +135,7 @@ class Questionnaire extends Model {
             }
             else {
                 foreach ($id as $key=>$val){
-                    $questionnaire = self::where([
+                    $questionnaire[$key] = self::where([
                         'status' => 2,
                         'qnid' => $id,
                     ])
@@ -158,6 +158,11 @@ class Questionnaire extends Model {
 
     public static function getQuestionnaires($eid){
         $questionnaires = self::where('eid', $eid)->first();
+        return $questionnaires;
+    }
+
+    public static function getQuestionnaireByname($twt_name){
+        $questionnaires = self::where('twt_name', $twt_name)->get();
         return $questionnaires;
     }
 }

@@ -71,4 +71,9 @@ class Submit extends Model {
         $data = self::where('qnid',$qnid)->get();
         return $data;
     }
+
+    public static function getsubmit($twt_name){
+        $submit = self::where('twt_name', $twt_name)->get();
+        return $submit;
+    }
 }

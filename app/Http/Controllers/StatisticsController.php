@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class StatisticsController extends Controller {
     public function init($qnid) {
-        $questionnaire = Questionnaire::getQuestionnaire($qnid)->name;
+        $questionnaire = Questionnaire::getQuestionnaire($qnid);
         $questions = Question::getChoiceQuestions($qnid);
         if ($questionnaire->status == 0 || Submit::count_answers($qnid) == 0) {
             $statistics = null;
@@ -21,7 +21,7 @@ class StatisticsController extends Controller {
             $statistics = $this->statisticsOfAllQuestions($qnid);
         }
         return response()->json([
-            'questionnaire' => $questionnaire,
+            'questionnaire' => $questionnaire->name,
             'questions' => $questions,
             'statistics' => $statistics
         ]);
@@ -37,20 +37,26 @@ class StatisticsController extends Controller {
     public function statistics($sidArr, $qid) {
         $options = Option::getOptionsByQid($qid);
         $data = array();
-        $statistics = array();
-        foreach ($options as $option) {
-            $okey = $option->okey;
-            $option = $option->option;
-            $data = Answer::statistics($sidArr, $qid, $okey);
-            $count = $data['count'];
-            $sum = $data['sum'];
-            $proportion = $data['proportion'];
-            $data[] = [
-                'count' => $count,
-                'sum' => $sum,
-                'proportion' => $proportion
-            ];
-            $statistics[] = new statistics($okey, $option, $count, $sum, $proportion);
+        if (empty($sidArr)) {
+            $statistics = null;
+            $data = null;
+        }
+        else {
+            $statistics = array();
+            foreach ($options as $option) {
+                $okey = $option->okey;
+                $option = $option->option;
+                $data = Answer::statistics($sidArr, $qid, $okey);
+                $count = $data['count'];
+                $sum = $data['sum'];
+                $proportion = $data['proportion'];
+                $data[] = [
+                    'count' => $count,
+                    'sum' => $sum,
+                    'proportion' => $proportion
+                ];
+                $statistics[] = new statistics($okey, $option, $count, $sum, $proportion);
+            }
         }
         return [
             'options' => $options,
@@ -60,12 +66,22 @@ class StatisticsController extends Controller {
     }
 
     public function statisticsOfOneQuestion(Request $request, $qid) {
-        $data = $request->all();
-        $requirements = $data['requirements'];
-        $qnid = Question::getQuestionByQid($qid)->qnid;
-        $sidArr = Answer::getSidArr($requirements, $qnid);
-        $statistics = $this->statistics($sidArr, $qid);
-        return response()->json($statistics);
+        $qtype = Question::getQuestionByQid($qid)->qtype;
+        $answers = Answer::getdata($qid);
+        if (count($answers) == 0) {
+            $statistics = null;
+        }
+        else {
+            $data = $request->all();
+            $requirements = $data['requirements'];
+            $qnid = Question::getQuestionByQid($qid)->qnid;
+            $sidArr = Answer::getSidArr($requirements, $qnid);
+            $statistics = $this->statistics($sidArr, $qid);
+        }
+        return response()->json([
+            'qtype' => $qtype,
+            'statistics' => $statistics
+        ]);
     }
 
     public function statisticsOfAllQuestions($qnid) {

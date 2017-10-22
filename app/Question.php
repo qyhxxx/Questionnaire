@@ -78,7 +78,7 @@ class Question extends Model {
     }
 
     public static function getonequestion($qnid,$qid){
-        $data = self::where(['qnid' => $qnid,'qid' => $qid])->get();
+        $data = self::where(['qnid' => $qnid,'qid' => $qid])->first();
         return $data;
     }
 

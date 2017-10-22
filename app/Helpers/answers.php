@@ -2,7 +2,7 @@
 
 namespace app\Helpers;
 
-class answer{
+class answers{
     var $question,$option, $oneanswer, $qtype;
 
     public function __construct($question, $option, $oneanswer, $qtype){

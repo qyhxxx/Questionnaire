@@ -11,8 +11,10 @@ use App\Questionnaire;
 use App\Submit;
 use Illuminate\Http\Request;
 
-class QuestionnaireController extends Controller {
-    public function add(Request $request, $status) {
+class QuestionnaireController extends Controller
+{
+    public function add(Request $request, $status)
+    {
         $data = $request->all();
         $twt_name = $request->session()->get('data')['twt_name'];
         $data_questionnaire = $data['questionnaire'];
@@ -21,6 +23,8 @@ class QuestionnaireController extends Controller {
         $data_questionnaire['twt_name'] = $twt_name;
         $data_questionnaire['qcount'] = $qcount;
         $data_questionnaire['status'] = $status;
+        $data_questionnaire['num'] = 0;
+        $data_questionnaire['recovery'] = 0;
         $questionnaire = Questionnaire::add($data_questionnaire);
         $qnid = $questionnaire->qnid;
         $editor = Editor::add($twt_name, $qnid);
@@ -32,7 +36,8 @@ class QuestionnaireController extends Controller {
         return response()->json($response);
     }
 
-    public function update(Request $request, $qnid, $status) {
+    public function update(Request $request, $status, $qnid)
+    {
         $data = $request->all();
         $data_questionnaire = $data['questionnaire'];
         $data_questions = $data['questions'];
@@ -42,12 +47,13 @@ class QuestionnaireController extends Controller {
         Questionnaire::updateByQnid($qnid, $data_questionnaire);
         Question::deleteAll($qnid);
         Option::deleteAll($qnid);
-        $this->store($data, $qnid);
+        $this->store($data_questions, $qnid);
         $response = $status ? ['qnid' => $qnid] : null;
         return response()->json($response);
     }
 
-    public function store($data, $qnid) {
+    public function store($data, $qnid)
+    {
         $data_questions = $data['questions'];
         $qcount = count($data_questions);
         for ($i = 0; $i < $qcount; $i++) {
@@ -65,7 +71,8 @@ class QuestionnaireController extends Controller {
         }
     }
 
-    public function getDataOfQuestionnaire($qnid) {
+    public function getDataOfQuestionnaire($qnid)
+    {
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
         $questions = Question::getAllQuestions($qnid);
         return response()->json([
@@ -74,30 +81,59 @@ class QuestionnaireController extends Controller {
         ]);
     }
 
-    public function submit(Request $request, $qnid) {
-        if ($request->session()->has('data')) {
-            $twt_name = $request->session()->get('data')['twt_name'];
-        }
-        $ip = functions::getIp();
+    public function submit(Request $request, $qnid)
+    {
+        if ($request->isMethod('POST')) {
+            if ($request->session()->has('data')) {
+                $twt_name = $request->session()->get('data')['twt_name'];
+            }
+            $ip = functions::getIp();
 //        if (Submit::isRepeat($qnid, $twt_name ?? null, $ip)) {
 //            retrn response()->json([
 //                    'status' => 0
 //            ]);
 //        }
-        $data_submit = [
-            'qnid' => $qnid,
-            'twt_name' => $twt_name ?? null,
-            'ip' => $ip
-        ];
-        $submit = Submit::add($data_submit);
-        $sid = $submit->sid;
-        $data_answers = $request->input('answers');
-        for ($i = 0; $i < count($data_answers); $i++) {
-            $data_answer = $data_answers[$i];
-            $answers[$i] = Answer::add($data_answer, $sid);
+            $data_submit = [
+                'qnid' => $qnid,
+                'twt_name' => $twt_name ?? null,
+                'ip' => $ip
+            ];
+            $submit = Submit::add($data_submit);
+            $sid = $submit->sid;
+            $data_answers = $request->input('answers');
+            for ($i = 0; $i < count($data_answers); $i++) {
+                $data_answer = $data_answers[$i];
+                $answers[$i] = Answer::add($data_answer, $sid);
+            }
+            $questionnaire = Questionnaire::getQuestionnaire($qnid);
+            $recovery = $questionnaire['recovery'];
+            $recovery = $recovery+1;
+            $update_recovery = Questionnaire::updateByQnid($qnid, ['recovery' => $recovery]);
+            return response()->json([
+                'answers' => $answers ?? null
+            ]);
         }
+        $questionnaire_info = Questionnaire::getdata($qnid);
+        $num = $questionnaire_info['num'];
+        if(isset($num)){
+            $num = $num+1;
+            $data_update = [
+                'num' => $num,
+            ];
+            $update = Questionnaire::updateByQnid($qnid, $data_update);
+        }
+        else{
+            $num = 1;
+            $data_update = [
+                'num' => $num,
+            ];
+            $update = Questionnaire::updateByQnid($qnid, $data_update);
+        }
+        $questionnaire = Questionnaire::getQuestionnaire($qnid);
+        $questions = Question::getAllQuestions($qnid);
         return response()->json([
-            'answers' => $answers ?? null
+            'questionnaire' => $questionnaire,
+            'questions' => $questions
         ]);
     }
 }

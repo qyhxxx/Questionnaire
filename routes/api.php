@@ -24,7 +24,7 @@ Route::get('/', function () {
 Route::get('login', 'LoginController@login');
 Route::get('loginStatus', 'LoginController@loginStatus');
 Route::get('qnid/{qnid}', 'QuestionnaireController@getDataOfQuestionnaire')->middleware('GetDataMiddleware');
-Route::post('submit/qnid/{qnid}', 'QuestionnaireController@submit');
+Route::any('submit/qnid/{qnid}', 'QuestionnaireController@submit');
 
 Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'status/{status}'], function () {
