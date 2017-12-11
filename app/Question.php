@@ -6,7 +6,7 @@ use App\Helpers\stem;
 use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model {
-    const qtype_array = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    const qtype_array = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
     protected $table = 'questions';
 
@@ -27,7 +27,8 @@ class Question extends Model {
             self::qtype_array[6] => '排序题',
             self::qtype_array[7] => '矩阵单选题',
             self::qtype_array[8] => '矩阵多选题',
-            self::qtype_array[9] => '矩阵量表题'
+            self::qtype_array[9] => '矩阵量表题',
+            self::qtype_array[10] => '下拉题'
         ];
         if ($qtype !== null) {
             return $arr[$qtype];
