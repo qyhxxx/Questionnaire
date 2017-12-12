@@ -103,7 +103,7 @@ class Option extends Model {
         $option = self::where([
             'qid' => $qid,
             'okey' => $okey
-        ])->first()->option;
+        ])->first();
         return $option;
     }
 
@@ -111,7 +111,7 @@ class Option extends Model {
         $problem = self::where([
             'qid' => $qid,
             'pkey' => $pkey
-        ])->first()->problem;
+        ])->first();
         return $problem;
     }
 }
