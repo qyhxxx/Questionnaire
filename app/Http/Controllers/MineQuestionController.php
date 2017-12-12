@@ -268,14 +268,17 @@ class MineQuestionController extends Controller
                 }
             }
         }
+        else{
+            $formanswers = array();
+        }
 
         if($request->isMethod('POST')){
             $hasnumber = $request->input('hasnumber');
             $recovery_at = $request->input('recoveryat');
             $ischecked = $request->input('ischecked');
             $onceanswer = $request->input('onceanswer');
-            $allkilled = $request->input('allkilled');
-            $partkilled = $request->input('partkilled');
+//            $allkilled = $request->input('allkilled');
+//            $partkilled = $request->input('partkilled');
             $recovery_time = strtotime($recovery_at);
             $install = [
                 'hasnumber' => $hasnumber,
@@ -288,12 +291,12 @@ class MineQuestionController extends Controller
             foreach ($twt_name as $key=>$value){
                 $editor_add = Editor::add($value, $qnid);
             }
-            if($allkilled){
-                Answer::allkilled();
-            }
-            if($partkilled){
-                Answer::partkilled($partkilled);
-            }
+//            if($allkilled){
+//                Answer::allkilled();
+//            }
+//            if($partkilled){
+//                Answer::partkilled($partkilled);
+//            }
         }
         return response()->json([
             'questionnaire_data' => $questionnaire_data,
