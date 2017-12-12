@@ -56,7 +56,3 @@ Route::group(['middleware' => ['Authentication']], function () {
 
     Route::get('logout', 'LogoutController@logout');
 });
-
-Route::get('test', function () {
-    phpinfo();
-});

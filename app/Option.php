@@ -6,7 +6,7 @@ use App\Helpers\functions;
 use Illuminate\Database\Eloquent\Model;
 
 class Option extends Model {
-    const arr1 = [0, 1, 2, 6];
+    const arr1 = [0, 1, 2, 6, 10];
     const arr2 = [7, 8];
     const arr3 = [9];
 
@@ -79,6 +79,8 @@ class Option extends Model {
             case 3:
                 $problems = self::batchAdd($data_problem, $qnid, $qid, 0);
                 break;
+            default:
+
         }
         $contents = [
             'options' => $options ?? null,

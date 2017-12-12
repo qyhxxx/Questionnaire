@@ -47,14 +47,13 @@ class QuestionnaireController extends Controller
         Questionnaire::updateByQnid($qnid, $data_questionnaire);
         Question::deleteAll($qnid);
         Option::deleteAll($qnid);
-        $this->store($data_questions, $qnid);
+        $this->store($data, $qnid);
         $response = $status ? ['qnid' => $qnid] : null;
         return response()->json($response);
     }
 
     public function store($data, $qnid)
     {
-        $data_question = $data['question'];
         $data_questions = $data['questions'];
         $qcount = count($data_questions);
         for ($i = 0; $i < $qcount; $i++) {

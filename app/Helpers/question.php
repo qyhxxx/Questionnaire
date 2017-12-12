@@ -7,7 +7,7 @@ class question {
 
     public function __construct($data_question, $data_options = null, $data_problems = null) {
         $this->question = $data_question;
-        $this->answer = null;
+        $this->answer = ['st' => '', 'nd' => ''];
         $this->options = $data_options;
         foreach ($data_problems as $item) {
             $item->answer = array();
