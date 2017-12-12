@@ -9,7 +9,7 @@ class Usr extends Model {
 
     protected $primaryKey = 'twt_name';
 
-    protected $fillable = ['twt_name', 'user_number'];
+    protected $fillable = ['twt_name', 'user_number', 'type', 'phone'];
 
     public $timestamps = true;
 

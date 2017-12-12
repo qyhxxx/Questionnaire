@@ -54,8 +54,8 @@ class QuestionnaireController extends Controller
 
     public function store($data, $qnid)
     {
-        $data_question
-        s = $data['questions'];
+        $data_question = $data['question'];
+        $data_questions = $data['questions'];
         $qcount = count($data_questions);
         for ($i = 0; $i < $qcount; $i++) {
             $data_question = $data_questions[$i]['question'];
