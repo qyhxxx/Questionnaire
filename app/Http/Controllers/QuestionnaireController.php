@@ -103,7 +103,22 @@ class QuestionnaireController extends Controller
             $data_answers = $request->input('answers');
             for ($i = 0; $i < count($data_answers); $i++) {
                 $data_answer = $data_answers[$i];
-                $answers[$i] = Answer::add($data_answer, $sid);
+                $answers[$i] = Answer::add($data_answer, $sid, $qnid, $i);
+                if ($answers[$i] == false) {
+                    Answer::deleteBySid($sid);
+                    Submit::deleteBySid($sid);
+                    return response()->json([
+                        'message' => '有未答的题目',
+                        'qnum' => $i + 1,
+                    ]);
+                } else if (is_numeric($answers[$i])) {
+                    Answer::deleteBySid($sid);
+                    Submit::deleteBySid($sid);
+                    return response()->json([
+                        'qnum' => $i + 1,
+                        'error' => $answers[$i],
+                    ]);
+                }
             }
             $questionnaire = Questionnaire::getQuestionnaire($qnid);
             $recovery = $questionnaire['recovery'];

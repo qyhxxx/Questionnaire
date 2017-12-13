@@ -51,6 +51,14 @@ class Question extends Model {
         return $question;
     }
 
+    public static function getQuestionByQnum1($qnum, $qnid) {
+        $question = self::where([
+            'qnum' => $qnum,
+            'qnid' => $qnid
+        ])->first();
+        return $question;
+    }
+
     public static function getAllQuestions($qnid) {
         $data_questions = self::where('qnid', $qnid)
             ->orderBy('qnum')

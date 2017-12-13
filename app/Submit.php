@@ -76,4 +76,8 @@ class Submit extends Model {
         $submit = self::where('twt_name', $twt_name)->get();
         return $submit;
     }
+
+    public static function deleteBySid($sid) {
+        self::where('sid', $sid)->delete();
+    }
 }

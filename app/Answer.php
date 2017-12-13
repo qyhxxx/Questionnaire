@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\functions;
 use Illuminate\Database\Eloquent\Model;
 
 class Answer extends Model {
@@ -35,10 +36,37 @@ class Answer extends Model {
         }
     }
 
-    public static function add($data, $sid) {
+    public static function add($data, $sid, $qnid, $i) {
+        if ($data == null) {
+            $question = Question::getQuestionByQnum1($i + 1, $qnid);
+            $qtype = $question->qtype;
+            $qid = $question->qid;
+            if ($qtype == 6) {
+                $options = Option::getOptionsByQid($qid);
+                for ($i = 0; $i < count($options); $i++) {
+                    $data['qnid'] = $qnid;
+                    $data['qid'] = $qid;
+                    $data['sid'] = $sid;
+                    $okey = functions::numToChar($i);
+                    $data['okey'] = $okey;
+                    $data['option'] = Option::getOption($qid, $okey);
+                    $answers[$i] = self::create($data);
+                }
+                return $answers ?? null;
+            } else if ($question->isrequired) {
+                return false;
+            }
+        }
         $qid = $data['qid'];
         $submit_answer = $data['answer'];
-        $qtype = Question::getQuestionByQid($qid)->qtype;
+        $question = Question::getQuestionByQid($qid);
+        $isrequired = $question->isrequired;
+        $qtype = $question->qtype;
+        if ($submit_answer == null) {
+            if ($isrequired == 1) {
+                return false;
+            }
+        }
         if (self::getAnswerType($qtype) != 3) {
             unset($data['answer']);
         }
@@ -74,6 +102,11 @@ class Answer extends Model {
                 break;
             case 3:
                 $data['sid'] = $sid;
+                $test = $question->test;
+                $error = functions::textValidation($submit_answer, $test);
+                if ($error != 0) {
+                    return $error;
+                }
                 $answer = self::create($data);
                 break;
             case 4:
@@ -238,5 +271,9 @@ class Answer extends Model {
     public static function getoneanswer($sid, $qid){
         $answer = self::where(['sid'=>$sid, 'qid'=>$qid]);
         return $answer;
+    }
+
+    public static function deleteBySid($sid) {
+        self::where('sid', $sid)->delete();
     }
 }
