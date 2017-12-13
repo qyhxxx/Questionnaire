@@ -26,7 +26,7 @@ Route::get('loginStatus', 'LoginController@loginStatus');
 Route::get('qnid/{qnid}', 'QuestionnaireController@getDataOfQuestionnaire')->middleware('GetDataMiddleware');
 Route::any('submit/qnid/{qnid}', 'QuestionnaireController@submit');
 
-//Route::group(['middleware' => ['Authentication']], function () {
+Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'status/{status}'], function () {
         Route::post('edit', 'QuestionnaireController@add');
         Route::post('update/qnid/{qnid}', 'QuestionnaireController@update');
@@ -55,5 +55,5 @@ Route::any('submit/qnid/{qnid}', 'QuestionnaireController@submit');
     });
 
     Route::get('logout', 'LogoutController@logout');
-//});
+});
 
