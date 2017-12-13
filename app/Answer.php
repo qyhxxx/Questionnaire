@@ -14,9 +14,9 @@ class Answer extends Model {
 
     protected $primaryKey = 'aid';
 
-    protected $fillable = ['sid', 'qnid', 'qid', 'answer', 'okey', 'option', 'pkey', 'problem'];
+    protected $fillable = ['sid', 'qnid', 'qid', 'answer', 'okey', 'option', 'pkey', 'problem', 'created_at'];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     public static function getAnswerType($qtype) {
         if (in_array($qtype, self::arr1)) {

@@ -19,6 +19,22 @@ class MineQuestionController extends Controller
     public function questionnaire(Request $request){
         $twt_name = $request->session()->get('data')['twt_name'];
         $eid = Editor::geteid($twt_name);
+        $questionnaire = null;
+        for ($i = 0; $i < count($eid); $i++) {
+            $questionnaire[$i] = Questionnaire::getQuestionnaires($eid[$i]);
+        }
+        if($questionnaire != null){
+            foreach ($questionnaire as $key => $val){
+                if($val->recovery_at != null){
+                    $today_at = Carbon::now();
+                    $today_day = strtotime($today_at);
+                    if($val->recovery_at <= $today_day){
+                        $status = 2;
+                        $update = Questionnaire::updateByQnid($val->qnid, ['status' => $status]);
+                    }
+                }
+            }
+        }
         for ($i = 0; $i < count($eid); $i++) {
             $questionnaire[$i] = Questionnaire::getQuestionnaires($eid[$i]);
         }
@@ -102,18 +118,21 @@ class MineQuestionController extends Controller
         $today_at = Carbon::now();
         $today_day = strtotime($today_at);
         $everyday_ans = array();
+        $j = 0;
         for($i = $created_day;$i <= $today_day;$i = strtotime('+1 day', $i)){
             foreach ($submit_answers as $key => $val){
                 $time = date('Y-m-d', strtotime($val['created_at']));
                     if($time == date('Y-m-d',$i)){
-                        if(!isset($everyday_ans[$time])){
-                            $everyday_ans[$time] = 1;
+                        if(!isset($everyday_ans[$j]['number'])){
+                            $everyday_ans[$j]['number'] = 1;
+                            $everyday_ans[$j]['time'] = $time;
                         }
                         else{
-                            $everyday_ans[$time]++;
+                            $everyday_ans[$j]['number'] = $everyday_ans[$j]['number']+1;
                         }
                     }
             }
+            $j++;
         }
         $answer = null;
         $formanswers = null;
@@ -123,85 +142,6 @@ class MineQuestionController extends Controller
                 $answer[$val['sid']][$val['qid']] = $val;
             }
         }
-
-//            for($i=0;$i<$count_answers;$i++){
-//                for($j=0;$j<$count_questions;$j++){
-//                    $question = Question::getonequestion($qnid, $answer[$i]['qid']);
-//                    $option = Option::getQcontentsByQid($value['qid']);
-//                    $oneanswer =  Answer::getoneanswer($key, $value['qid']);
-//                    $qtype = $question['qtype'];
-//                    $finalanswer = null;
-//                    if($qtype == 0||$qtype == 1) {
-//                        foreach ($oneanswer as $keys=>$values) {
-//                            $finalanswer[] = [
-//                                'okey' => $values['okey'],
-//                                'option' => $values['option'],
-//                            ];
-//                        }
-//                    }
-//                    elseif ($qtype == 2){
-//                        foreach ($oneanswer as $keys=>$values){
-//                            $finalanswer[$keys] = [
-//                                'okey' => $values->okey,
-//                                'answer' => $values->answer,
-//                            ];
-//                        }
-//                    }
-//                    elseif ($qtype == 3||$qtype == 4||$qtype == 5){
-//                        foreach ($oneanswer as $keys=>$values){
-//                            $finalanswer[$keys] = [
-//                                'okey' => $values->okey,
-//                                'answer' => $values->answer,
-//                            ];
-//                        }
-//                    }
-//                    elseif ($qtype == 6){
-//                        foreach ($oneanswer as $keys=>$values){
-//                            $finalanswer[$keys] = [
-//                                'okey' => $values->okey,
-//                                'option' => $values->option,
-//                                'answer' => $values->answer,
-//                            ];
-//                        }
-//                    }
-//                    elseif ($qtype == 7){
-//                        foreach ($oneanswer as $keys=>$values){
-//                            $option[$values['pkey']] = $values['option'];
-//                            $finalanswer[$keys] = [
-//                                'pkey' => $values->pkey,
-//                                'problem' => $values->problem,
-//                                'okey' => $values->okey,
-//                                'option' => $option,
-//                            ];
-//                        }
-//                    }
-//                    elseif ($qtype == 8){
-//                        foreach ($oneanswer as $keys=>$values){
-//                            $option[$values['pkey']][] = $values['option'];
-//                            $finalanswer[$keys] = [
-//                                'pkey' => $values['pkey'],
-//                                'problem' => $values['problem'],
-//                                'okey' => $values['okey'],
-//                                'option' => $option,
-//                            ];
-//                        }
-//                    }
-//                    elseif ($qtype == 9){
-//                        foreach ($oneanswer as $keys=>$values){
-//                            $finalanswer[$keys] = [
-//                                'pkey' => $values['pkey'],
-//                                'problem' => $values['problem'],
-//                                'answer' => $values['answer'],
-//                            ];
-//                        }
-//                    }
-//                    $formanswers[$key][$value['qid']] = new answers($question, $option, $finalanswer, $qtype);
-//                    $formanswers[$key][$value['qid']]->question = $question;
-//                    $formanswers[$key][$value['qid']]->option = $option;
-//                    $formanswers[$key][$value['qid']]->answer = $finalanswer;
-//                    $formanswers[$key][$value['qid']]->qtype = $qtype;
-//                }
-//            }
         if($answer != null){
             foreach ($answer as $key=>$value){
                 foreach ($answer[$key] as $qid=>$info){
@@ -210,14 +150,20 @@ class MineQuestionController extends Controller
                     $oneanswer =  Answer::getoneanswer($key, $info['qid']);
                     $qtype = $question['qtype'];
                     $finalanswer = null;
-                    if($qtype == 0||$qtype == 1) {
+                    if($qtype == 0) {
                         $finalanswer = [
                             'okey' => $info['okey'],
                             'option' => $info['option'],
                         ];
                     }
+                    elseif($qtype == 1||$qtype == 10) {
+                        $finalanswer[$info['qid']][] = [
+                            'okey' => $info['okey'],
+                            'option' => $info['option'],
+                        ];
+                    }
                     elseif ($qtype == 2){
-                        $finalanswer = [
+                        $finalanswer[$info['qid']][] = [
                             'okey' => $info['okey'],
                             'answer' => $info['answer'],
                         ];
@@ -229,7 +175,7 @@ class MineQuestionController extends Controller
                         ];
                     }
                     elseif ($qtype == 6){
-                        $finalanswer = [
+                        $finalanswer[$info['qid']][] = [
                             'okey' => $info['okey'],
                             'option' => $info['option'],
                             'answer' => $info['answer'],
@@ -237,7 +183,7 @@ class MineQuestionController extends Controller
                     }
                     elseif ($qtype == 7){
                         $option[$info['pkey']] = $info['option'];
-                        $finalanswer = [
+                        $finalanswer[$info['qid']][] = [
                             'pkey' => $info['pkey'],
                             'problem' => $info['problem'],
                             'okey' => $info['okey'],
@@ -246,7 +192,7 @@ class MineQuestionController extends Controller
                     }
                     elseif ($qtype == 8){
                         $option[$info['pkey']][] = $info['option'];
-                        $finalanswer = [
+                        $finalanswer[$info['qid']][] = [
                             'pkey' => $info['pkey'],
                             'problem' => $info['problem'],
                             'okey' => $info['okey'],
@@ -254,30 +200,20 @@ class MineQuestionController extends Controller
                         ];
                     }
                     elseif ($qtype == 9){
-                        $finalanswer = [
+                        $finalanswer[$info['qid']][] = [
                             'pkey' => $info['pkey'],
                             'problem' => $info['problem'],
                             'answer' => $info['answer'],
                         ];
                     }
-                    else{
-                        $finalanswer = [
-                            'st' => $info['st'],
-                            'nd' => $info['nd']
-                        ];
-                    }
+
                     $formanswers[$key][$info['qid']] = new answers($question, $option, $finalanswer, $qtype);
-//                    $formanswers[$key][$info['qid']]->question = $question;
-//                    $formanswers[$key][$info['qid']]->option = $option;
-//                    $formanswers[$key][$info['qid']]->answer = $finalanswer;
-//                    $formanswers[$key][$info['qid']]->qtype = $qtype;
                 }
             }
         }
         else{
             $formanswers = array();
         }
-
         if($request->isMethod('POST')){
             $hasnumber = $request->input('hasnumber');
             $recovery_at = $request->input('recoveryat');
@@ -291,11 +227,14 @@ class MineQuestionController extends Controller
                 'recovery_at' => $recovery_time,
                 'ischecked' => $ischecked,
                 'onceanswer' => $onceanswer,
+                'issetddl' => true,
             ];
             $install_add = Questionnaire::update_install($qnid, $install);
             $twt_name = $request->input('twt_name');
-            foreach ($twt_name as $key=>$value){
-                $editor_add = Editor::add($value, $qnid);
+            if($twt_name != null){
+                foreach ($twt_name as $key=>$value){
+                    $editor_add = Editor::add($value, $qnid);
+                }
             }
 //            if($allkilled){
 //                Answer::allkilled();

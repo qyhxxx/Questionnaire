@@ -11,7 +11,7 @@ class Questionnaire extends Model {
     protected $primaryKey = 'qnid';
 
     protected $fillable = ['twt_name', 'name', 'remark', 'qcount', 'status', 'hasnumber',
-        'recover_at', 'ischecked', 'onceanswer', 'num', 'eid', 'recovery'];
+        'recover_at', 'ischecked', 'onceanswer', 'num', 'eid', 'recovery', 'issetddl'];
 
     public $timestamps = true;
 
@@ -47,6 +47,7 @@ class Questionnaire extends Model {
         $questionnaire->recovery_at = $install['recovery_at'];
         $questionnaire->ischecked = $install['ischecked'];
         $questionnaire->onceanswer = $install['onceanswer'];
+        $questionnaire->issetddl = $install['issetddl'];
         $questionnaire->save();
         return $questionnaire;
     }

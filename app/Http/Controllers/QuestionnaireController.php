@@ -25,6 +25,7 @@ class QuestionnaireController extends Controller
         $data_questionnaire['status'] = $status;
         $data_questionnaire['num'] = 0;
         $data_questionnaire['recovery'] = 0;
+        $data_questionnaire['issetddl'] = false;
         $questionnaire = Questionnaire::add($data_questionnaire);
         $qnid = $questionnaire->qnid;
         $editor = Editor::add($twt_name, $qnid);
