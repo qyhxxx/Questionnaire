@@ -56,3 +56,8 @@ Route::group(['middleware' => ['Authentication']], function () {
 
     Route::get('logout', 'LogoutController@logout');
 });
+
+Route::get('test', function () {
+    $usrs = DB::table('usrs')->orderBy('created_at', 'desc')->get();
+    dd($usrs);
+});

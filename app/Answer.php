@@ -229,7 +229,9 @@ class Answer extends Model {
 
 
     public static function getmanyanswers($qnid){
-        $answers = self::where('qnid', $qnid)->get()->toArray();
+        $answers = self::where('qnid', $qnid)
+            ->orderBy('created_at', 'desc')
+            ->get()->toArray();
         return $answers;
     }
 

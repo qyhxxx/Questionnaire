@@ -260,6 +260,12 @@ class MineQuestionController extends Controller
                             'answer' => $info['answer'],
                         ];
                     }
+                    else{
+                        $finalanswer = [
+                            'st' => $info['st'],
+                            'nd' => $info['nd']
+                        ];
+                    }
                     $formanswers[$key][$info['qid']] = new answers($question, $option, $finalanswer, $qtype);
 //                    $formanswers[$key][$info['qid']]->question = $question;
 //                    $formanswers[$key][$info['qid']]->option = $option;
