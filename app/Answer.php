@@ -89,6 +89,15 @@ class Answer extends Model {
                     $answer[$i] = $answerOfOnePro ?? null;
                 }
                 break;
+            default:
+                $data['sid'] = $sid;
+                $data['okey'] = 'st';
+                $data['option'] = $submit_answer['st'];
+                $answer['st'] = self::create($data);
+                $data['okey'] = 'nd';
+                $data['option'] = $submit_answer['nd'];
+                $answer['nd'] = self::create($data);
+                break;
         }
 //        if ($qtype == 0) {
 //            $data['sid'] = $sid;
