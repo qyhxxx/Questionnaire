@@ -28,8 +28,10 @@ class Answer extends Model {
         else if (in_array($qtype, self::arr3)) {
             return 3;
         }
-        else {
+        else if (in_array($qtype, self::arr4)) {
             return 4;
+        } else {
+            return 5;
         }
     }
 
