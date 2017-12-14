@@ -25,7 +25,10 @@ class QuestionnaireController extends Controller
         $data_questionnaire['status'] = $status;
         $data_questionnaire['num'] = 0;
         $data_questionnaire['recovery'] = 0;
-        $data_questionnaire['issetddl'] = false;
+        $data_questionnaire['issetddl'] = 0;
+        $data_questionnaire['hasnumber'] = 1;
+        $data_questionnaire['ischecked'] = 0;
+        $data_questionnaire['onceanswer'] = 0;
         $questionnaire = Questionnaire::add($data_questionnaire);
         $qnid = $questionnaire->qnid;
         $editor = Editor::add($twt_name, $qnid);
@@ -108,8 +111,8 @@ class QuestionnaireController extends Controller
             }
             $questionnaire = Questionnaire::getQuestionnaire($qnid);
             $recovery = $questionnaire['recovery'];
-            $recovery = $recovery+1;
-            $update_recovery = Questionnaire::updateByQnid($qnid, ['recovery' => $recovery]);
+            $new_recovery = $recovery+1;
+            $update_recovery = Questionnaire::updateByQnid($qnid, ['recovery' => $new_recovery]);
             return response()->json([
                 'answers' => $answers ?? null
             ]);

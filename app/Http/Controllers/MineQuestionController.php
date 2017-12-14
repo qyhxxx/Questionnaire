@@ -27,9 +27,12 @@ class MineQuestionController extends Controller
             foreach ($questionnaire as $key => $val){
                 if($val->recovery_at != null){
                     $today_at = Carbon::now();
-                    $today_day = strtotime($today_at);
-                    if($val->recovery_at <= $today_day){
+                    if($val->recovery_at <= $today_at){
                         $status = 2;
+                        $update = Questionnaire::updateByQnid($val->qnid, ['status' => $status]);
+                    }
+                    else{
+                        $status = 1;
                         $update = Questionnaire::updateByQnid($val->qnid, ['status' => $status]);
                     }
                 }
@@ -207,27 +210,58 @@ class MineQuestionController extends Controller
                         ];
                     }
 
-                    $formanswers[$key][$info['qid']] = new answers($question, $option, $finalanswer, $qtype);
+                    $formanswers[][$info['qid']] = new answers($question, $option, $finalanswer, $qtype);
                 }
             }
         }
         else{
             $formanswers = array();
         }
+
+        return response()->json([
+            'questionnaire_data' => $questionnaire_data,
+            'questions' => $questions,
+            'editors' => $editors,
+            'answers' => $formanswers,
+            'count_answers' => $count_answers,
+            'everyday_ans' => $everyday_ans,
+        ]);
+    }
+
+    public function install($qnid, Request $request){
+        $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
         if($request->isMethod('POST')){
             $hasnumber = $request->input('hasnumber');
             $recovery_at = $request->input('recoveryat');
             $ischecked = $request->input('ischecked');
             $onceanswer = $request->input('onceanswer');
-//            $allkilled = $request->input('allkilled');
-//            $partkilled = $request->input('partkilled');
-            $recovery_time = strtotime($recovery_at);
+            $issetddl = $request->input('issetddl');
+            if($recovery_at == null && $questionnaire_data['issetddl'] = 0){
+                $issetddl = 0;
+            }
+            elseif($recovery_at == null && $questionnaire_data['issetddl'] = 1){
+                $issetddl = 1;
+            }
+            $allkilled = $request->input('allkilled');
+            $partkilled = $request->input('partkilled');
+            if($allkilled == $qnid){
+                $delete_all = Answer::allkilled($qnid);
+            }
+            if($partkilled != null){
+                foreach ($partkilled as $key => $val){
+                    $delete_part = Answer::partkilled($val);
+                }
+            }
+            $recovery_time = null;
+            if($recovery_at != null){
+                $recovery_time = date('Y-m-d H:i:s', $recovery_at / 1000);
+            }
             $install = [
                 'hasnumber' => $hasnumber,
                 'recovery_at' => $recovery_time,
                 'ischecked' => $ischecked,
                 'onceanswer' => $onceanswer,
-                'issetddl' => true,
+                'issetddl' => $issetddl,
             ];
             $install_add = Questionnaire::update_install($qnid, $install);
             $twt_name = $request->input('twt_name');
@@ -245,11 +279,6 @@ class MineQuestionController extends Controller
         }
         return response()->json([
             'questionnaire_data' => $questionnaire_data,
-            'questions' => $questions,
-            'editors' => $editors,
-            'answers' => $formanswers,
-            'count_answers' => $count_answers,
-            'everyday_ans' => $everyday_ans,
         ]);
     }
 //    //问卷展开[数据]

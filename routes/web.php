@@ -45,7 +45,10 @@ Route::group(['middleware' => ['Authentication']], function () {
         Route::get('/mine', 'MineQuestionController@questionnaire');
 
         //问卷展开[概述、设置]
-        Route::any('/overview/{id}', 'MineQuestionController@overview');
+        Route::get('/overview/{id}', 'MineQuestionController@overview');
+        Route::post('/overview/{id}', 'MineQuestionController@overview');
+        Route::post('/install/{id}', 'MineQuestionController@install');
+        Route::get('/install/{id}', 'MineQuestionController@install');
 //        Route::get('/overview/{id}', function () {
 //            return view('minequestion.overview');
 //        });

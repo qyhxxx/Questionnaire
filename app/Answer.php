@@ -222,8 +222,8 @@ class Answer extends Model {
         return $partkilled;
     }
 
-    public static function allkilled(){
-        $allkilled = self::delete();
+    public static function allkilled($qnid){
+        $allkilled = self::where('qnid', $qnid)->delete();
         return $allkilled;
     }
 
