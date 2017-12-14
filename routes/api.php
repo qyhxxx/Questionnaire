@@ -24,6 +24,7 @@ Route::get('/', function () {
 Route::get('login', 'LoginController@login');
 Route::get('loginStatus', 'LoginController@loginStatus');
 Route::get('qnid/{qnid}', 'QuestionnaireController@getDataOfQuestionnaire')->middleware('GetDataMiddleware');
+Route::get('qinfo/{qnid}', 'QuestionnaireController@qinfo');
 Route::any('submit/qnid/{qnid}', 'QuestionnaireController@submit');
 
 Route::group(['middleware' => ['Authentication']], function () {
@@ -58,9 +59,4 @@ Route::group(['middleware' => ['Authentication']], function () {
     });
 
     Route::get('logout', 'LogoutController@logout');
-});
-
-Route::get('test', function () {
-    $usrs = DB::table('usrs')->orderBy('created_at', 'desc')->get();
-    dd($usrs);
 });

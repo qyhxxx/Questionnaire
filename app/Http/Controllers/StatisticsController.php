@@ -66,20 +66,21 @@ class StatisticsController extends Controller {
     }
 
     public function statisticsOfOneQuestion(Request $request, $qid) {
-        $qtype = Question::getQuestionByQid($qid)->qtype;
+        $question = Question::getQuestionByQid($qid);
         $answers = Answer::getdata($qid);
         if (count($answers) == 0) {
             $statistics = null;
         }
         else {
             $data = $request->all();
-            $requirements = $data['requirements'];
+            $requirements = $data['requirements'] ?? null;
             $qnid = Question::getQuestionByQid($qid)->qnid;
             $sidArr = Answer::getSidArr($requirements, $qnid);
             $statistics = $this->statistics($sidArr, $qid);
         }
         return response()->json([
-            'qtype' => $qtype,
+            'question' => $question->topic,
+            'qtype' => $question->qtype,
             'statistics' => $statistics
         ]);
     }

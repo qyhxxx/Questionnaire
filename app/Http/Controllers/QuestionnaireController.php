@@ -107,7 +107,27 @@ class QuestionnaireController extends Controller
             $data_answers = $request->input('answers');
             for ($i = 0; $i < count($data_answers); $i++) {
                 $data_answer = $data_answers[$i];
-                $answers[$i] = Answer::add($data_answer, $sid);
+                $answers[$i] = Answer::add($data_answer, $sid, $qnid, $i);
+                if (is_numeric($answers[$i])) {
+                    if ($answers[$i] == -1) {
+                        Answer::deleteBySid($sid);
+                        Submit::deleteBySid($sid);
+                        return response()->json([
+                            'message' => '有未答的题目',
+                            'qnum' => $i + 1,
+                        ]);
+                    } else if ($answers[$i] == 0) {
+                        continue;
+                    } else {
+                        Answer::deleteBySid($sid);
+                        Submit::deleteBySid($sid);
+                        return response()->json([
+                            'message' => '文本验证',
+                            'qnum' => $i + 1,
+                            'error' => $answers[$i],
+                        ]);
+                    }
+                }
             }
             $questionnaire = Questionnaire::getQuestionnaire($qnid);
             $recovery = $questionnaire['recovery'];
@@ -138,6 +158,16 @@ class QuestionnaireController extends Controller
         return response()->json([
             'questionnaire' => $questionnaire,
             'questions' => $questions
+        ]);
+    }
+
+    public function qinfo($qnid) {
+        $questionnaire = Questionnaire::getQuestionnaire($qnid);
+        $qstatus = $questionnaire->status;
+        $ischecked = $questionnaire->ischecked;
+        return response()->json([
+            'qstatus' => $qstatus,
+            'ischecked' => $ischecked
         ]);
     }
 }
