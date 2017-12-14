@@ -153,63 +153,57 @@ class MineQuestionController extends Controller
                     $oneanswer =  Answer::getoneanswer($key, $info['qid']);
                     $qtype = $question['qtype'];
                     $finalanswer = null;
-                    if($qtype == 0) {
-                        $finalanswer = [
-                            'okey' => $info['okey'],
-                            'option' => $info['option'],
-                        ];
+                    if($info['option'] != null || $info['answer'] != null) {
+                        if ($qtype == 0) {
+                            $finalanswer = [
+                                'okey' => $info['okey'],
+                                'option' => $info['option'],
+                            ];
+                        } elseif ($qtype == 1 || $qtype == 10) {
+                            $finalanswer[$info['qid']][] = [
+                                'okey' => $info['okey'],
+                                'option' => $info['option'],
+                            ];
+                        } elseif ($qtype == 2) {
+                            $finalanswer[$info['qid']][] = [
+                                'okey' => $info['okey'],
+                                'answer' => $info['answer'],
+                            ];
+                        } elseif ($qtype == 3 || $qtype == 4 || $qtype == 5) {
+                            $finalanswer = [
+                                'okey' => $info['okey'],
+                                'answer' => $info['answer'],
+                            ];
+                        } elseif ($qtype == 6) {
+                            $finalanswer[$info['qid']][] = [
+                                'okey' => $info['okey'],
+                                'option' => $info['option'],
+                                'answer' => $info['answer'],
+                            ];
+                        } elseif ($qtype == 7) {
+                            $option[$info['pkey']] = $info['option'];
+                            $finalanswer[$info['qid']][] = [
+                                'pkey' => $info['pkey'],
+                                'problem' => $info['problem'],
+                                'okey' => $info['okey'],
+                                'option' => $option,
+                            ];
+                        } elseif ($qtype == 8) {
+                            $option[$info['pkey']][] = $info['option'];
+                            $finalanswer[$info['qid']][] = [
+                                'pkey' => $info['pkey'],
+                                'problem' => $info['problem'],
+                                'okey' => $info['okey'],
+                                'option' => $option,
+                            ];
+                        } elseif ($qtype == 9) {
+                            $finalanswer[$info['qid']][] = [
+                                'pkey' => $info['pkey'],
+                                'problem' => $info['problem'],
+                                'answer' => $info['answer'],
+                            ];
+                        }
                     }
-                    elseif($qtype == 1||$qtype == 10) {
-                        $finalanswer[$info['qid']][] = [
-                            'okey' => $info['okey'],
-                            'option' => $info['option'],
-                        ];
-                    }
-                    elseif ($qtype == 2){
-                        $finalanswer[$info['qid']][] = [
-                            'okey' => $info['okey'],
-                            'answer' => $info['answer'],
-                        ];
-                    }
-                    elseif ($qtype == 3||$qtype == 4||$qtype == 5){
-                        $finalanswer = [
-                            'okey' => $info['okey'],
-                            'answer' => $info['answer'],
-                        ];
-                    }
-                    elseif ($qtype == 6){
-                        $finalanswer[$info['qid']][] = [
-                            'okey' => $info['okey'],
-                            'option' => $info['option'],
-                            'answer' => $info['answer'],
-                        ];
-                    }
-                    elseif ($qtype == 7){
-                        $option[$info['pkey']] = $info['option'];
-                        $finalanswer[$info['qid']][] = [
-                            'pkey' => $info['pkey'],
-                            'problem' => $info['problem'],
-                            'okey' => $info['okey'],
-                            'option' => $option,
-                        ];
-                    }
-                    elseif ($qtype == 8){
-                        $option[$info['pkey']][] = $info['option'];
-                        $finalanswer[$info['qid']][] = [
-                            'pkey' => $info['pkey'],
-                            'problem' => $info['problem'],
-                            'okey' => $info['okey'],
-                            'option' => $option,
-                        ];
-                    }
-                    elseif ($qtype == 9){
-                        $finalanswer[$info['qid']][] = [
-                            'pkey' => $info['pkey'],
-                            'problem' => $info['problem'],
-                            'answer' => $info['answer'],
-                        ];
-                    }
-
                     $formanswers[][$info['qid']] = new answers($question, $option, $finalanswer, $qtype);
                 }
             }

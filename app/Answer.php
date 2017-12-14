@@ -15,7 +15,7 @@ class Answer extends Model {
 
     protected $primaryKey = 'aid';
 
-    protected $fillable = ['sid', 'qnid', 'qid', 'answer', 'okey', 'option', 'pkey', 'problem', 'created_at'];
+    protected $fillable = ['sid', 'qnid', 'qid', 'answer', 'okey', 'option', 'pkey', 'problem'];
 
     public $timestamps = true;
 
