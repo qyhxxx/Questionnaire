@@ -54,19 +54,15 @@ class Answer extends Model {
                 }
                 return $answers ?? null;
             } else if ($question->isrequired) {
-                return false;
+                return -1;
+            } else {
+                return 0;
             }
         }
         $qid = $data['qid'];
         $submit_answer = $data['answer'];
         $question = Question::getQuestionByQid($qid);
-        $isrequired = $question->isrequired;
         $qtype = $question->qtype;
-        if ($submit_answer == null) {
-            if ($isrequired == 1) {
-                return false;
-            }
-        }
         if (self::getAnswerType($qtype) != 3) {
             unset($data['answer']);
         }

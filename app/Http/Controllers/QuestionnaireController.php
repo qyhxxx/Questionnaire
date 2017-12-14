@@ -25,6 +25,10 @@ class QuestionnaireController extends Controller
         $data_questionnaire['status'] = $status;
         $data_questionnaire['num'] = 0;
         $data_questionnaire['recovery'] = 0;
+        $data_questionnaire['issetddl'] = 0;
+        $data_questionnaire['hasnumber'] = 1;
+        $data_questionnaire['ischecked'] = 0;
+        $data_questionnaire['onceanswer'] = 0;
         $questionnaire = Questionnaire::add($data_questionnaire);
         $qnid = $questionnaire->qnid;
         $editor = Editor::add($twt_name, $qnid);
@@ -104,20 +108,25 @@ class QuestionnaireController extends Controller
             for ($i = 0; $i < count($data_answers); $i++) {
                 $data_answer = $data_answers[$i];
                 $answers[$i] = Answer::add($data_answer, $sid, $qnid, $i);
-                if ($answers[$i] == false) {
-                    Answer::deleteBySid($sid);
-                    Submit::deleteBySid($sid);
-                    return response()->json([
-                        'message' => '有未答的题目',
-                        'qnum' => $i + 1,
-                    ]);
-                } else if (is_numeric($answers[$i])) {
-                    Answer::deleteBySid($sid);
-                    Submit::deleteBySid($sid);
-                    return response()->json([
-                        'qnum' => $i + 1,
-                        'error' => $answers[$i],
-                    ]);
+                if (is_numeric($answers[$i])) {
+                    if ($answers[$i] == -1) {
+                        Answer::deleteBySid($sid);
+                        Submit::deleteBySid($sid);
+                        return response()->json([
+                            'message' => '有未答的题目',
+                            'qnum' => $i + 1,
+                        ]);
+                    } else if ($answers[$i] == 0) {
+                        continue;
+                    } else {
+                        Answer::deleteBySid($sid);
+                        Submit::deleteBySid($sid);
+                        return response()->json([
+                            'message' => '文本验证',
+                            'qnum' => $i + 1,
+                            'error' => $answers[$i],
+                        ]);
+                    }
                 }
             }
             $questionnaire = Questionnaire::getQuestionnaire($qnid);
@@ -149,6 +158,16 @@ class QuestionnaireController extends Controller
         return response()->json([
             'questionnaire' => $questionnaire,
             'questions' => $questions
+        ]);
+    }
+
+    public function qinfo($qnid) {
+        $questionnaire = Questionnaire::getQuestionnaire($qnid);
+        $qstatus = $questionnaire->status;
+        $ischecked = $questionnaire->ischecked;
+        return response()->json([
+            'qstatus' => $qstatus,
+            'ischecked' => $ischecked
         ]);
     }
 }
