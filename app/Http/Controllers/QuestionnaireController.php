@@ -91,90 +91,88 @@ class QuestionnaireController extends Controller
         }
     }
 
-    public function getDataOfQuestionnaire($qnid)
+    public function getResponseOfQuestionnaire($qnid, $src = null)
     {
+        $response = $this->getDataOfQuestionnaire($qnid);
+        if ($src = 'answer') {
+            $questionnaire_info = Questionnaire::getdata($qnid);
+            $num = $questionnaire_info['num'];
+            if(isset($num)){
+                $num = $num+1;
+                $data_update = [
+                    'num' => $num,
+                ];
+                $update = Questionnaire::updateByQnid($qnid, $data_update);
+            }
+            else{
+                $num = 1;
+                $data_update = [
+                    'num' => $num,
+                ];
+                $update = Questionnaire::updateByQnid($qnid, $data_update);
+            }
+        }
+        return response()->json($response);
+    }
+
+    public function getDataOfQuestionnaire($qnid) {
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
         $questions = Question::getAllQuestions($qnid);
-        return response()->json([
+        return [
             'questionnaire' => $questionnaire,
             'questions' => $questions
-        ]);
+        ];
     }
 
     public function submit(Request $request, $qnid)
     {
-        if ($request->isMethod('POST')) {
-            if ($request->session()->has('data')) {
-                $twt_name = $request->session()->get('data')['twt_name'];
-            }
-            $ip = functions::getIp();
-//        if (Submit::isRepeat($qnid, $twt_name ?? null, $ip)) {
-//            retrn response()->json([
-//                    'status' => 0
-//            ]);
-//        }
-            $data_submit = [
-                'qnid' => $qnid,
-                'twt_name' => $twt_name ?? null,
-                'ip' => $ip,
-            //    'ishidden' => 0
-            ];
-            $submit = Submit::add($data_submit);
-            $sid = $submit->sid;
-            $data_answers = $request->input('answers');
-            for ($i = 0; $i < count($data_answers); $i++) {
-                $data_answer = $data_answers[$i];
-                $answers[$i] = Answer::add($data_answer, $sid, $qnid, $i);
-                if (is_numeric($answers[$i])) {
-                    if ($answers[$i] == -1) {
-                        Answer::deleteBySid($sid);
-                        Submit::deleteBySid($sid);
-                        return response()->json([
-                            'message' => '有未答的题目',
-                            'qnum' => $i + 1,
-                        ]);
-                    } else if ($answers[$i] == 0) {
-                        continue;
-                    } else {
-                        Answer::deleteBySid($sid);
-                        Submit::deleteBySid($sid);
-                        return response()->json([
-                            'message' => '文本验证',
-                            'qnum' => $i + 1,
-                            'error' => $answers[$i],
-                        ]);
-                    }
-                }
-            }
-            $questionnaire = Questionnaire::getQuestionnaire($qnid);
-            $recovery = $questionnaire['recovery'];
-            $new_recovery = $recovery+1;
-            $update_recovery = Questionnaire::updateByQnid($qnid, ['recovery' => $new_recovery]);
+        if ($request->session()->has('data')) {
+            $twt_name = $request->session()->get('data')['twt_name'];
+        }
+        $ip = functions::getIp();
+        if (Submit::isRepeat($qnid, $twt_name ?? null, $ip)) {
             return response()->json([
-                'answers' => $answers ?? null
+                'message' => '请勿重复答题'
             ]);
         }
-        $questionnaire_info = Questionnaire::getdata($qnid);
-        $num = $questionnaire_info['num'];
-        if(isset($num)){
-            $num = $num+1;
-            $data_update = [
-                'num' => $num,
-            ];
-            $update = Questionnaire::updateByQnid($qnid, $data_update);
-        }
-        else{
-            $num = 1;
-            $data_update = [
-                'num' => $num,
-            ];
-            $update = Questionnaire::updateByQnid($qnid, $data_update);
+        $data_submit = [
+            'qnid' => $qnid,
+            'twt_name' => $twt_name ?? null,
+            'ip' => $ip
+        ];
+        $submit = Submit::add($data_submit);
+        $sid = $submit->sid;
+        $data_answers = $request->input('answers');
+        for ($i = 0; $i < count($data_answers); $i++) {
+            $data_answer = $data_answers[$i];
+            $answers[$i] = Answer::add($data_answer, $sid, $qnid, $i);
+            if (is_numeric($answers[$i])) {
+                if ($answers[$i] == -1) {
+                    Answer::deleteBySid($sid);
+                    Submit::deleteBySid($sid);
+                    return response()->json([
+                        'message' => '有未答的题目',
+                        'qnum' => $i + 1,
+                    ]);
+                } else if ($answers[$i] == 0) {
+                    continue;
+                } else {
+                    Answer::deleteBySid($sid);
+                    Submit::deleteBySid($sid);
+                    return response()->json([
+                        'message' => '文本验证',
+                        'qnum' => $i + 1,
+                        'error' => $answers[$i],
+                    ]);
+                }
+            }
         }
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
-        $questions = Question::getAllQuestions($qnid);
+        $recovery = $questionnaire['recovery'];
+        $new_recovery = $recovery+1;
+        $update_recovery = Questionnaire::updateByQnid($qnid, ['recovery' => $new_recovery]);
         return response()->json([
-            'questionnaire' => $questionnaire,
-            'questions' => $questions ?? array()
+            'answers' => $answers ?? null
         ]);
     }
 
