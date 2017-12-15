@@ -17,8 +17,13 @@ class QuestionnaireController extends Controller
     {
         $data = $request->all();
         $twt_name = $request->session()->get('data')['twt_name'];
-        $data_questionnaire = $data['questionnaire'];
-        $data_questions = $data['questions'];
+        $data_questionnaire = $data['questionnaire'] ?? null;
+        if ($data_questionnaire == null) {
+            return response()->json([
+                'message' => '请填写问卷标题'
+            ]);
+        }
+        $data_questions = $data['questions'] ?? null;
         $qcount = count($data_questions);
         $data_questionnaire['twt_name'] = $twt_name;
         $data_questionnaire['qcount'] = $qcount;
@@ -35,24 +40,35 @@ class QuestionnaireController extends Controller
         $eid = $editor->id;
         $data_editor = ['eid' => $eid];
         Questionnaire::updateByQnid($qnid, $data_editor);
+        $response = ['qnid' => $qnid];
+        if ($qcount == 0) {
+            return response()->json($response);
+        }
         $this->store($data, $qnid);
-        $response = $status ? ['qnid' => $qnid] : null;
         return response()->json($response);
     }
 
     public function update(Request $request, $status, $qnid)
     {
         $data = $request->all();
-        $data_questionnaire = $data['questionnaire'];
-        $data_questions = $data['questions'];
+        $data_questionnaire = $data['questionnaire'] ?? null;
+        if ($data_questionnaire == null) {
+            return response()->json([
+                'message' => '请填写问卷标题'
+            ]);
+        }
+        $data_questions = $data['questions'] ?? null;
         $qcount = count($data_questions);
         $data_questionnaire['qcount'] = $qcount;
         $data_questionnaire['status'] = $status;
         Questionnaire::updateByQnid($qnid, $data_questionnaire);
         Question::deleteAll($qnid);
         Option::deleteAll($qnid);
+        $response = ['qnid' => $qnid];
+        if ($qcount == 0) {
+            return response()->json($response);
+        }
         $this->store($data, $qnid);
-        $response = $status ? ['qnid' => $qnid] : null;
         return response()->json($response);
     }
 
@@ -100,7 +116,8 @@ class QuestionnaireController extends Controller
             $data_submit = [
                 'qnid' => $qnid,
                 'twt_name' => $twt_name ?? null,
-                'ip' => $ip
+                'ip' => $ip,
+            //    'ishidden' => 0
             ];
             $submit = Submit::add($data_submit);
             $sid = $submit->sid;
@@ -157,7 +174,7 @@ class QuestionnaireController extends Controller
         $questions = Question::getAllQuestions($qnid);
         return response()->json([
             'questionnaire' => $questionnaire,
-            'questions' => $questions
+            'questions' => $questions ?? array()
         ]);
     }
 
@@ -165,10 +182,34 @@ class QuestionnaireController extends Controller
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
         $qstatus = $questionnaire->status;
         $ischecked = $questionnaire->ischecked;
+        $onceanswer = $questionnaire->onceanswer;
         return response()->json([
             'qstatus' => $qstatus,
-            'ischecked' => $ischecked
+            'ischecked' => $ischecked,
+            'onceanswer' => $onceanswer
         ]);
+    }
+
+    public function ifAnswered($qnid, Request $request){
+        $twt_name = null;
+        $info = null;
+        if ($request->session()->has('data')) {
+            $twt_name = $request->session()->get('data')['twt_name'];
+        }
+        if($twt_name != null){
+            $data = Submit::getdata($qnid, $twt_name);
+            if(count($data) < 1){
+                $info = 0;
+            }
+
+            else{
+                $info = 1;
+            }
+        }
+        return response()->json([
+            'info' => $info,
+        ]);
+
     }
 
 }

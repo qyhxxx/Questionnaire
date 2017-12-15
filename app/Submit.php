@@ -9,7 +9,7 @@ class Submit extends Model {
 
     protected $primaryKey = 'sid';
 
-    protected $fillable = ['qnid', 'twt_name', 'ip'];
+    protected $fillable = ['qnid', 'twt_name', 'ip', 'ishidden'];
 
     public $timestamps = true;
 
@@ -79,5 +79,11 @@ class Submit extends Model {
 
     public static function deleteBySid($sid) {
         self::where('sid', $sid)->delete();
+    }
+
+    public static function submitIshidden($sid){
+        $data = self::where('sid', $sid)->first();
+        $ishidden = $data->ishidden;
+        return $ishidden;
     }
 }

@@ -3,12 +3,11 @@
 namespace app\Helpers;
 
 class answers{
-    var $question,$option, $oneanswer, $qtype;
+    var $qid, $answer, $qtype;
 
-    public function __construct($question, $option, $oneanswer, $qtype){
-        $this->question = $question;
-        $this->option = $option;
-        $this->answer = $oneanswer;
+    public function __construct($question, $finalanswer, $qtype){
+        $this->qid = $question->qid;
+        $this->answer = $finalanswer;
         $this->qtype = $qtype;
     }
 }

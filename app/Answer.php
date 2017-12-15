@@ -248,8 +248,8 @@ class Answer extends Model {
         return $data;
     }
 
-    public static function partkilled($aid){
-        $partkilled = self::where('aid', $aid)->delete();
+    public static function partkilled($sid){
+        $partkilled = self::where('sid', $sid)->update(['ishidden' => 1]);
         return $partkilled;
     }
 

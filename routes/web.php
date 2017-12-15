@@ -26,6 +26,7 @@ Route::get('loginStatus', 'LoginController@loginStatus');
 Route::get('qnid/{qnid}', 'QuestionnaireController@getDataOfQuestionnaire')->middleware('GetDataMiddleware');
 Route::any('submit/qnid/{qnid}', 'QuestionnaireController@submit');
 Route::get('qinfo/{qnid}', 'QuestionnaireController@qinfo');
+Route::get('ifAnswered/{qnid}', 'QuestionnaireController@ifAnswered');
 
 Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'status/{status}'], function () {
@@ -47,9 +48,11 @@ Route::group(['middleware' => ['Authentication']], function () {
 
         //问卷展开[概述、设置]
         Route::get('/overview/{id}', 'MineQuestionController@overview');
-        Route::post('/overview/{id}', 'MineQuestionController@overview');
-        Route::post('/install/{id}', 'MineQuestionController@install');
-        Route::get('/install/{id}', 'MineQuestionController@install');
+  //      Route::post('/overview/{id}', 'MineQuestionController@overview');
+        Route::any('/install/{id}', 'MineQuestionController@install');
+    //    Route::get('/install/{id}', 'MineQuestionController@installInfo');
+        Route::post('/killed/{id}', 'MineQuestionController@killed');
+        Route::get('/killed/{id}', 'MineQuestionController@killed');
 //        Route::get('/overview/{id}', function () {
 //            return view('minequestion.overview');
 //        });
