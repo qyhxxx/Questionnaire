@@ -25,18 +25,16 @@ class Submit extends Model {
                 $submit = self::where([
                     'qnid' => $qnid,
                     'twt_name' => $twt_name
-                ])->get()->toArray();
-            }
-            else {
+                ])->first();
+            } else {
                 $submit = self::where([
                     'qnid' => $qnid,
                     'ip' => $ip
-                ])->get()->toArray();
+                ])->first();
             }
-            if (!empty($submit)) {
+            if ($submit != null) {
                 return 1;
-            }
-            else {
+            } else {
                 return 0;
             }
         }
