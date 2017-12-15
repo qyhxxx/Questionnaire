@@ -81,9 +81,8 @@ class Submit extends Model {
         self::where('sid', $sid)->delete();
     }
 
-    public static function submitIshidden($sid){
-        $data = self::where('sid', $sid)->first();
-        $ishidden = $data->ishidden;
-        return $ishidden;
+    public static function allkilled($qnid){
+        $allkilled = self::where('qnid', $qnid)->delete();
+        return $allkilled;
     }
 }

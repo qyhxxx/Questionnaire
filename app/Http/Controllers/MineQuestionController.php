@@ -140,7 +140,7 @@ class MineQuestionController extends Controller
         $everyday_ans = array_values($everyday_ans);
         $answer = array();
         $formanswers = array();
-        
+
         $answers = Answer::getmanyanswers($qnid);
         if($answers != null) {
             foreach ($answers as $val) {
@@ -307,15 +307,11 @@ class MineQuestionController extends Controller
 
     public function killed($qnid, Request $request){
         $allkilled = $request->input('allkilled');
-        $partkilled = $request->input('partkilled');
         $delete = '';
         if($allkilled == $qnid){
-            $delete = Answer::allkilled($qnid);
-        }
-        if($partkilled != null){
-            foreach ($partkilled as $key => $val){
-                $delete = Answer::partkilled($val);
-            }
+            $delete_ans = Answer::allkilled($qnid);
+            $delete_sub = Submit::allkilled($qnid);
+            $delete = 1;
         }
         return response()->json($delete);
     }

@@ -28,6 +28,7 @@ Route::get('qinfo/{qnid}', 'QuestionnaireController@qinfo');
 Route::any('submit/qnid/{qnid}', 'QuestionnaireController@submit');
 Route::get('ifAnswered/{qnid}', 'QuestionnaireController@ifAnswered');
 
+
 Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'status/{status}'], function () {
         Route::post('edit', 'QuestionnaireController@add');
