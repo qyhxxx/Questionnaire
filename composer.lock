@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "872fad36b33020f0ea72a633e21a5655",
+    "content-hash": "c3a35c0247f351e75edd5e2bd6d222ca",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2195,6 +2195,35 @@
             "description": "CssToInlineStyles is a class that enables you to convert HTML-pages/files into HTML-pages/files with inline styles. This is very useful when you're sending emails.",
             "homepage": "https://github.com/tijsverkoyen/CssToInlineStyles",
             "time": "2016-09-20T12:50:39+00:00"
+        },
+        {
+            "name": "twt/sso",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twtstudio/twt-sso-php.git",
+                "reference": "157e3786186dd2cefafe5dc60bbf144f8ffe2023"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/twtstudio/twt-sso-php/157e3786186dd2cefafe5dc60bbf144f8ffe2023.zip",
+                "reference": "157e3786186dd2cefafe5dc60bbf144f8ffe2023",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TwT\\SSO\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Innpaul Zhang",
+                    "email": "zyp108421@gmail.com"
+                }
+            ],
+            "time": "2017-12-15T02:19:15+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
