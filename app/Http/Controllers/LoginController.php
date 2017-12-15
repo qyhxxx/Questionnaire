@@ -41,10 +41,14 @@ class LoginController extends Controller {
 
     public function loginStatus(Request $request) {
         if ($request->session()->has('data')) {
-            return 1;
+            return response()->json([
+                'status' => 1
+            ]);
         }
         else {
-            return 0;
+            return response()->json([
+                'status' => 0
+            ]);
         }
     }
 }

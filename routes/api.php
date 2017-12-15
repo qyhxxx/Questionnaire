@@ -25,7 +25,7 @@ Route::get('login', 'LoginController@login');
 Route::get('loginStatus', 'LoginController@loginStatus');
 Route::get('qnid/{qnid}/{src?}', 'QuestionnaireController@getResponseOfQuestionnaire')->middleware('GetDataMiddleware');
 Route::get('qinfo/{qnid}', 'QuestionnaireController@qinfo');
-Route::get('submit/qnid/{qnid}', 'QuestionnaireController@submit');
+Route::any('submit/qnid/{qnid}', 'QuestionnaireController@submit');
 Route::get('ifAnswered/{qnid}', 'QuestionnaireController@ifAnswered');
 
 
