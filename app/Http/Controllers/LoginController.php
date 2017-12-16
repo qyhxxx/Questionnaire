@@ -27,6 +27,7 @@ class LoginController extends Controller {
         $sso = self::construct();
         $userinfo = $sso->fetchUserInfo($token);
         if ($userinfo->status == 1) {
+            dd($userinfo->result);
             $result = $userinfo->result;
             $data['user_number'] = $result->user_number;
             $data['twt_name'] = $result->twt_name;
