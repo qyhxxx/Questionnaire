@@ -26,9 +26,6 @@ class LoginController extends Controller {
     public static function storage($token) {
         $sso = self::construct();
         $userinfo = $sso->fetchUserInfo($token);
-        dd($userinfo->status);
-        dd($userinfo->result->user_number);
-        dd($userinfo->result->twt_name);
         if ($userinfo->status) {
             $result = $userinfo->result;
             $data['user_number'] = $result->user_number;
@@ -36,6 +33,7 @@ class LoginController extends Controller {
             Usr::add($data);
             $data['type'] = 0;
             $data['token'] = $token;
+            dd($data);
             session(['data' => $data]);
             return 1;
         }
