@@ -31,12 +31,13 @@ class LoginController extends Controller {
             echo $result->user_number . "1 <br>";
             $data['user_number'] = $result->user_number;
             $data['twt_name'] = $result->twt_name;
+            echo $result->user_number . "2 <br>";
             Usr::add($data);
             $data['type'] = 0;
             $data['token'] = $token;
-            echo $result->user_number . "2 <br>";
-            session(['data' => $data]);
             echo $result->user_number . "3 <br>";
+            session(['data' => $data]);
+            echo $result->user_number . "4 <br>";
             exit;
             return 1;
         }
