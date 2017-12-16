@@ -23,7 +23,7 @@ class LoginController extends Controller {
         exit;
     }
 
-    public static function storage($token) {
+    public static function storage(Request $request, $token) {
         $sso = self::construct();
         $userinfo = $sso->fetchUserInfo($token);
 //        dd($userinfo);
@@ -35,6 +35,7 @@ class LoginController extends Controller {
             $data['type'] = 0;
             $data['token'] = $token;
             session(['data' => $data]);
+            $session = $request->session()->get('data');
             return 1;
         }
         else {
