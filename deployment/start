@@ -1,0 +1,6 @@
+#!/bin/bash
+composer install
+
+php artisan cache:clear
+php artisan optimize
+php artisan config:cache
