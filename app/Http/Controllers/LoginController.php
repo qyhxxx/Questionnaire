@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\functions;
 use App\Helpers\sso;
 use App\Usr;
 use Illuminate\Http\Request;
+use TwT\SSO\Api;
 
 class LoginController extends Controller {
     public static function construct() {
         $app_key = "xVNxrf0yMuy7Cgs3pqdB";
         $app_id = "8";
-        $sso = new sso($app_id, $app_key, false);
+        $sso = new sso($app_id, $app_key);
         return $sso;
     }
 
