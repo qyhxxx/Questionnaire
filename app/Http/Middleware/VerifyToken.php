@@ -19,6 +19,7 @@ class VerifyToken
         if ($request->has('token')) {
             $token = $request->input('token');
             $status = LoginController::storage($token);
+            //return redirect()->intended();
             return response()->json([
                 'status' => $status
             ]);

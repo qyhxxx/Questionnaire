@@ -37,9 +37,8 @@ class QuestionnaireController extends Controller
         $data_questionnaire['onceanswer'] = 0;
         $data_questionnaire['verifiedphone'] = 0;
         $time = Carbon::now();
-        $timestamp = strtotime($time);
-        $data_questionnaire['created_at'] = $timestamp;
-        $data_questionnaire['updated_at'] = $timestamp;
+        $data_questionnaire['created_at'] = $time;
+        $data_questionnaire['updated_at'] = $time;
         $questionnaire = Questionnaire::add($data_questionnaire);
         $qnid = $questionnaire->qnid;
         $editor = Editor::add($twt_name, $qnid);
@@ -66,8 +65,7 @@ class QuestionnaireController extends Controller
         $data_questions = $data['questions'] ?? null;
         $qcount = count($data_questions);
         $time = Carbon::now();
-        $timestamp = strtotime($time);
-        $data_questionnaire['updated_at'] = $timestamp;
+        $data_questionnaire['updated_at'] = $time;
         $data_questionnaire['qcount'] = $qcount;
         $data_questionnaire['status'] = $status;
         Questionnaire::updateByQnid($qnid, $data_questionnaire);
@@ -142,11 +140,6 @@ class QuestionnaireController extends Controller
             $twt_name = $request->session()->get('data')['twt_name'];
         }
         $ip = functions::getIp();
-        if (Submit::isRepeat($qnid, $twt_name ?? null, $ip)) {
-            return response()->json([
-                'message' => '请勿重复答题'
-            ]);
-        }
         $data_submit = [
             'qnid' => $qnid,
             'twt_name' => $twt_name ?? null,
@@ -191,10 +184,12 @@ class QuestionnaireController extends Controller
         $qstatus = $questionnaire->status;
         $ischecked = $questionnaire->ischecked;
         $onceanswer = $questionnaire->onceanswer;
+        $verifiedphone = $questionnaire->verifiedphone;
         return response()->json([
             'qstatus' => $qstatus,
             'ischecked' => $ischecked,
-            'onceanswer' => $onceanswer
+            'onceanswer' => $onceanswer,
+            'verifiedphone' => $verifiedphone
         ]);
     }
 
@@ -217,7 +212,5 @@ class QuestionnaireController extends Controller
         return response()->json([
             'info' => $info,
         ]);
-
     }
-
 }

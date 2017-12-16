@@ -25,7 +25,7 @@ Route::get('login', 'LoginController@login');
 Route::get('loginStatus', 'LoginController@loginStatus');
 Route::get('qnid/{qnid}/{src?}', 'QuestionnaireController@getResponseOfQuestionnaire')->middleware('GetDataMiddleware');
 Route::get('qinfo/{qnid}', 'QuestionnaireController@qinfo');
-Route::any('submit/qnid/{qnid}', 'QuestionnaireController@submit');
+Route::post('submit/qnid/{qnid}', 'QuestionnaireController@submit');
 Route::get('ifAnswered/{qnid}', 'QuestionnaireController@ifAnswered');
 
 
@@ -34,6 +34,8 @@ Route::group(['middleware' => ['Authentication']], function () {
         Route::post('edit', 'QuestionnaireController@add');
         Route::post('update/qnid/{qnid}', 'QuestionnaireController@update')->middleware('Update');
     });
+    Route::get('getVerifiedPhoneQuery', 'VerifiedPhoneController@getgetVerifiedPhoneQuery');
+    Route::post('getVerifiedPhoneSign', 'VerifiedPhoneController@getVerifiedPhoneSign');
     Route::group(['prefix' => 'statistics'], function () {
         Route::get('qnid/{qnid}/init', 'StatisticsController@init');
         Route::get('qid/{qid}/getOptions', 'StatisticsController@getOptions');
@@ -65,7 +67,3 @@ Route::group(['middleware' => ['Authentication']], function () {
     Route::get('logout', 'LogoutController@logout');
 });
 
-Route::get('test', function () {
-    $usr = \App\Usr::getUsr('qyhxxx');
-    dd($usr);
-});
