@@ -19,6 +19,8 @@ class VerifyToken
         if ($request->has('token')) {
             $token = $request->input('token');
             $status = LoginController::storage($token);
+            var_dump($status);
+            exit;
             return response()->json([
                 'status' => $status
             ]);
