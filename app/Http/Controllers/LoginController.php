@@ -33,8 +33,8 @@ class LoginController extends Controller {
             Usr::add($data);
             $data['type'] = 0;
             $data['token'] = $token;
-            dd($result);
             session(['data' => $data]);
+            dd($result);
             return 1;
         }
         else {
