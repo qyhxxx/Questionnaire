@@ -284,6 +284,7 @@ class MineQuestionController extends Controller
                 'ischecked' => $ischecked,
                 'onceanswer' => $onceanswer,
                 'issetddl' => $issetddl,
+                'verifiedphone' => $verifiedphone
             ];
             $install_add = Questionnaire::update_install($qnid, $install);
             $twt_name = $request->input('twt_name');

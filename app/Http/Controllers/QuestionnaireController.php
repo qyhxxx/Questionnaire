@@ -10,6 +10,7 @@ use App\Question;
 use App\Questionnaire;
 use App\Submit;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class QuestionnaireController extends Controller
 {
@@ -35,6 +36,10 @@ class QuestionnaireController extends Controller
         $data_questionnaire['ischecked'] = 0;
         $data_questionnaire['onceanswer'] = 0;
         $data_questionnaire['verifiedphone'] = 0;
+        $time = Carbon::now();
+        $timestamp = strtotime($time);
+        $data_questionnaire['created_at'] = $timestamp;
+        $data_questionnaire['updated_at'] = $timestamp;
         $questionnaire = Questionnaire::add($data_questionnaire);
         $qnid = $questionnaire->qnid;
         $editor = Editor::add($twt_name, $qnid);
@@ -60,6 +65,9 @@ class QuestionnaireController extends Controller
         }
         $data_questions = $data['questions'] ?? null;
         $qcount = count($data_questions);
+        $time = Carbon::now();
+        $timestamp = strtotime($time);
+        $data_questionnaire['updated_at'] = $timestamp;
         $data_questionnaire['qcount'] = $qcount;
         $data_questionnaire['status'] = $status;
         Questionnaire::updateByQnid($qnid, $data_questionnaire);
@@ -171,9 +179,7 @@ class QuestionnaireController extends Controller
                 }
             }
         }
-        $questionnaire = Questionnaire::getQuestionnaire($qnid);
-        $recovery = $questionnaire['recovery'];
-        $new_recovery = $recovery+1;
+        $new_recovery = Submit::count_answers($qnid);
         $update_recovery = Questionnaire::updateByQnid($qnid, ['recovery' => $new_recovery]);
         return response()->json([
             'answers' => $answers ?? null

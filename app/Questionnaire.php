@@ -11,9 +11,10 @@ class Questionnaire extends Model {
     protected $primaryKey = 'qnid';
 
     protected $fillable = ['twt_name', 'name', 'remark', 'qcount', 'status', 'hasnumber',
-        'recover_at', 'ischecked', 'onceanswer', 'num', 'eid', 'recovery', 'issetddl', 'verifiedphone'];
+        'recover_at', 'ischecked', 'onceanswer', 'num', 'eid', 'recovery', 'issetddl', 'verifiedphone',
+    'created_at', 'updated_at'];
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     public static function add($data) {
         $questionnaire = self::create($data);
