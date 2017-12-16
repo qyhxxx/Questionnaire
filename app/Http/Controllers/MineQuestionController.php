@@ -268,10 +268,10 @@ class MineQuestionController extends Controller
             $onceanswer = $request->input('onceanswer');
             $issetddl = $request->input('issetddl');
             $verifiedphone = $request->input('verifiedphone');
-            if($recovery_at == '' && $questionnaire_data['issetddl'] = 0){
+            if($recovery_at == '' && $questionnaire_data['issetddl'] == 0){
                 $issetddl = 0;
             }
-            elseif($recovery_at == '' && $questionnaire_data['issetddl'] = 1){
+            elseif($recovery_at == '' && $questionnaire_data['issetddl'] == 1){
                 $issetddl = 1;
             }
             $recovery_time = '';
@@ -284,6 +284,7 @@ class MineQuestionController extends Controller
                 'ischecked' => $ischecked,
                 'onceanswer' => $onceanswer,
                 'issetddl' => $issetddl,
+                'verifiedphone' => $verifiedphone
             ];
             $install_add = Questionnaire::update_install($qnid, $install);
             $twt_name = $request->input('twt_name');
@@ -305,7 +306,6 @@ class MineQuestionController extends Controller
         $usr = Usr::getUsr($twt_name);
         return response()->json([
             'questionnaire_data' => $questionnaire_data,
-            'verifiedphone' => $questionnaire_data->verifiedphone,
             'issupermng' => $usr->type
         ]);
     }
