@@ -27,13 +27,13 @@ class LoginController extends Controller {
         $sso = self::construct();
         $userinfo = $sso->fetchUserInfo($token);
         if ($userinfo->status == 1) {
-            dd($userinfo->result);
             $result = $userinfo->result;
             $data['user_number'] = $result->user_number;
             $data['twt_name'] = $result->twt_name;
             Usr::add($data);
             $data['type'] = 0;
             $data['token'] = $token;
+            dd($result);
             session(['data' => $data]);
             return 1;
         }
