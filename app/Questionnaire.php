@@ -44,20 +44,23 @@ class Questionnaire extends Model {
 
     public static function update_install($qnid, $install){
         $questionnaire = self::find($qnid);
-        if($install['hasnumber'] != null){
+        if($install['hasnumber'] != $questionnaire->hasnumber){
             $questionnaire->hasnumber = $install['hasnumber'];
         }
-        if($install['recovery_at'] != null){
+        if($install['recovery_at'] != ''){
             $questionnaire->recovery_at = $install['recovery_at'];
         }
-        if($install['ischecked'] != null){
+        if($install['ischecked'] != $questionnaire->ischecked){
             $questionnaire->ischecked = $install['ischecked'];
         }
-        if($install['onceanswer'] != null){
+        if($install['onceanswer'] != $questionnaire->onceanswer){
             $questionnaire->onceanswer = $install['onceanswer'];
         }
-        if($install['issetddl'] != null){
+        if($install['issetddl'] != $questionnaire->issetddl){
             $questionnaire->issetddl = $install['issetddl'];
+        }
+        if ($install['verifiedphone'] != $questionnaire->verifiedphone){
+            $questionnaire->verifiedphone = $install['verifiedphone'];
         }
         $questionnaire->save();
         return $questionnaire;
