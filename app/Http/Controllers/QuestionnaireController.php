@@ -34,6 +34,7 @@ class QuestionnaireController extends Controller
         $data_questionnaire['hasnumber'] = 1;
         $data_questionnaire['ischecked'] = 0;
         $data_questionnaire['onceanswer'] = 0;
+        $data_questionnaire['verifiedphone'] = 0;
         $questionnaire = Questionnaire::add($data_questionnaire);
         $qnid = $questionnaire->qnid;
         $editor = Editor::add($twt_name, $qnid);
@@ -118,6 +119,9 @@ class QuestionnaireController extends Controller
     public function getDataOfQuestionnaire($qnid) {
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
         $questions = Question::getAllQuestions($qnid);
+        if (count($questions) == 0) {
+            $questions = array();
+        }
         return [
             'questionnaire' => $questionnaire,
             'questions' => $questions

@@ -32,7 +32,7 @@ Route::get('ifAnswered/{qnid}', 'QuestionnaireController@ifAnswered');
 Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'status/{status}'], function () {
         Route::post('edit', 'QuestionnaireController@add');
-        Route::post('update/qnid/{qnid}', 'QuestionnaireController@update');
+        Route::post('update/qnid/{qnid}', 'QuestionnaireController@update')->middleware('Update');
     });
     Route::group(['prefix' => 'statistics'], function () {
         Route::get('qnid/{qnid}/init', 'StatisticsController@init');
@@ -63,4 +63,9 @@ Route::group(['middleware' => ['Authentication']], function () {
     });
 
     Route::get('logout', 'LogoutController@logout');
+});
+
+Route::get('test', function () {
+    $usr = \App\Usr::getUsr('qyhxxx');
+    dd($usr);
 });

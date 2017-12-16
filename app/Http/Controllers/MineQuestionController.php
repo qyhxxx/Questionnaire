@@ -267,6 +267,7 @@ class MineQuestionController extends Controller
             $ischecked = $request->input('ischecked');
             $onceanswer = $request->input('onceanswer');
             $issetddl = $request->input('issetddl');
+            $verifiedphone = $request->input('verifiedphone');
             if($recovery_at == '' && $questionnaire_data['issetddl'] = 0){
                 $issetddl = 0;
             }
@@ -300,8 +301,12 @@ class MineQuestionController extends Controller
 //            }
         }
         $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
+        $twt_name = $questionnaire_data->twt_name;
+        $usr = Usr::getUsr($twt_name);
         return response()->json([
             'questionnaire_data' => $questionnaire_data,
+            'verifiedphone' => $questionnaire_data->verifiedphone,
+            'issupermng' => $usr->type
         ]);
     }
 

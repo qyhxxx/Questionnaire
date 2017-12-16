@@ -17,4 +17,9 @@ class Usr extends Model {
         $usr = self::firstOrCreate($data);
         return $usr;
     }
+
+    public static function getUsr($twt_name) {
+        $usr = self::where('twt_name', $twt_name)->first();
+        return $usr;
+    }
 }
