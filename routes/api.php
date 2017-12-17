@@ -68,9 +68,9 @@ Route::group(['middleware' => ['Authentication']], function () {
 });
 
 Route::get('update', function () {
-    $usrs = DB::table('usrs')->get();
+    $usrs = DB::table('usrs')->get()->toArray();
     foreach ($usrs as $usr) {
-        $twt_name = $usrs->twt_name;
+        $twt_name = $usr->twt_name;
         DB::table('usrs')->where('twt_name', $twt_name)->update(['type' => 0]);
     }
     $usrs = DB::table('usrs')->get();
