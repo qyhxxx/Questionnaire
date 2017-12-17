@@ -16,14 +16,16 @@ class VerifyToken
      */
     public function handle($request, Closure $next)
     {
-        if ($request->has('token')) {
+        if ($request->has('token') && strlen($request->get('token') > 45)) {
             $token = $request->input('token');
             $status = LoginController::storage($token);
-            $url = $request->session()->pull('url');
+            if ($request->session()->has('url')) {
+                $url = $request->session()->pull('url');
+            } else {
+                $url = "https://survey.twtstudio.com/";
+            }
             header("Location:".$url);
             exit;
-            //var_dump($status);
-            //exit;
             //return redirect()->intended();
 //            return response()->json([
 //                'status' => $status

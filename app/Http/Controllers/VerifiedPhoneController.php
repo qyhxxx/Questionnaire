@@ -28,7 +28,7 @@ class VerifiedPhoneController extends Controller
         $data['phone'] = $phone;
         session(['data' => $data]);
         return response()->json([
-            'sign' => $sign
+            'sign' => $sign ? 1 : 0
         ]);
     }
 }
