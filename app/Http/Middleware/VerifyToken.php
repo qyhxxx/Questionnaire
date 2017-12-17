@@ -19,10 +19,15 @@ class VerifyToken
         if ($request->has('token')) {
             $token = $request->input('token');
             $status = LoginController::storage($token);
+            $url = $request->session()->pull('url');
+            header("Location:".$url);
+            exit;
+            //var_dump($status);
+            //exit;
             //return redirect()->intended();
-            return response()->json([
-                'status' => $status
-            ]);
+//            return response()->json([
+//                'status' => $status
+//            ]);
         }
         return $next($request);
     }

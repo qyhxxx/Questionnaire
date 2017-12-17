@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Helpers\login;
 use App\Http\Controllers\LoginController;
 use Closure;
 
@@ -18,6 +17,9 @@ class Authentication
     public function handle($request, Closure $next)
     {
         if (!$request->session()->has('data')) {
+            $url = $request->url();
+            session(['url' => $url]);
+            session()->save();
             LoginController::login();
         }
         return $next($request);
