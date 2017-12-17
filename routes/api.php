@@ -67,13 +67,6 @@ Route::group(['middleware' => ['Authentication']], function () {
     Route::get('logout', 'LogoutController@logout');
 });
 
-Route::get('update', function () {
-    $usrs = DB::table('usrs')->get()->toArray();
-    foreach ($usrs as $usr) {
-        $twt_name = $usr->twt_name;
-        DB::table('usrs')->where('twt_name', $twt_name)->update(['type' => 0]);
-    }
-    $usrs = DB::table('usrs')->get();
-    dd($usrs);
+Route::get('test', function () {
+    echo strlen("?token=PXOebB9RN08rynF1AlUrCGCyYV5YoABgnN5ZYwL92qbaSq4ruGFTsRW71knVjfU0bcRaw6akJMqBYRuswBOQeupUZv6RejhiiHIL");
 });
-

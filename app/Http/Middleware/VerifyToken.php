@@ -16,7 +16,7 @@ class VerifyToken
      */
     public function handle($request, Closure $next)
     {
-        if ($request->has('token') && strlen($request->get('token') > 45)) {
+        if ($request->has('token') && strlen($request->get('token')) > 45) {
             $token = $request->input('token');
             $status = LoginController::storage($token);
             if ($request->session()->has('url')) {
