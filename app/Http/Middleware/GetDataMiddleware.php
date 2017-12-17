@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Editor;
+use App\Http\Controllers\LoginController;
 use App\Questionnaire;
 use Closure;
 
@@ -29,11 +30,14 @@ class GetDataMiddleware
                     ]);
                 }
 
-            }
-            else {
+            } else {
                 return response()->json([
                     'status' => 0
                 ]);
+            }
+        } else if ($questionnaire->ischecked || $questionnaire->verifiedphone) {
+            if (!$request->session()->has('data')) {
+                LoginController::login();
             }
         }
         return $next($request);

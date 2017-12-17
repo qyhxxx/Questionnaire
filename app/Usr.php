@@ -22,4 +22,10 @@ class Usr extends Model {
         $usr = self::where('twt_name', $twt_name)->first();
         return $usr;
     }
+
+    public static function updateUsr($twt_name, $data) {
+        self::where('twt_name', $twt_name)->update($data);
+        $usr = self::getUsr($twt_name);
+        return $usr;
+    }
 }

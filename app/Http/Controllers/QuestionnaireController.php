@@ -138,12 +138,14 @@ class QuestionnaireController extends Controller
     {
         if ($request->session()->has('data')) {
             $twt_name = $request->session()->get('data')['twt_name'];
+            $phone = $request->session()->get('data')['phone'] ?? null;
         }
         $ip = functions::getIp();
         $data_submit = [
             'qnid' => $qnid,
             'twt_name' => $twt_name ?? null,
-            'ip' => $ip
+            'ip' => $ip,
+            'phone' => $phone ?? null
         ];
         $submit = Submit::add($data_submit);
         $sid = $submit->sid;

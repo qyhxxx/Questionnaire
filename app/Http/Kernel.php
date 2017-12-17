@@ -6,6 +6,7 @@ use App\Http\Middleware\Answer;
 use App\Http\Middleware\Authentication;
 use App\Http\Middleware\Cors;
 use App\Http\Middleware\GetDataMiddleware;
+use App\Http\Middleware\submitAnswer;
 use App\Http\Middleware\test;
 use App\Http\Middleware\Update;
 use App\Http\Middleware\VerifyToken;
@@ -71,5 +72,6 @@ class Kernel extends HttpKernel
         'Authentication' => Authentication::class,
         'Update' => Update::class,
         'GetDataMiddleware' => GetDataMiddleware::class,
+        'submitAnswer' => submitAnswer::class,
     ];
 }

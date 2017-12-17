@@ -24,6 +24,9 @@ class VerifiedPhoneController extends Controller
         $time = $data['time'];
         $sso = LoginController::construct();
         $sign = $sso->getVerifiedPhoneSign($phone, $token, $time);
+        $data = $request->session()->get('data');
+        $data['phone'] = $phone;
+        session(['data' => $data]);
         return response()->json([
             'sign' => $sign
         ]);
