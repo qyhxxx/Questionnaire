@@ -34,6 +34,7 @@ class LoginController extends Controller {
             $data['type'] = 0;
             $data['token'] = $token;
             session(['data' => $data]);
+            session()->save();
             return 1;
         }
         else {
@@ -52,14 +53,5 @@ class LoginController extends Controller {
                 'status' => 0
             ]);
         }
-    }
-
-    public static function getStr(Request $request) {
-        $sso = self::construct();
-        $data = $request->session()->get('data');
-        $twt_name = $data['name'] ?? 0;
-        $token = $data['token'];
-        $str = $sso->getVerifiedPhoneQuery($twt_name, $token);
-        return $str;
     }
 }
