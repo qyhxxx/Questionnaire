@@ -21,7 +21,7 @@ Route::get('/', function () {
     //
 });
 
-Route::get('login/{from?}', 'LoginController@login');
+Route::get('login', 'LoginController@login');
 Route::get('loginStatus', 'LoginController@loginStatus');
 Route::get('qnid/{qnid}/{src?}', 'QuestionnaireController@getResponseOfQuestionnaire')->middleware('GetDataMiddleware');
 Route::get('qinfo/{qnid}', 'QuestionnaireController@qinfo');
@@ -64,4 +64,9 @@ Route::group(['middleware' => ['Authentication']], function () {
     });
 
     Route::get('logout', 'LogoutController@logout');
+});
+
+Route::get('test', function () {
+    $str = urlencode("https://survey.twtstudio.com/index");
+    echo urldecode($str);
 });

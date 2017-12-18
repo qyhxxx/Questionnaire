@@ -16,8 +16,9 @@ class LoginController extends Controller {
         return $sso;
     }
 
-    public static function login($from = "https://survey.twtstudio.com/") {
+    public static function login() {
         $sso = self::construct();
+        $from = $_GET['from'] ?? urlencode("https://survey.twtstudio.com/index");
         $link = "https://survey.twtstudio.com/api/?from=" . $from;
         header("Location:".$sso->getLoginUrl($link));
         exit;
