@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class VerifiedPhoneController extends Controller
 {
-    public function getgetVerifiedPhoneQuery(Request $request) {
+    public function getVerifiedPhoneQuery(Request $request) {
         $data = $request->session()->get('data');
         $twt_name = $data['twt_name'] ?? 0;
         $token = $data['token'];

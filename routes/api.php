@@ -33,7 +33,7 @@ Route::group(['middleware' => ['Authentication']], function () {
         Route::post('edit', 'QuestionnaireController@add');
         Route::post('update/qnid/{qnid}', 'QuestionnaireController@update')->middleware('Update');
     });
-    Route::get('getVerifiedPhoneQuery', 'VerifiedPhoneController@getgetVerifiedPhoneQuery');
+    Route::get('getVerifiedPhoneQuery', 'VerifiedPhoneController@getVerifiedPhoneQuery');
     Route::post('getVerifiedPhoneSign', 'VerifiedPhoneController@getVerifiedPhoneSign');
     Route::group(['prefix' => 'statistics'], function () {
         Route::get('qnid/{qnid}/init', 'StatisticsController@init');
