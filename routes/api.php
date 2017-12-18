@@ -65,3 +65,8 @@ Route::group(['middleware' => ['Authentication']], function () {
 
     Route::get('logout', 'LogoutController@logout');
 });
+
+Route::post('test', function (Request $request) {
+    $data = $request->all();
+    dd($data);
+});

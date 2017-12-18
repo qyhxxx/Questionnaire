@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Usr extends Model {
     protected $table = 'usrs';
 
-    protected $primaryKey = 'twt_name';
+    protected $primaryKey = 'id';
 
-    protected $fillable = ['twt_name', 'user_number', 'type', 'phone'];
+    protected $fillable = ['id', 'twt_name', 'user_number', 'type', 'phone'];
 
     public $timestamps = true;
 
