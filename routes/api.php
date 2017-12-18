@@ -41,11 +41,11 @@ Route::group(['middleware' => ['Authentication']], function () {
         Route::post('qid/{qid}/data', 'StatisticsController@statisticsOfOneQuestion');
     });
 
-    Route::get('getCsrfToken', function () {
-        return response()->json([
-            'csrf_token' => csrf_token()
-        ]);
-    });
+//    Route::get('getCsrfToken', function () {
+//        return response()->json([
+//            'csrf_token' => csrf_token()
+//        ]);
+//    });
 
     //我的问卷
     Route::group(['prefix' => 'minequestion'], function () {
