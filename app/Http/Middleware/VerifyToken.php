@@ -19,17 +19,17 @@ class VerifyToken
         if ($request->has('token') && strlen($request->get('token')) > 45) {
             $token = $request->input('token');
             $status = LoginController::storage($token);
-            if ($request->session()->has('url')) {
-                $url = $request->session()->pull('url');
-            } else {
-                $url = "https://survey.twtstudio.com/";
-            }
-            header("Location:".$url);
-            exit;
+//            if ($request->session()->has('url')) {
+//                $url = $request->session()->pull('url');
+//            } else {
+//                $url = "https://survey.twtstudio.com/";
+//            }
+//            header("Location:".$url);
+//            exit;
             //return redirect()->intended();
-//            return response()->json([
-//                'status' => $status
-//            ]);
+            return response()->json([
+                'status' => $status
+            ]);
         }
         return $next($request);
     }
