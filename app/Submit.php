@@ -9,7 +9,7 @@ class Submit extends Model {
 
     protected $primaryKey = 'sid';
 
-    protected $fillable = ['qnid', 'twt_name', 'ip', 'ishidden'];
+    protected $fillable = ['qnid', 'twt_name', 'ip', 'phone'];
 
     public $timestamps = true;
 
@@ -18,27 +18,28 @@ class Submit extends Model {
         return $submit;
     }
 
-    public static function isRepeat($qnid, $twt_name = null, $ip) {
-        $questionnaire = Questionnaire::getQuestionnaire($qnid);
-        if ($questionnaire->onceanswer) {
-            if ($twt_name) {
-                $submit = self::where([
-                    'qnid' => $qnid,
-                    'twt_name' => $twt_name
-                ])->first();
-            } else {
-                $submit = self::where([
-                    'qnid' => $qnid,
-                    'ip' => $ip
-                ])->first();
-            }
-            if ($submit != null) {
-                return 1;
-            } else {
-                return 0;
-            }
+    public static function isRepeat($qnid, $twt_name = null, $ip, $phone = null) {
+        if ($phone) {
+            $submit = self::where([
+                'qnid' => $qnid,
+                'phone' => $phone
+            ])->first();
+        } else if ($twt_name) {
+            $submit = self::where([
+                'qnid' => $qnid,
+                'twt_name' => $twt_name
+            ])->first();
+        } else {
+            $submit = self::where([
+                'qnid' => $qnid,
+                'ip' => $ip
+            ])->first();
         }
-        return 0;
+        if ($submit != null) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public static function getSidArr($qnid) {
