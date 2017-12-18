@@ -66,36 +66,36 @@ class MineQuestionController extends Controller
         ]);
     }
 
-    //问卷缩略图页面
-    public function mine(Request $request){
-        $order_status = $request->input('order_status');
-        $order_sequence = $request->input('order_sequence');
-        $twt_name = $request->session()->get('data')['twt_name'];
-
-//        $data = $request->input('data');
-//        if($data){
-//            $find = Questionnaire::reach($data);
-//            if(!$find){
-//                return redirect('/minequestion/false');
-//            }  //报错页面
+//    //问卷缩略图页面
+//    public function mine(Request $request){
+//        $order_status = $request->input('order_status');
+//        $order_sequence = $request->input('order_sequence');
+//        $twt_name = $request->session()->get('data')['twt_name'];
+//
+////        $data = $request->input('data');
+////        if($data){
+////            $find = Questionnaire::reach($data);
+////            if(!$find){
+////                return redirect('/minequestion/false');
+////            }  //报错页面
+////            return response()->json([
+////                'find' => $find,
+////            ]);
+////        }
+//        $questionnaires = Editor::questionnaires($twt_name);
+//        $id = array();
+//        if ($questionnaires) {
+//            foreach ($questionnaires as $key=>$val) {
+//                $id[$key] = $val->qnid;
+//            }
+//        }
+//        if($id) {
+//            $questionnaire = Questionnaire::sequence($order_status, $order_sequence, $id);
 //            return response()->json([
-//                'find' => $find,
+//                'questionnaire' => $questionnaire ?? null,
 //            ]);
 //        }
-        $questionnaires = Editor::questionnaires($twt_name);
-        $id = array();
-        if ($questionnaires) {
-            foreach ($questionnaires as $key=>$val) {
-                $id[$key] = $val->qnid;
-            }
-        }
-        if($id) {
-            $questionnaire = Questionnaire::sequence($order_status, $order_sequence, $id);
-            return response()->json([
-                'questionnaire' => $questionnaire ?? null,
-            ]);
-        }
-    }
+//    }
 //    //问卷缩略图页面搜索问卷
 //    public function reach(Request $request){
 //        $data = $request->input('data');
@@ -111,20 +111,18 @@ class MineQuestionController extends Controller
     public function overview($qnid){
         $questionnaire_data = Questionnaire::getdata($qnid);
         $questions = Question::getquestions($qnid);
-        $count_questions = count($questions);
         $editors = Editor::getdata($qnid);
         $submit_answers = Submit::answers($qnid);
         $count_answers = count($submit_answers);
-        //     $answers = Answer::getanswers($qnid);
         $created_at = $questionnaire_data['created_at'];
         $created_day = strtotime($created_at);
         $today_at = Carbon::now();
         $today_day = strtotime($today_at);
         $everyday_ans = array();
-     //   $j = 0;
         for($i = $created_day;$i <= $today_day;$i = strtotime('+1 day', $i)){
-            foreach ($submit_answers as $key => $val){
-                $time = date('Y-m-d', strtotime($val['created_at']));
+            if(count($submit_answers) >= 1){
+                foreach ($submit_answers as $key => $val){
+                    $time = date('Y-m-d', strtotime($val['created_at']));
                     if($time == date('Y-m-d',$i)){
                         if(!isset($everyday_ans[$time]['number'])){
                             $everyday_ans[$time]['number'] = 1;
@@ -134,15 +132,15 @@ class MineQuestionController extends Controller
                             $everyday_ans[$time]['number'] = $everyday_ans[$j]['number']+1;
                         }
                     }
+                }
             }
-          //  $j++;
         }
         $everyday_ans = array_values($everyday_ans);
         $answer = array();
         $formanswers = array();
 
         $answers = Answer::getmanyanswers($qnid);
-        if($answers != null) {
+        if(count($answers) >= 1) {
             foreach ($answers as $val) {
                 $answer[$val['sid']][$val['qid']][] = $val;
             }
