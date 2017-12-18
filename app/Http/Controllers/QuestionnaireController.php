@@ -19,7 +19,7 @@ class QuestionnaireController extends Controller
         $data = $request->all();
         $twt_name = $request->session()->get('data')['twt_name'];
         $data_questionnaire = $data['questionnaire'] ?? null;
-        if ($data_questionnaire->name == null) {
+        if ($data_questionnaire == null) {
             return response()->json([
                 'message' => '请填写问卷标题'
             ]);
