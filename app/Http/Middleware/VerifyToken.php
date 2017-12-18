@@ -25,7 +25,7 @@ class VerifyToken
 //                $url = "https://survey.twtstudio.com/";
 //            }
             if ($status) {
-                $url = $request->get('from') ?? "https://survey.twtstudio.com/";
+                $url = $request->get('from');
                 header("Location:".$url);
                 exit;
             } else {
