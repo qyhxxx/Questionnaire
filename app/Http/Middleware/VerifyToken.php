@@ -24,12 +24,12 @@ class VerifyToken
 //            } else {
 //                $url = "https://survey.twtstudio.com/";
 //            }
-            $url = "https://survey.twtstudio.com/";
-            header("Location:".$url);
-            exit;
-//            return response()->json([
-//                'status' => $status
-//            ]);
+//            $url = "https://survey.twtstudio.com/";
+//            header("Location:".$url);
+//            exit;
+            return response()->json([
+                'status' => $status
+            ]);
         }
         return $next($request);
     }
