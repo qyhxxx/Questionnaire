@@ -24,7 +24,6 @@ class Usr extends Model {
     }
 
     public static function updateUsr($twt_name, $data) {
-        $data['type'] = 0;
         self::where('twt_name', $twt_name)->update($data);
         $usr = self::getUsr($twt_name);
         return $usr;

@@ -28,7 +28,6 @@ Route::get('qinfo/{qnid}', 'QuestionnaireController@qinfo');
 Route::post('submit/qnid/{qnid}', 'QuestionnaireController@submit')->middleware('submitAnswer');
 Route::get('ifAnswered/{qnid}', 'QuestionnaireController@ifAnswered');
 
-
 Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'status/{status}'], function () {
         Route::post('edit', 'QuestionnaireController@add');
@@ -65,8 +64,4 @@ Route::group(['middleware' => ['Authentication']], function () {
     });
 
     Route::get('logout', 'LogoutController@logout');
-});
-
-Route::get('test', function () {
-    echo strlen("?token=PXOebB9RN08rynF1AlUrCGCyYV5YoABgnN5ZYwL92qbaSq4ruGFTsRW71knVjfU0bcRaw6akJMqBYRuswBOQeupUZv6RejhiiHIL");
 });
