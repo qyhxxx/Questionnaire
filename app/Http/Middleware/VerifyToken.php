@@ -26,8 +26,9 @@ class VerifyToken
 //            }
             if ($status) {
                 $url = urldecode($request->get('from'));
-                header("Location:".$url);
-                exit;
+                dd($url);
+//                header("Location:".$url);
+//                exit;
             } else {
                 return response()->json([
                     'message' => '登录失败'
