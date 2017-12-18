@@ -26,7 +26,9 @@ class VerifyToken
 //            }
             if ($status) {
                 $url = urldecode($request->get('from'));
-                dd($url);
+                return response()->json([
+                    'url' => $url
+                ]);
 //                header("Location:".$url);
 //                exit;
             } else {
