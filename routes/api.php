@@ -67,5 +67,5 @@ Route::group(['middleware' => ['Authentication']], function () {
 });
 
 Route::get('test', function () {
-    echo urlencode("https://survey.twtstudio.com");
+    echo urlencode("https://survey.twtstudio.com/create");
 });
