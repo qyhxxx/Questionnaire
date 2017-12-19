@@ -21,14 +21,9 @@ Route::get('/', function () {
     //
 });
 
-Route::get('test', function () {
-    return 'hhh';
-});
-
 Route::get('login', 'LoginController@login');
 Route::get('loginStatus', 'LoginController@loginStatus');
-Route::get('qnid/{qnid}', 'QuestionnaireController@getResponseOfQuestionnaire')->middleware('GetDataMiddleware');
-Route::get('answer/{qnid}', 'QuestionnaireController@getResponseOfQuestionnaire')->middleware('GetDataMiddleware');
+Route::get('qnid/{qnid}/{src?}', 'QuestionnaireController@getResponseOfQuestionnaire')->middleware('GetDataMiddleware');
 Route::get('qinfo/{qnid}', 'QuestionnaireController@qinfo');
 Route::post('submit/qnid/{qnid}', 'QuestionnaireController@submit')->middleware('submitAnswer');
 Route::get('ifAnswered/{qnid}', 'QuestionnaireController@ifAnswered');

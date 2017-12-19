@@ -98,23 +98,25 @@ class QuestionnaireController extends Controller
         }
     }
 
-    public function getResponseOfQuestionnaire($qnid)
+    public function getResponseOfQuestionnaire($qnid, $src = null)
     {
-        $questionnaire_info = Questionnaire::getdata($qnid);
-        $num = $questionnaire_info['num'];
-        if(isset($num)){
-            $num = $num+1;
-            $data_update = [
-                'num' => $num,
-            ];
-            $update = Questionnaire::updateByQnid($qnid, $data_update);
-        }
-        else{
-            $num = 1;
-            $data_update = [
-                'num' => $num,
-            ];
-            $update = Questionnaire::updateByQnid($qnid, $data_update);
+        if ($src == 'answer') {
+            $questionnaire_info = Questionnaire::getdata($qnid);
+            $num = $questionnaire_info['num'];
+            if(isset($num)){
+                $num = $num+1;
+                $data_update = [
+                    'num' => $num,
+                ];
+                $update = Questionnaire::updateByQnid($qnid, $data_update);
+            }
+            else{
+                $num = 1;
+                $data_update = [
+                    'num' => $num,
+                ];
+                $update = Questionnaire::updateByQnid($qnid, $data_update);
+            }
         }
         $response = $this->getDataOfQuestionnaire($qnid);
         return response()->json($response);
