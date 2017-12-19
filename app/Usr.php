@@ -16,6 +16,7 @@ class Usr extends Model {
     public static function add($data) {
         $usr = self::find($data['id']);
         if ($usr != null) {
+            unset($data['type']);
             $usr->update($data);
             $usr = self::find($data['id']);
         } else {
