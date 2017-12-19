@@ -161,7 +161,7 @@ class QuestionnaireController extends Controller
             $twt_name = $request->session()->get('data')['twt_name'];
             $phone = $request->session()->get('data')['phone'] ?? null;
         }
-        $ip = functions::getIp();
+        $ip = $request->getClientIp();
         $data_submit = [
             'qnid' => $qnid,
             'twt_name' => $twt_name ?? null,
