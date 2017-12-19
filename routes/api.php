@@ -28,7 +28,7 @@ Route::get('qinfo/{qnid}', 'QuestionnaireController@qinfo');
 Route::post('submit/qnid/{qnid}', 'QuestionnaireController@submit')->middleware('submitAnswer');
 Route::get('ifAnswered/{qnid}', 'QuestionnaireController@ifAnswered');
 
-//Route::group(['middleware' => ['Authentication']], function () {
+Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'status/{status}'], function () {
         Route::post('edit', 'QuestionnaireController@add');
         Route::post('update/qnid/{qnid}', 'QuestionnaireController@update')->middleware('Update');
@@ -70,4 +70,4 @@ Route::get('ifAnswered/{qnid}', 'QuestionnaireController@ifAnswered');
     });
 
     Route::get('logout', 'LogoutController@logout');
-//});
+});
