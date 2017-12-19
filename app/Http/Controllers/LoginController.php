@@ -47,8 +47,10 @@ class LoginController extends Controller {
 
     public function loginStatus(Request $request) {
         if ($request->session()->has('data')) {
+            $twt_name = $request->session()->get('data')['twt_name'];
             return response()->json([
-                'status' => 1
+                'status' => 1,
+                'twt_name' => $twt_name
             ]);
         }
         else {
