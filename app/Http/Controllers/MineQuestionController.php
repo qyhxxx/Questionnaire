@@ -129,7 +129,7 @@ class MineQuestionController extends Controller
                             $everyday_ans[$time]['time'] = $time;
                         }
                         else{
-                            $everyday_ans[$time]['number'] = $everyday_ans[$j]['number']+1;
+                            $everyday_ans[$time]['number'] = $everyday_ans[$i]['number']+1;
                         }
                     }
                 }
