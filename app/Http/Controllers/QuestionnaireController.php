@@ -9,6 +9,7 @@ use App\Option;
 use App\Question;
 use App\Questionnaire;
 use App\Submit;
+use App\Usr;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -157,16 +158,28 @@ class QuestionnaireController extends Controller
 
     public function submit(Request $request, $qnid)
     {
+        $real_name = null;
         if ($request->session()->has('data')) {
             $twt_name = $request->session()->get('data')['twt_name'];
             $phone = $request->session()->get('data')['phone'] ?? null;
+            $real_name = $request->session()->get('data')['real_name'];
+        }
+        $questionnaire_data = Questionnaire::getdata($qnid);
+        $creator_name = $questionnaire_data['twt_name'];
+        $creator_type = Usr::getTypeByName($creator_name);
+        if($creator_type == 1 && $questionnaire_data['ischecked'] == 1){
+            $name = $real_name;
+        }
+        else{
+            $name = null;
         }
         $ip = $request->getClientIp();
         $data_submit = [
             'qnid' => $qnid,
             'twt_name' => $twt_name ?? null,
             'ip' => $ip,
-            'phone' => $phone ?? null
+            'phone' => $phone ?? null,
+            'real_name' => $name,
         ];
         $submit = Submit::add($data_submit);
         $sid = $submit->sid;

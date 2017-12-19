@@ -30,11 +30,12 @@ class LoginController extends Controller {
         if ($userinfo->status == 1) {
             $result = $userinfo->result;
             $data['id'] = $result->id;
-            $data['twt_name'] = $result->twt_name;
             $data['user_number'] = $result->user_number;
+            $data['twt_name'] = $result->twt_name;
             $data['type'] = 0;
             Usr::add($data);
             $data['token'] = $token;
+            $data['real_name'] = $result->user_info->username;
             session(['data' => $data]);
             session()->save();
             return 1;
