@@ -38,6 +38,7 @@ class QuestionnaireController extends Controller
         $data_questionnaire['onceanswer'] = 0;
         $data_questionnaire['verifiedphone'] = 0;
         $time = date('Y-m-d H:i:s', time());
+        dd($time);
         $data_questionnaire['created_at'] = $time;
         $data_questionnaire['updated_at'] = $time;
         $questionnaire = Questionnaire::add($data_questionnaire);
