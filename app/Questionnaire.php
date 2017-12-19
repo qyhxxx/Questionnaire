@@ -13,7 +13,7 @@ class Questionnaire extends Model {
     protected $fillable = ['twt_name', 'name', 'remark', 'qcount', 'status', 'hasnumber', 'recover_at', 'ischecked',
             'onceanswer', 'num', 'eid', 'recovery', 'issetddl', 'verifiedphone', 'created_at', 'updated_at'];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     public static function add($data) {
         $questionnaire = self::create($data);

@@ -36,9 +36,9 @@ class QuestionnaireController extends Controller
         $data_questionnaire['ischecked'] = 0;
         $data_questionnaire['onceanswer'] = 0;
         $data_questionnaire['verifiedphone'] = 0;
-        $time = Carbon::now();
-        $data_questionnaire['created_at'] = $time;
-        $data_questionnaire['updated_at'] = $time;
+//        $time = Carbon::now();
+//        $data_questionnaire['created_at'] = $time;
+//        $data_questionnaire['updated_at'] = $time;
         $questionnaire = Questionnaire::add($data_questionnaire);
         $qnid = $questionnaire->qnid;
         $editor = Editor::add($twt_name, $qnid);
@@ -64,8 +64,8 @@ class QuestionnaireController extends Controller
         }
         $data_questions = $data['questions'] ?? null;
         $qcount = count($data_questions);
-        $time = Carbon::now();
-        $data_questionnaire['updated_at'] = $time;
+//        $time = Carbon::now();
+//        $data_questionnaire['updated_at'] = $time;
         $data_questionnaire['qcount'] = $qcount;
         $data_questionnaire['status'] = $status;
         Questionnaire::updateByQnid($qnid, $data_questionnaire);
