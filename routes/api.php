@@ -23,7 +23,7 @@ Route::get('/', function () {
 
 Route::get('login', 'LoginController@login');
 Route::get('loginStatus', 'LoginController@loginStatus');
-Route::get('qnid/{qnid}/', 'QuestionnaireController@getResponseOfQuestionnaire')->middleware('GetDataMiddleware');
+Route::get('qnid/{qnid}', 'QuestionnaireController@getResponseOfQuestionnaire')->middleware('GetDataMiddleware');
 Route::get('qnid/{qnid}/answer', 'QuestionnaireController@getResponseOfAnswer')->middleware('GetDataMiddleware');
 Route::get('qinfo/{qnid}', 'QuestionnaireController@qinfo');
 Route::post('submit/qnid/{qnid}', 'QuestionnaireController@submit')->middleware('submitAnswer');
