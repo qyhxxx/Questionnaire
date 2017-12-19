@@ -24,7 +24,7 @@ class submitAnswer
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
         $onceanswer = $questionnaire->onceanswer;
         $verifiedphone = $questionnaire->verifiedphone;
-        $ip = functions::getIp();
+        $ip = $request->getClientIp();
         if ($onceanswer) {
             if ($request->session()->has('data')) {
                 $twt_name = $request->session()->get('data')['twt_name'];
