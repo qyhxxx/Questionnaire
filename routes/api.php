@@ -21,8 +21,8 @@ Route::get('/', function () {
     //
 });
 
-Route::get('test/{qnid}', function ($qnid) {
-    return $qnid;
+Route::get('test', function () {
+    return 'hhh';
 });
 
 Route::get('login', 'LoginController@login');
