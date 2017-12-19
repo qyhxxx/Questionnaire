@@ -45,8 +45,8 @@ class QuestionnaireController extends Controller
         $editor = Editor::add($twt_name, $qnid);
         $eid = $editor->id;
         $data_editor = ['eid' => $eid];
-        Questionnaire::updateByQnid($qnid, $data_editor);
         return response()->json('');
+        Questionnaire::updateByQnid($qnid, $data_editor);
         $response = ['qnid' => $qnid];
         if ($qcount == 0) {
             return response()->json($response);
