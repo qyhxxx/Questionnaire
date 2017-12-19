@@ -21,9 +21,8 @@ class Questionnaire extends Model {
     }
 
     public static function updateByQnid($qnid, $data) {
-
         $t = self::getQuestionnaire($qnid);
-        return response()->json($t);
+        return response()->json($data);
         $t->update($data);
         $questionnaire = self::getQuestionnaire($qnid);
         return $questionnaire;
