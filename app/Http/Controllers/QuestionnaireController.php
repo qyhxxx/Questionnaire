@@ -100,6 +100,22 @@ class QuestionnaireController extends Controller
 
     public function getResponseOfQuestionnaire($qnid)
     {
+        $questionnaire_info = Questionnaire::getdata($qnid);
+        $num = $questionnaire_info['num'];
+        if(isset($num)){
+            $num = $num+1;
+            $data_update = [
+                'num' => $num,
+            ];
+            $update = Questionnaire::updateByQnid($qnid, $data_update);
+        }
+        else{
+            $num = 1;
+            $data_update = [
+                'num' => $num,
+            ];
+            $update = Questionnaire::updateByQnid($qnid, $data_update);
+        }
         $response = $this->getDataOfQuestionnaire($qnid);
         return response()->json($response);
     }
