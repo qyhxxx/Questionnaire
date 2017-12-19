@@ -283,10 +283,7 @@ class MineQuestionController extends Controller
             $onceanswer = $request->input('onceanswer');
             $issetddl = $request->input('issetddl');
             $verifiedphone = $request->input('verifiedphone');
-            $iscollect = $request->input('iscollect');
-            if($questionnaire_data['status'] == 2){
-                $iscollect = 2;
-            }
+
             if($recovery_at == '' && $questionnaire_data['issetddl'] == 0){
                 $issetddl = 0;
             }
@@ -304,7 +301,7 @@ class MineQuestionController extends Controller
                 'onceanswer' => $onceanswer,
                 'issetddl' => $issetddl,
                 'verifiedphone' => $verifiedphone,
-                'status' => $iscollect,
+
             ];
             $install_add = Questionnaire::update_install($qnid, $install);
             $twt_name = $request->input('twt_name');
@@ -327,6 +324,24 @@ class MineQuestionController extends Controller
         return response()->json([
             'questionnaire_data' => $questionnaire_data,
             'issupermng' => $usr->type
+        ]);
+    }
+
+    public function installCollect($qnid, Request $request){
+        $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
+        $iscollect = $request->input('iscollect');
+        if($request->isMethod('POST')) {
+            if ($questionnaire_data['status'] == 2) {
+                $iscollect = 2;
+            }
+            $install = [
+                'status' => $iscollect,
+            ];
+            $install_add = Questionnaire::update_install($qnid, $install);
+        }
+        $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
+        return response()->json([
+            'questionnaire_data' => $questionnaire_data,
         ]);
     }
 
