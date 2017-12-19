@@ -101,7 +101,7 @@ class QuestionnaireController extends Controller
     public function getResponseOfQuestionnaire($qnid, $src = null)
     {
         $response = $this->getDataOfQuestionnaire($qnid);
-        if ($src == 1) {
+        if ($src != null) {
             $questionnaire_info = Questionnaire::getdata($qnid);
             $num = $questionnaire_info['num'];
             if(isset($num)){
