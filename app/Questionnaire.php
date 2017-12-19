@@ -65,6 +65,15 @@ class Questionnaire extends Model {
         return $questionnaire;
     }
 
+    public static function update_collect($qnid, $install){
+        $questionnaire = self::find($qnid);
+        if($install['status'] != $questionnaire->status){
+            $questionnaire->status = $install['status'];
+        }
+        $questionnaire->save();
+        return $questionnaire;
+    }
+
     //缩略图页面搜索相应问卷
     public static function reach($data){
         $reach = self::where('name','like','%'.$data.'%')->get();

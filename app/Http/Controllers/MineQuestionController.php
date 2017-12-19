@@ -337,7 +337,7 @@ class MineQuestionController extends Controller
             $install = [
                 'status' => $iscollect,
             ];
-            $install_add = Questionnaire::update_install($qnid, $install);
+            $install_add = Questionnaire::update_collect($qnid, $install);
         }
         $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
         return response()->json([
