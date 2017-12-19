@@ -329,8 +329,8 @@ class MineQuestionController extends Controller
 
     public function installCollect($qnid, Request $request){
         $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
-        $iscollect = $request->input('iscollect');
         if($request->isMethod('POST')) {
+            $iscollect = $request->input('iscollect');
             if ($questionnaire_data['status'] == 2) {
                 $iscollect = 2;
             }
