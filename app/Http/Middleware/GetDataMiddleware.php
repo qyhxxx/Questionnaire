@@ -20,7 +20,7 @@ class GetDataMiddleware
     {
         $qnid = $request->route('qnid');
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
-        if (time() > $questionnaire->recovery_at) {
+        if ($questionnaire->recovery_at != null && time() > $questionnaire->recovery_at) {
             Questionnaire::updateByQnid($qnid, ['status' => 2]);
         }
         if ($questionnaire->status != 1) {
