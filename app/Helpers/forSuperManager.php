@@ -1,7 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: qyh
- * Date: 2017/12/19
- * Time: 23:05
- */
+
+namespace app\Helpers;
+
+class forSuperManager{
+    var $qid, $answer;
+
+    public function __construct($qid, $data){
+        $this->qid = $qid;
+        $this->answer = $data;
+    }
+}

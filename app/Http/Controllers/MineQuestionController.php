@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Answer;
+use app\Helpers\forSuperManager;
 use App\Submit;
 use Illuminate\Http\Request;
 use App\Questionnaire;
@@ -150,8 +151,8 @@ class MineQuestionController extends Controller
                     $twt_name = Submit::getNameBySid($val['sid']);
                     $real_name = Submit::getRealnameBySid($val['sid']);
                     $user_number = Usr::getNumberByName($twt_name);
-                    $stu_info[$val['sid']][] = $real_name;
-                    $stu_info[$val['sid']][] = $user_number;
+                    $stu_info[$val['sid']][] = new forSuperManager('name', $real_name);
+                    $stu_info[$val['sid']][] = new forSuperManager('studentid', $user_number);
                 } else {
                     $stu_info = array([]);
                 }
