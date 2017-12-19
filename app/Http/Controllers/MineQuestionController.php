@@ -146,15 +146,15 @@ class MineQuestionController extends Controller
         if(count($answers) >= 1) {
             foreach ($answers as $val) {
                 $answer_ques[$val['sid']][$val['qid']][] = $val;
-       //         if ($creator_type == 1) {
+                if ($creator_type == 1) {
                     $twt_name = Submit::getNameBySid($val['sid']);
                     $real_name = Submit::getRealnameBySid($val['sid']);
                     $user_number = Usr::getNumberByName($twt_name);
                     $stu_info[$val['sid']][] = $real_name;
                     $stu_info[$val['sid']][] = $user_number;
-//                } else {
-//                    $stu_info = array([]);
-//                }
+                } else {
+                    $stu_info = array([]);
+                }
             }
         }
 //        $answer_sub = array_values($answer);
@@ -243,7 +243,6 @@ class MineQuestionController extends Controller
 //                    }
 //                }
             }
-
         }
         else{
             $formanswers = array();
