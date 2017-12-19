@@ -221,11 +221,14 @@ class QuestionnaireController extends Controller
         $ischecked = $questionnaire->ischecked;
         $onceanswer = $questionnaire->onceanswer;
         $verifiedphone = $questionnaire->verifiedphone;
+        $twt_name = $questionnaire->twt_name;
+        $issupermng = Usr::getTypeByName($twt_name);
         return response()->json([
             'qstatus' => $qstatus,
             'ischecked' => $ischecked,
             'onceanswer' => $onceanswer,
-            'verifiedphone' => $verifiedphone
+            'verifiedphone' => $verifiedphone,
+            'issupermng' => $issupermng
         ]);
     }
 
