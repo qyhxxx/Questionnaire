@@ -73,9 +73,3 @@ Route::group(['middleware' => ['Authentication']], function () {
 
     Route::get('logout', 'LogoutController@logout');
 });
-
-Route::get('test', function () {
-    $questionnaire = DB::table('questionnaires')->where('qnid', 445)->first();
-    $recovery_at = $questionnaire->recovery_at;
-    dd(time() > $recovery_at);
-});
