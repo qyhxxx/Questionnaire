@@ -41,12 +41,12 @@ class QuestionnaireController extends Controller
         $data_questionnaire['created_at'] = $time;
         $data_questionnaire['updated_at'] = $time;
         $questionnaire = Questionnaire::add($data_questionnaire);
-        return response()->json('');
         $qnid = $questionnaire->qnid;
         $editor = Editor::add($twt_name, $qnid);
         $eid = $editor->id;
         $data_editor = ['eid' => $eid];
         Questionnaire::updateByQnid($qnid, $data_editor);
+        return response()->json('');
         $response = ['qnid' => $qnid];
         if ($qcount == 0) {
             return response()->json($response);
