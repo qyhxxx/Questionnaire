@@ -14,7 +14,13 @@ class Usr extends Model {
     public $timestamps = true;
 
     public static function add($data) {
-        $usr = self::firstOrCreate($data);
+        $usr = self::find($data['id']);
+        if ($usr != null) {
+            $usr->update($data);
+            $usr = self::find($data['id']);
+        } else {
+            $usr = self::create($data);
+        }
         return $usr;
     }
 
