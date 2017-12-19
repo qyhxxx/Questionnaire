@@ -26,7 +26,7 @@ class MineQuestionController extends Controller
         }
         if($questionnaire != null){
             foreach ($questionnaire as $key => $val){
-                if($val->recovery_at != null){
+                if($val != null && $val->recovery_at != null){
                     $today_at = Carbon::now();
                     if($val->recovery_at <= $today_at){
                         $status = 2;
