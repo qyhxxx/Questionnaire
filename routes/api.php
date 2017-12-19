@@ -21,6 +21,10 @@ Route::get('/', function () {
     //
 });
 
+Route::get('test/{qnid}', function ($qnid) {
+    return $qnid;
+});
+
 Route::get('login', 'LoginController@login');
 Route::get('loginStatus', 'LoginController@loginStatus');
 Route::get('qnid/{qnid}', 'QuestionnaireController@getResponseOfQuestionnaire')->middleware('GetDataMiddleware');
