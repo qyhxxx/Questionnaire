@@ -41,6 +41,7 @@ class QuestionnaireController extends Controller
         $data_questionnaire['created_at'] = $time;
         $data_questionnaire['updated_at'] = $time;
         $questionnaire = Questionnaire::add($data_questionnaire);
+        return response()->json('');
         $qnid = $questionnaire->qnid;
         $editor = Editor::add($twt_name, $qnid);
         $eid = $editor->id;
