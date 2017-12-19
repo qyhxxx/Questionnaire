@@ -84,4 +84,11 @@ class Submit extends Model {
         $allkilled = self::where('qnid', $qnid)->delete();
         return $allkilled;
     }
+
+    public static function getNameBySid($sid){
+        $data = self::where('sid', $sid)->first();
+        $twt_name = $data['twt_name'];
+        return $twt_name;
+    }
+
 }

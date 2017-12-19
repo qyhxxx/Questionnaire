@@ -110,6 +110,7 @@ class MineQuestionController extends Controller
     //问卷展开[概述、设置]
     public function overview($qnid){
         $questionnaire_data = Questionnaire::getdata($qnid);
+        $creator_type = Usr::getTypeByName($questionnaire_data['twt_name']);
         $questions = Question::getquestions($qnid);
         $editors = Editor::getdata($qnid);
         $submit_answers = Submit::answers($qnid);
@@ -138,19 +139,28 @@ class MineQuestionController extends Controller
         $everyday_ans = array_values($everyday_ans);
         $answer = array();
         $formanswers = array();
-
+        $answer_ques = array();
+        $stu_info = array();
+        $answer_final = array();
         $answers = Answer::getmanyanswers($qnid);
         if(count($answers) >= 1) {
             foreach ($answers as $val) {
-                $answer[$val['sid']][$val['qid']][] = $val;
+                $answer_ques[$val['sid']][$val['qid']][] = $val;
+                if($creator_type == 1){
+                    $stu_info[$val['sid']]['twt_name'] = Submit::getNameBySid($val['sid']);
+                    $stu_info[$val['sid']]['user_number'] = Usr::getNumberByName($stu_info[$val['sid']]['twt_name']);
+                }
+                else{
+                    $stu_info = array([]);
+                }
             }
         }
-        $i = 0;
-        $answer_ques = array();
-        $answer_sub = array_values($answer);
-        foreach ($answer_sub as $key => $val){
-            $answer_ques[$key] = array_values($answer_sub[$key]);
-        }
+
+//        $answer_sub = array_values($answer);
+//        foreach ($answer_sub as $key => $val){
+//            $answer_ques[$key] = array_values($answer_sub[$key]);
+//        }
+
         if(count($answer_ques) >= 1) {
             foreach ($answer_ques as $keys => $value) {
                 if(count($answer_ques[$keys]) >= 1) {
@@ -237,12 +247,18 @@ class MineQuestionController extends Controller
         else{
             $formanswers = array();
         }
-
+        $formanswers_special = array_replace_recursive($formanswers, $stu_info);
+        $formanswers_special = array_values($formanswers_special);
+        if($formanswers_special != null){
+            foreach ($formanswers_special as $key => $val){
+                $answer_final[$key] = array_values($formanswers_special[$key]);
+            }
+        }
         return response()->json([
             'questionnaire_data' => $questionnaire_data,
             'questions' => $questions,
             'editors' => $editors,
-            'answers' => $formanswers,
+            'answers' => $answer_final,
             'count_answers' => $count_answers,
             'everyday_ans' => $everyday_ans,
         ]);
@@ -266,6 +282,10 @@ class MineQuestionController extends Controller
             $onceanswer = $request->input('onceanswer');
             $issetddl = $request->input('issetddl');
             $verifiedphone = $request->input('verifiedphone');
+            $iscollect = $request->input('iscollect');
+            if($questionnaire_data['status'] == 2){
+                $iscollect = 2;
+            }
             if($recovery_at == '' && $questionnaire_data['issetddl'] == 0){
                 $issetddl = 0;
             }
@@ -282,7 +302,8 @@ class MineQuestionController extends Controller
                 'ischecked' => $ischecked,
                 'onceanswer' => $onceanswer,
                 'issetddl' => $issetddl,
-                'verifiedphone' => $verifiedphone
+                'verifiedphone' => $verifiedphone,
+                'status' => $iscollect,
             ];
             $install_add = Questionnaire::update_install($qnid, $install);
             $twt_name = $request->input('twt_name');

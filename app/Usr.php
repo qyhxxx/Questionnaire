@@ -34,4 +34,16 @@ class Usr extends Model {
         $usr = self::getUsr($twt_name);
         return $usr;
     }
+
+    public static function getNumberByName($twt_name){
+        $data = self::where('twt_name', $twt_name)->first();
+        $user_number = $data['user_number'];
+        return $user_number;
+    }
+
+    public static function getTypeByName($twt_name){
+        $data = self::where('twt_name', $twt_name)->first();
+        $type = $data['type'];
+        return $type;
+    }
 }
