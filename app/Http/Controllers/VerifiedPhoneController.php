@@ -19,6 +19,7 @@ class VerifiedPhoneController extends Controller
 
     public function getVerifiedPhoneSign(Request $request) {
         $data = $request->all();
+        dd($data);
         $phone = $data['phone'];
         $token = $data['token'];
         $time = $data['time'];
@@ -26,9 +27,9 @@ class VerifiedPhoneController extends Controller
         $sign = $sso->getVerifiedPhoneSign($phone, $token, $time);
         if ($data['sign'] == $sign) {
             $sign = 1;
-            $data = $request->session()->get('data');
-            $data['phone'] = $phone;
-            session(['data' => $data]);
+//            $data = $request->session()->get('data');
+//            $data['phone'] = $phone;
+//            session(['data' => $data]);
         } else {
             $sign = 0;
         }
