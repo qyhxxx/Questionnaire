@@ -20,8 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/', function () {
     //
 });
-Route::get('getVerifiedPhoneQuery', 'VerifiedPhoneController@getVerifiedPhoneQuery');
-Route::post('getVerifiedPhoneSign', 'VerifiedPhoneController@getVerifiedPhoneSign');
 
 Route::get('login', 'LoginController@login');
 Route::get('loginStatus', 'LoginController@loginStatus');
@@ -35,8 +33,8 @@ Route::group(['middleware' => ['Authentication']], function () {
         Route::post('edit', 'QuestionnaireController@add');
         Route::post('update/qnid/{qnid}', 'QuestionnaireController@update')->middleware('Update');
     });
-//    Route::get('getVerifiedPhoneQuery', 'VerifiedPhoneController@getVerifiedPhoneQuery');
-//    Route::post('getVerifiedPhoneSign', 'VerifiedPhoneController@getVerifiedPhoneSign');
+    Route::get('getVerifiedPhoneQuery', 'VerifiedPhoneController@getVerifiedPhoneQuery');
+    Route::post('getVerifiedPhoneSign', 'VerifiedPhoneController@getVerifiedPhoneSign');
     Route::group(['prefix' => 'statistics'], function () {
         Route::get('qnid/{qnid}/init', 'StatisticsController@init');
         Route::get('qid/{qid}/getOptions', 'StatisticsController@getOptions');
@@ -74,8 +72,4 @@ Route::group(['middleware' => ['Authentication']], function () {
     });
 
     Route::get('logout', 'LogoutController@logout');
-});
-
-Route::get('strlen', function () {
-    echo strlen("HjmSpywwjJ8smnOsueowbcL9ImWKAuXlzwbiuWloIZm8guJI1rLpCJCtWB9Tgi3LPLOVe0KDDIsVRHK4A1DIQJojVo1dSJMbai8y");
 });
