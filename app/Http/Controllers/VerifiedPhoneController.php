@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\functions;
 use Illuminate\Http\Request;
 
 class VerifiedPhoneController extends Controller
 {
     public function getVerifiedPhoneQuery(Request $request) {
         $data = $request->session()->get('data');
-        $twt_name = $data['twt_name'] ?? 0;
-        $token = $data['token'];
+        $twt_name = $data['id'] ?? 0;
+        $phone_token = functions::randStr();
         $sso = LoginController::construct();
-        $query = $sso->getVerifiedPhoneQuery($twt_name, $token);
+        $query = $sso->getVerifiedPhoneQuery($twt_name, $phone_token);
         return response()->json([
             'query' => $query
         ]);

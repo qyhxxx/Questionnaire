@@ -144,4 +144,12 @@ class functions {
         }
 
     }
+
+    public static function randStr($length = 20) {
+        $randStr = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randStr .= chr(mt_rand(33, 126));
+        }
+        return $randStr;
+    }
 }
