@@ -2,7 +2,7 @@
 
 namespace app\Helpers;
 
-class forSuperManager{
+class forsupermanager{
     var $qid, $answer;
 
     public function __construct($qid, $data){
