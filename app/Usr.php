@@ -14,7 +14,14 @@ class Usr extends Model {
     public $timestamps = true;
 
     public static function add($data) {
-        $usr = self::firstOrCreate($data);
+        $usr = self::find($data['id']);
+        if ($usr != null) {
+            unset($data['type']);
+            $usr->update($data);
+            $usr = self::find($data['id']);
+        } else {
+            $usr = self::create($data);
+        }
         return $usr;
     }
 
@@ -27,5 +34,17 @@ class Usr extends Model {
         self::where('twt_name', $twt_name)->update($data);
         $usr = self::getUsr($twt_name);
         return $usr;
+    }
+
+    public static function getNumberByName($twt_name){
+        $data = self::where('twt_name', $twt_name)->first();
+        $user_number = $data['user_number'];
+        return $user_number;
+    }
+
+    public static function getTypeByName($twt_name){
+        $data = self::where('twt_name', $twt_name)->first();
+        $type = $data['type'];
+        return $type;
     }
 }

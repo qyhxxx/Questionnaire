@@ -41,6 +41,12 @@ Route::group(['middleware' => ['Authentication']], function () {
         Route::post('qid/{qid}/data', 'StatisticsController@statisticsOfOneQuestion');
     });
 
+//    Route::get('getCsrfToken', function () {
+//        return response()->json([
+//            'csrf_token' => csrf_token()
+//        ]);
+//    });
+
     //我的问卷
     Route::group(['prefix' => 'minequestion'], function () {
         //问卷缩略图页面
@@ -51,8 +57,10 @@ Route::group(['middleware' => ['Authentication']], function () {
         //问卷展开[概述、设置]
         Route::get('/overview/{id}', 'MineQuestionController@overview');
   //      Route::post('/overview/{id}', 'MineQuestionController@overview');
-        Route::any('/install/{id}', 'MineQuestionController@install');
-    //    Route::get('/install/{id}', 'MineQuestionController@installInfo');
+        Route::get('/install/{id}', 'MineQuestionController@install');
+        Route::post('/install/{id}', 'MineQuestionController@install');
+        Route::get('/installCollect/{id}', 'MineQuestionController@installCollect');
+        Route::post('/installCollect/{id}', 'MineQuestionController@installCollect');
         Route::post('/killed/{id}', 'MineQuestionController@killed');
         Route::get('/killed/{id}', 'MineQuestionController@killed');
 //        Route::get('/overview/{id}', function () {

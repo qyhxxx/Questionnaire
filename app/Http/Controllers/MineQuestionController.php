@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Answer;
+use app\Helpers\forSuperManager;
 use App\Submit;
 use Illuminate\Http\Request;
 use App\Questionnaire;
@@ -25,7 +26,7 @@ class MineQuestionController extends Controller
         }
         if($questionnaire != null){
             foreach ($questionnaire as $key => $val){
-                if($val->recovery_at != null){
+                if($val != null && $val->recovery_at != null){
                     $today_at = Carbon::now();
                     if($val->recovery_at <= $today_at){
                         $status = 2;
@@ -111,6 +112,7 @@ class MineQuestionController extends Controller
     //问卷展开[概述、设置]
     public function overview($qnid){
         $questionnaire_data = Questionnaire::getdata($qnid);
+        $creator_type = Usr::getTypeByName($questionnaire_data['twt_name']);
         $questions = Question::getquestions($qnid);
         $editors = Editor::getdata($qnid);
         $submit_answers = Submit::answers($qnid);
@@ -130,7 +132,7 @@ class MineQuestionController extends Controller
                             $everyday_ans[$time]['time'] = $time;
                         }
                         else{
-                            $everyday_ans[$time]['number'] = $everyday_ans[$j]['number']+1;
+                            $everyday_ans[$time]['number'] = $everyday_ans[$time]['number']+1;
                         }
                     }
                 }
@@ -139,19 +141,29 @@ class MineQuestionController extends Controller
         $everyday_ans = array_values($everyday_ans);
         $answer = array();
         $formanswers = array();
-
+        $answer_ques = array();
+        $stu_info = array();
+        $answer_final = array();
         $answers = Answer::getmanyanswers($qnid);
         if(count($answers) >= 1) {
             foreach ($answers as $val) {
-                $answer[$val['sid']][$val['qid']][] = $val;
+                $answer_ques[$val['sid']][$val['qid']][] = $val;
+                if ($creator_type == 1) {
+                    $twt_name = Submit::getNameBySid($val['sid']);
+                    $real_name = Submit::getRealnameBySid($val['sid']);
+                    $user_number = Usr::getNumberByName($twt_name);
+                    $stu_info[$val['sid']][] = new forSuperManager('name', $real_name);
+                    $stu_info[$val['sid']][] = new forSuperManager('studentid', $user_number);
+                } else {
+                    $stu_info = array([]);
+                }
             }
         }
-        $i = 0;
-        $answer_ques = array();
-        $answer_sub = array_values($answer);
-        foreach ($answer_sub as $key => $val){
-            $answer_ques[$key] = array_values($answer_sub[$key]);
-        }
+//        $answer_sub = array_values($answer);
+//        foreach ($answer_sub as $key => $val){
+//            $answer_ques[$key] = array_values($answer_sub[$key]);
+//        }
+
         if(count($answer_ques) >= 1) {
             foreach ($answer_ques as $keys => $value) {
                 if(count($answer_ques[$keys]) >= 1) {
@@ -233,17 +245,22 @@ class MineQuestionController extends Controller
 //                    }
 //                }
             }
-
         }
         else{
             $formanswers = array();
         }
-
+        $formanswers_special = array_replace_recursive($stu_info, $formanswers);
+        $formanswers_special = array_values($formanswers_special);
+        if($formanswers_special != null) {
+            foreach ($formanswers_special as $key => $val) {
+                $answer_final[$key] = array_values($formanswers_special[$key]);
+            }
+        }
         return response()->json([
             'questionnaire_data' => $questionnaire_data,
             'questions' => $questions,
             'editors' => $editors,
-            'answers' => $formanswers,
+            'answers' => $answer_final,
             'count_answers' => $count_answers,
             'everyday_ans' => $everyday_ans,
         ]);
@@ -267,6 +284,7 @@ class MineQuestionController extends Controller
             $onceanswer = $request->input('onceanswer');
             $issetddl = $request->input('issetddl');
             $verifiedphone = $request->input('verifiedphone');
+
             if($recovery_at == '' && $questionnaire_data['issetddl'] == 0){
                 $issetddl = 0;
             }
@@ -283,7 +301,8 @@ class MineQuestionController extends Controller
                 'ischecked' => $ischecked,
                 'onceanswer' => $onceanswer,
                 'issetddl' => $issetddl,
-                'verifiedphone' => $verifiedphone
+                'verifiedphone' => $verifiedphone,
+
             ];
             $install_add = Questionnaire::update_install($qnid, $install);
             $twt_name = $request->input('twt_name');
@@ -306,6 +325,24 @@ class MineQuestionController extends Controller
         return response()->json([
             'questionnaire_data' => $questionnaire_data,
             'issupermng' => $usr->type
+        ]);
+    }
+
+    public function installCollect($qnid, Request $request){
+        $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
+        if($request->isMethod('POST')) {
+            $iscollect = $request->input('iscollect');
+            if ($questionnaire_data['status'] == 2) {
+                $iscollect = 2;
+            }
+            $install = [
+                'status' => $iscollect,
+            ];
+            $install_add = Questionnaire::update_collect($qnid, $install);
+        }
+        $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
+        return response()->json([
+            'questionnaire_data' => $questionnaire_data,
         ]);
     }
 

@@ -18,7 +18,8 @@ class LoginController extends Controller {
 
     public static function login() {
         $sso = self::construct();
-        $link = "http://survey.twtstudio.com/api";
+        $from = $_GET['from'] ?? urlencode("https://survey.twtstudio.com/index");
+        $link = "https://survey.twtstudio.com/api/?from=" . $from;
         header("Location:".$sso->getLoginUrl($link));
         exit;
     }
@@ -28,12 +29,13 @@ class LoginController extends Controller {
         $userinfo = $sso->fetchUserInfo($token);
         if ($userinfo->status == 1) {
             $result = $userinfo->result;
-            //$data['id'] = $result->id;
+            $data['id'] = $result->id;
             $data['user_number'] = $result->user_number;
             $data['twt_name'] = $result->twt_name;
             $data['type'] = 0;
             Usr::add($data);
             $data['token'] = $token;
+            $data['real_name'] = $result->user_info->username;
             session(['data' => $data]);
             session()->save();
             return 1;
@@ -45,8 +47,10 @@ class LoginController extends Controller {
 
     public function loginStatus(Request $request) {
         if ($request->session()->has('data')) {
+            $twt_name = $request->session()->get('data')['twt_name'];
             return response()->json([
-                'status' => 1
+                'status' => 1,
+                'twt_name' => $twt_name
             ]);
         }
         else {

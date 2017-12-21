@@ -9,6 +9,7 @@ use App\Option;
 use App\Question;
 use App\Questionnaire;
 use App\Submit;
+use App\Usr;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -36,7 +37,7 @@ class QuestionnaireController extends Controller
         $data_questionnaire['ischecked'] = 0;
         $data_questionnaire['onceanswer'] = 0;
         $data_questionnaire['verifiedphone'] = 0;
-        $time = Carbon::now();
+        $time = date('Y-m-d H:i:s', time());
         $data_questionnaire['created_at'] = $time;
         $data_questionnaire['updated_at'] = $time;
         $questionnaire = Questionnaire::add($data_questionnaire);
@@ -64,7 +65,7 @@ class QuestionnaireController extends Controller
         }
         $data_questions = $data['questions'] ?? null;
         $qcount = count($data_questions);
-        $time = Carbon::now();
+        $time = date('Y-m-d H:i:s', time());
         $data_questionnaire['updated_at'] = $time;
         $data_questionnaire['qcount'] = $qcount;
         $data_questionnaire['status'] = $status;
@@ -100,8 +101,7 @@ class QuestionnaireController extends Controller
 
     public function getResponseOfQuestionnaire($qnid, $src = null)
     {
-        $response = $this->getDataOfQuestionnaire($qnid);
-        if ($src = 'answer') {
+        if ($src == 'answer') {
             $questionnaire_info = Questionnaire::getdata($qnid);
             $num = $questionnaire_info['num'];
             if(isset($num)){
@@ -119,6 +119,28 @@ class QuestionnaireController extends Controller
                 $update = Questionnaire::updateByQnid($qnid, $data_update);
             }
         }
+        $response = $this->getDataOfQuestionnaire($qnid);
+        return response()->json($response);
+    }
+
+    public function getResponseOfAnswer($qnid) {
+        $questionnaire_info = Questionnaire::getdata($qnid);
+        $num = $questionnaire_info['num'];
+        if(isset($num)){
+            $num = $num+1;
+            $data_update = [
+                'num' => $num,
+            ];
+            $update = Questionnaire::updateByQnid($qnid, $data_update);
+        }
+        else{
+            $num = 1;
+            $data_update = [
+                'num' => $num,
+            ];
+            $update = Questionnaire::updateByQnid($qnid, $data_update);
+        }
+        $response = $this->getDataOfQuestionnaire($qnid);
         return response()->json($response);
     }
 
@@ -136,16 +158,28 @@ class QuestionnaireController extends Controller
 
     public function submit(Request $request, $qnid)
     {
+        $real_name = null;
         if ($request->session()->has('data')) {
             $twt_name = $request->session()->get('data')['twt_name'];
             $phone = $request->session()->get('data')['phone'] ?? null;
+            $real_name = $request->session()->get('data')['real_name'];
         }
-        $ip = functions::getIp();
+        $questionnaire_data = Questionnaire::getdata($qnid);
+        $creator_name = $questionnaire_data['twt_name'];
+        $creator_type = Usr::getTypeByName($creator_name);
+        if($creator_type == 1 && $questionnaire_data['ischecked'] == 1){
+            $name = $real_name;
+        }
+        else{
+            $name = null;
+        }
+        $ip = $request->getClientIp();
         $data_submit = [
             'qnid' => $qnid,
             'twt_name' => $twt_name ?? null,
             'ip' => $ip,
-            'phone' => $phone ?? null
+            'phone' => $phone ?? null,
+            'real_name' => $name,
         ];
         $submit = Submit::add($data_submit);
         $sid = $submit->sid;
@@ -187,11 +221,14 @@ class QuestionnaireController extends Controller
         $ischecked = $questionnaire->ischecked;
         $onceanswer = $questionnaire->onceanswer;
         $verifiedphone = $questionnaire->verifiedphone;
+        $twt_name = $questionnaire->twt_name;
+        $issupermng = Usr::getTypeByName($twt_name);
         return response()->json([
             'qstatus' => $qstatus,
             'ischecked' => $ischecked,
             'onceanswer' => $onceanswer,
-            'verifiedphone' => $verifiedphone
+            'verifiedphone' => $verifiedphone,
+            'issupermng' => $issupermng
         ]);
     }
 

@@ -9,7 +9,7 @@ class Submit extends Model {
 
     protected $primaryKey = 'sid';
 
-    protected $fillable = ['qnid', 'twt_name', 'ip', 'phone'];
+    protected $fillable = ['qnid', 'twt_name', 'ip', 'phone', 'real_name'];
 
     public $timestamps = true;
 
@@ -84,4 +84,17 @@ class Submit extends Model {
         $allkilled = self::where('qnid', $qnid)->delete();
         return $allkilled;
     }
+
+    public static function getNameBySid($sid){
+        $data = self::where('sid', $sid)->first();
+        $twt_name = $data['twt_name'];
+        return $twt_name;
+    }
+
+    public static function getRealnameBySid($sid){
+        $data = self::where('sid', $sid)->first();
+        $real_name = $data['real_name'];
+        return $real_name;
+    }
+
 }

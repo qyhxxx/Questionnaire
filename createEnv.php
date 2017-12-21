@@ -7,7 +7,7 @@ $env = json_decode(file_get_contents('.env.lapin'));
 file_put_contents('.env', <<<EOF
 APP_NAME=Twt_Survey
 APP_ENV=local
-APP_KEY=base64:jv26tt6YFRg9VzqV0z65FdGo5+C6i4LGGT6cXjQUmng=
+APP_KEY=base64:wYxpGSEhdhi1bnFuJWP71VA70Sk8g7trLH91zlzPPvY=
 APP_DEBUG=false
 APP_LOG_LEVEL=debug
 APP_URL=https://survey.twtstudio.com

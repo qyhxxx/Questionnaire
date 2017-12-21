@@ -21,8 +21,8 @@ class Questionnaire extends Model {
     }
 
     public static function updateByQnid($qnid, $data) {
-        self::getQuestionnaire($qnid)->update($data);
         $questionnaire = self::getQuestionnaire($qnid);
+        $questionnaire->update($data);
         return $questionnaire;
     }
 
@@ -60,6 +60,15 @@ class Questionnaire extends Model {
         }
         if ($install['verifiedphone'] != $questionnaire->verifiedphone){
             $questionnaire->verifiedphone = $install['verifiedphone'];
+        }
+        $questionnaire->save();
+        return $questionnaire;
+    }
+
+    public static function update_collect($qnid, $install){
+        $questionnaire = self::find($qnid);
+        if($install['status'] != $questionnaire->status){
+            $questionnaire->status = $install['status'];
         }
         $questionnaire->save();
         return $questionnaire;
