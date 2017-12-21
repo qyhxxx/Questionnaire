@@ -249,7 +249,12 @@ class MineQuestionController extends Controller
         else{
             $formanswers = array();
         }
-        $formanswers_special = array_replace_recursive($stu_info, $formanswers);
+        if($creator_type == 0){
+            $formanswers_special = $formanswers;
+        }
+        else{
+            $formanswers_special = array_replace_recursive($stu_info, $formanswers);
+        }
         $formanswers_special = array_values($formanswers_special);
         if($formanswers_special != null) {
             foreach ($formanswers_special as $key => $val) {
@@ -335,10 +340,27 @@ class MineQuestionController extends Controller
             if ($questionnaire_data['status'] == 2) {
                 $iscollect = 2;
             }
-            $install = [
-                'status' => $iscollect,
-            ];
-            $install_add = Questionnaire::update_collect($qnid, $install);
+            if($iscollect == 0){
+                $iscollect = 2;
+                $time = date('Y-m-d H:i:s', time());
+                $issetddl = 1;
+                $install = [
+                    'status' => $iscollect,
+                    'recovery_at' => $time,
+                    'issetddl' => $issetddl,
+                ];
+                $install_add = Questionnaire::update_collect($qnid, $install);
+            }
+            else{
+                $iscollect = 1;
+                $issetddl = 0;
+                $install = [
+                    'status' => $iscollect,
+                    'recovery_at' => null,
+                    'issetddl' => $issetddl,
+                ];
+                $install_add = Questionnaire::update_collect($qnid, $install);
+            }
         }
         $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
         return response()->json([
