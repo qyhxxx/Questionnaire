@@ -46,10 +46,10 @@ class StatisticsController extends Controller {
             foreach ($options as $option) {
                 $okey = $option->okey;
                 $option = $option->option;
-                $data = Answer::statistics($sidArr, $qid, $okey);
-                $count = $data['count'];
-                $sum = $data['sum'];
-                $proportion = $data['proportion'];
+                $data_onequestion = Answer::statistics($sidArr, $qid, $okey);
+                $count = $data_onequestion['count'];
+                $sum = $data_onequestion['sum'];
+                $proportion = $data_onequestion['proportion'];
                 $data[] = [
                     'count' => $count,
                     'sum' => $sum,
