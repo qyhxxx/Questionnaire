@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Answer;
-use app\Helpers\forsupermanager;
+use App\Helpers\forsupermanager;
 use App\Submit;
 use Illuminate\Http\Request;
 use App\Questionnaire;
