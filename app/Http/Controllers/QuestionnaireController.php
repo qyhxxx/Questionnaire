@@ -233,19 +233,29 @@ class QuestionnaireController extends Controller
     }
 
     public function ifAnswered($qnid, Request $request){
-        $twt_name = null;
-        $info = null;
-        if ($request->session()->has('data')) {
-            $twt_name = $request->session()->get('data')['twt_name'];
+        $info = 1;
+        $questionnaire = Questionnaire::getQuestionnaire($qnid);
+        $ischecked = $questionnaire->ischecked;
+        if ($ischecked && !$request->session()->has('data')) {
+            LoginController::login();
         }
-        if($twt_name != null){
-            $data = Submit::getdata($qnid, $twt_name);
-            if(count($data) < 1){
+        $onceanswer = $questionnaire->onceanswer;
+        $verifiedphone = $questionnaire->verifiedphone;
+        if ($onceanswer) {
+            $twt_name = $request->session()->get('data')['twt_name'];
+            if (Submit::isRepeat($qnid, $twt_name)) {
                 $info = 0;
             }
-
-            else{
-                $info = 1;
+        }
+        if ($verifiedphone) {
+            $twt_name = $request->session()->get('data')['twt_name'];
+            $phone = $request->session()->get('data')['phone'];
+            $usr = Usr::getUsr($twt_name);
+            if ($usr->phone != null || $usr->phone != $phone) {
+                Usr::updateUsr($twt_name, ['phone' => $phone]);
+            }
+            if (Submit::isRepeat($qnid, $twt_name, $phone)) {
+                $info = 0;
             }
         }
         return response()->json([
