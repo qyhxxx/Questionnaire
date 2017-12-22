@@ -218,6 +218,7 @@ class QuestionnaireController extends Controller
 
     public function qinfo($qnid) {
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
+        $name = $questionnaire->name;
         $qstatus = $questionnaire->status;
         $ischecked = $questionnaire->ischecked;
         $onceanswer = $questionnaire->onceanswer;
@@ -225,6 +226,7 @@ class QuestionnaireController extends Controller
         $twt_name = $questionnaire->twt_name;
         $issupermng = Usr::getTypeByName($twt_name);
         return response()->json([
+            'name' => $name,
             'qstatus' => $qstatus,
             'ischecked' => $ischecked,
             'onceanswer' => $onceanswer,
