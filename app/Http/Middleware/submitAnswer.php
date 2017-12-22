@@ -24,25 +24,24 @@ class submitAnswer
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
         if ($questionnaire->recovery_at != null && time() > $questionnaire->recovery_at) {
             Questionnaire::updateByQnid($qnid, ['status' => 2]);
-            return response()->json([
-                'status' => 0
-            ]);
-        }
-        $ischecked = $questionnaire->ischecked;
-        if ($ischecked && !$request->session()->has('data')) {
-            LoginController::login();
         }
         $onceanswer = $questionnaire->onceanswer;
         $verifiedphone = $questionnaire->verifiedphone;
+        $ip = $request->getClientIp();
         if ($onceanswer) {
-            $twt_name = $request->session()->get('data')['twt_name'];
-            if (Submit::isRepeat($qnid, $twt_name)) {
+            if ($request->session()->has('data')) {
+                $twt_name = $request->session()->get('data')['twt_name'];
+            }
+            if (Submit::isRepeat($qnid, $twt_name ?? null)) {
                 return response()->json([
                     'message' => '请勿重复答题'
                 ]);
             }
         }
         if ($verifiedphone) {
+            if (!$request->session()->has('data')) {
+                LoginController::login();
+            }
             $twt_name = $request->session()->get('data')['twt_name'];
             $phone = $request->session()->get('data')['phone'];
             $usr = Usr::getUsr($twt_name);
