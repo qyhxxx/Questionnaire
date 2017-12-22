@@ -211,6 +211,7 @@ class QuestionnaireController extends Controller
         $new_recovery = Submit::count_answers($qnid);
         $update_recovery = Questionnaire::updateByQnid($qnid, ['recovery' => $new_recovery]);
         return response()->json([
+            'info' => 1,
             'answers' => $answers ?? null
         ]);
     }

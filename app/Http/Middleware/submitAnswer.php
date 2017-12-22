@@ -34,7 +34,7 @@ class submitAnswer
             }
             if (Submit::isRepeat($qnid, $twt_name ?? null)) {
                 return response()->json([
-                    'message' => '请勿重复答题'
+                    'info' => 0
                 ]);
             }
         }
@@ -50,7 +50,7 @@ class submitAnswer
             }
             if (Submit::isRepeat($qnid, $twt_name, $phone)) {
                 return response()->json([
-                    'message' => '请勿重复答题'
+                    'info' => 0
                 ]);
             }
         }
