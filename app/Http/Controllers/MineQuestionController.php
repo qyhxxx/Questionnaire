@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Answer;
-use app\Helpers\forSuperManager;
+use App\Helpers\forsupermanager;
 use App\Submit;
 use Illuminate\Http\Request;
 use App\Questionnaire;
@@ -61,6 +61,7 @@ class MineQuestionController extends Controller
 //                }
 //            }
 //        }
+        
         return response()->json([
             'questionnaire' => $questionnaire ?? null,
             'eid' => $eid,
@@ -151,8 +152,8 @@ class MineQuestionController extends Controller
                     $twt_name = Submit::getNameBySid($val['sid']);
                     $real_name = Submit::getRealnameBySid($val['sid']);
                     $user_number = Usr::getNumberByName($twt_name);
-                    $stu_info[$val['sid']][] = new forSuperManager('name', $real_name);
-                    $stu_info[$val['sid']][] = new forSuperManager('studentid', $user_number);
+                    $stu_info[$val['sid']][] = new forsupermanager('name', $real_name);
+                    $stu_info[$val['sid']][] = new forsupermanager('studentid', $user_number);
                 } else {
                     $stu_info = array([]);
                 }
@@ -248,7 +249,12 @@ class MineQuestionController extends Controller
         else{
             $formanswers = array();
         }
-        $formanswers_special = array_replace_recursive($stu_info, $formanswers);
+        if($creator_type == 0){
+            $formanswers_special = $formanswers;
+        }
+        else{
+            $formanswers_special = array_replace_recursive($stu_info, $formanswers);
+        }
         $formanswers_special = array_values($formanswers_special);
         if($formanswers_special != null) {
             foreach ($formanswers_special as $key => $val) {
@@ -334,10 +340,27 @@ class MineQuestionController extends Controller
             if ($questionnaire_data['status'] == 2) {
                 $iscollect = 2;
             }
-            $install = [
-                'status' => $iscollect,
-            ];
-            $install_add = Questionnaire::update_collect($qnid, $install);
+            if($iscollect == 0){
+                $iscollect = 2;
+                $time = date('Y-m-d H:i:s', time());
+                $issetddl = 1;
+                $install = [
+                    'status' => $iscollect,
+                    'recovery_at' => $time,
+                    'issetddl' => $issetddl,
+                ];
+                $install_add = Questionnaire::update_collect($qnid, $install);
+            }
+            else{
+                $iscollect = 1;
+                $issetddl = 0;
+                $install = [
+                    'status' => $iscollect,
+                    'recovery_at' => null,
+                    'issetddl' => $issetddl,
+                ];
+                $install_add = Questionnaire::update_collect($qnid, $install);
+            }
         }
         $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
         return response()->json([
