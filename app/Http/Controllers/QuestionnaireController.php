@@ -211,12 +211,14 @@ class QuestionnaireController extends Controller
         $new_recovery = Submit::count_answers($qnid);
         $update_recovery = Questionnaire::updateByQnid($qnid, ['recovery' => $new_recovery]);
         return response()->json([
+            'info' => 1,
             'answers' => $answers ?? null
         ]);
     }
 
     public function qinfo($qnid) {
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
+        $name = $questionnaire->name;
         $qstatus = $questionnaire->status;
         $ischecked = $questionnaire->ischecked;
         $onceanswer = $questionnaire->onceanswer;
@@ -224,6 +226,7 @@ class QuestionnaireController extends Controller
         $twt_name = $questionnaire->twt_name;
         $issupermng = Usr::getTypeByName($twt_name);
         return response()->json([
+            'name' => $name,
             'qstatus' => $qstatus,
             'ischecked' => $ischecked,
             'onceanswer' => $onceanswer,

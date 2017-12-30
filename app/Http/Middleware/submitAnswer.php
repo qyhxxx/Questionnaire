@@ -32,9 +32,9 @@ class submitAnswer
             if ($request->session()->has('data')) {
                 $twt_name = $request->session()->get('data')['twt_name'];
             }
-            if (Submit::isRepeat($qnid, $twt_name ?? null, $ip)) {
+            if (Submit::isRepeat($qnid, $twt_name ?? null)) {
                 return response()->json([
-                    'message' => '请勿重复答题'
+                    'info' => 0
                 ]);
             }
         }
@@ -48,9 +48,9 @@ class submitAnswer
             if ($usr->phone != null || $usr->phone != $phone) {
                 Usr::updateUsr($twt_name, ['phone' => $phone]);
             }
-            if (Submit::isRepeat($qnid, $twt_name, $ip, $phone)) {
+            if (Submit::isRepeat($qnid, $twt_name, $phone)) {
                 return response()->json([
-                    'message' => '请勿重复答题'
+                    'info' => 0
                 ]);
             }
         }

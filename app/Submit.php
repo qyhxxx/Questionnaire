@@ -18,21 +18,16 @@ class Submit extends Model {
         return $submit;
     }
 
-    public static function isRepeat($qnid, $twt_name = null, $ip, $phone = null) {
+    public static function isRepeat($qnid, $twt_name, $phone = null) {
         if ($phone) {
             $submit = self::where([
                 'qnid' => $qnid,
                 'phone' => $phone
             ])->first();
-        } else if ($twt_name) {
-            $submit = self::where([
-                'qnid' => $qnid,
-                'twt_name' => $twt_name
-            ])->first();
         } else {
             $submit = self::where([
                 'qnid' => $qnid,
-                'ip' => $ip
+                'twt_name' => $twt_name
             ])->first();
         }
         if ($submit != null) {
