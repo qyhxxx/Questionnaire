@@ -148,6 +148,7 @@ class MineQuestionController extends Controller
         if(count($answers) >= 1) {
             foreach ($answers as $val) {
                 $answer_ques[$val['sid']][$val['qid']][] = $val;
+                $submit_time[$val['sid']]['time'] = Submit::getTimeBySid($val['sid']);
                 if ($creator_type == 1) {
                     $twt_name = Submit::getNameBySid($val['sid']);
                     $real_name = Submit::getRealnameBySid($val['sid']);
@@ -250,10 +251,11 @@ class MineQuestionController extends Controller
             $formanswers = array();
         }
         if($creator_type == 0){
-            $formanswers_special = $formanswers;
+            $formanswers_special = array_replace_recursive($formanswers, $submit_time);
         }
         else{
-            $formanswers_special = array_replace_recursive($stu_info, $formanswers);
+            $formanswers_pro = array_replace_recursive($stu_info, $formanswers);
+            $formanswers_special = array_replace_recursive($formanswers_pro, $submit_time);
         }
         $formanswers_special = array_values($formanswers_special);
         if($formanswers_special != null) {
@@ -280,6 +282,8 @@ class MineQuestionController extends Controller
 //            'questionnaire_data' => $questionnaire_data,
 //        ]);
 //    }
+
+    //设置页面
     public function install($qnid, Request $request){
         $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
         if($request->isMethod('POST')){
@@ -333,6 +337,7 @@ class MineQuestionController extends Controller
         ]);
     }
 
+    //设置问卷收集状态
     public function installCollect($qnid, Request $request){
         $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
         if($request->isMethod('POST')) {
@@ -378,30 +383,18 @@ class MineQuestionController extends Controller
         }
         return response()->json($delete);
     }
-//    //问卷展开[数据]
-//    public function answerdata($qnid,Request $request){
-//        $qid = $request->input('qid');
-//        $question = Question::getonequestion($qnid,$qid);
-//        $option = Option::getQcontentsByQid($qid);
-//        $option_amount = count($option);
-//        $answers = Answer::getdata($qid);
-//        $answers_amount = count($answers);
-//        foreach ($answers as $val){
-//            $answers_amount[$val->order]++;
-//        }
-//        return response()->json([
-//            'question' => $question,
-//            'option' => $option,
-//            'answers_amount' => $answers_amount,
-//        ]);
-//    }
-//    //发布(二维码)
-//    public function publish($qnid){
-//        $QrCode = QrCode::encoding('UTF-8')->size(100)->generate(public_path('/submit/qnid/{qnid}'));
-//        return response()->json([
-//            'QrCode' => $QrCode,
-//        ]);
-//    }
+
+    public function verify($qnid, Request $request){
+        $twt_name = $request->session()->get('data')['twt_name'];
+        $questionnaire = Questionnaire::getQuestionnaire($qnid);
+        if($twt_name == $questionnaire['twt_name']){
+            $response = 1;
+        }
+        else{
+            $response = 0;
+        }
+        return response()->json($response);
+    }
 
 
 

@@ -9,6 +9,7 @@ use App\Http\Middleware\GetDataMiddleware;
 use App\Http\Middleware\submitAnswer;
 use App\Http\Middleware\test;
 use App\Http\Middleware\Update;
+use App\Http\Middleware\VerifyAuthority;
 use App\Http\Middleware\VerifyToken;
 use App\Http\Middleware\StartSession;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -73,5 +74,6 @@ class Kernel extends HttpKernel
         'Update' => Update::class,
         'GetDataMiddleware' => GetDataMiddleware::class,
         'submitAnswer' => submitAnswer::class,
+        'VerifyAuthority' => VerifyAuthority::class,
     ];
 }

@@ -27,8 +27,9 @@ Route::get('qnid/{qnid}/{src?}', 'QuestionnaireController@getResponseOfQuestionn
 Route::get('qinfo/{qnid}', 'QuestionnaireController@qinfo');
 Route::post('submit/qnid/{qnid}', 'QuestionnaireController@submit')->middleware('submitAnswer');
 Route::get('ifAnswered/{qnid}', 'QuestionnaireController@ifAnswered');
+Route::get('verify/{qnid}', 'MineQuestionController@verify');
 
-Route::group(['middleware' => ['Authentication']], function () {
+//Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'status/{status}'], function () {
         Route::post('edit', 'QuestionnaireController@add');
         Route::post('update/qnid/{qnid}', 'QuestionnaireController@update')->middleware('Update');
@@ -55,14 +56,14 @@ Route::group(['middleware' => ['Authentication']], function () {
         Route::get('/mine', 'MineQuestionController@questionnaire');
 
         //问卷展开[概述、设置]
-        Route::get('/overview/{id}', 'MineQuestionController@overview');
+        Route::get('/overview/{id}', 'MineQuestionController@overview')->middleware('VerifyAuthority');
   //      Route::post('/overview/{id}', 'MineQuestionController@overview');
-        Route::get('/install/{id}', 'MineQuestionController@install');
-        Route::post('/install/{id}', 'MineQuestionController@install');
-        Route::get('/installCollect/{id}', 'MineQuestionController@installCollect');
-        Route::post('/installCollect/{id}', 'MineQuestionController@installCollect');
-        Route::post('/killed/{id}', 'MineQuestionController@killed');
-        Route::get('/killed/{id}', 'MineQuestionController@killed');
+        Route::get('/install/{id}', 'MineQuestionController@install')->middleware('VerifyAuthority');
+        Route::post('/install/{id}', 'MineQuestionController@install')->middleware('VerifyAuthority');
+        Route::get('/installCollect/{id}', 'MineQuestionController@installCollect')->middleware('VerifyAuthority');
+        Route::post('/installCollect/{id}', 'MineQuestionController@installCollect')->middleware('VerifyAuthority');
+        Route::post('/killed/{id}', 'MineQuestionController@killed')->middleware('VerifyAuthority');
+        Route::get('/killed/{id}', 'MineQuestionController@killed')->middleware('VerifyAuthority');
 //        Route::get('/overview/{id}', function () {
 //            return view('minequestion.overview');
 //        });
@@ -72,4 +73,4 @@ Route::group(['middleware' => ['Authentication']], function () {
     });
 
     Route::get('logout', 'LogoutController@logout');
-});
+//});

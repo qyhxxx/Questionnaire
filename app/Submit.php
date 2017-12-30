@@ -97,4 +97,10 @@ class Submit extends Model {
         return $real_name;
     }
 
+    public static function getTimeBySid($sid){
+        $data = self::where('sid', $sid)->first();
+        $time = $data['created_at'];
+        return $time;
+    }
+
 }
