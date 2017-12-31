@@ -148,9 +148,9 @@ class MineQuestionController extends Controller
         if(count($answers) >= 1) {
             foreach ($answers as $val) {
                 $answer_ques[$val['sid']][$val['qid']][] = $val;
-                $submit_time[$val['sid']]['qid'] = 'date';
+                $submit_time[$val['sid']]['date']['qid'] = 'date';
                 $time = strtotime(Submit::getTimeBySid($val['sid']));
-                $submit_time[$val['sid']]['answer'] = date('Y-m-d H:i:s', $time / 1000);
+                $submit_time[$val['sid']]['date']['answer'] = date('Y-m-d H:i:s', $time);
                 if ($creator_type == 1) {
                     $twt_name = Submit::getNameBySid($val['sid']);
                     $real_name = Submit::getRealnameBySid($val['sid']);
