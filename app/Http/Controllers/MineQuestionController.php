@@ -137,7 +137,7 @@ class MineQuestionController extends Controller
             if(count($submit_answers) >= 1){
                 foreach ($submit_answers as $key => $val){
                     $time = date('Y-m-d', strtotime($val['created_at']));
-                    if($time == date('Y-m-d',$i)){
+                    if($time == $i){
                         if(!isset($everyday_ans[$time]['number'])){
                             $everyday_ans[$time]['number'] = 1;
                             $everyday_ans[$time]['time'] = $time;
