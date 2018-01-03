@@ -133,7 +133,7 @@ class MineQuestionController extends Controller
         $today_day = strtotime($today_at);
         $everyday_ans = array();
         $submit_time = array();
-        for($i = $created_day;$i <= $today_day;$i = strtotime('+1 day', $i)){
+        for($i = $created_at;$i <= $today_at;$i = date('Y-m-d', strtotime('+1 day', $i))){
             if(count($submit_answers) >= 1){
                 foreach ($submit_answers as $key => $val){
                     $time = date('Y-m-d', strtotime($val['created_at']));
