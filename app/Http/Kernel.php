@@ -32,6 +32,7 @@ class Kernel extends HttpKernel
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         VerifyToken::class,
         Cors::class,
+        GetDataMiddleware::class,
     ];
 
     /**
