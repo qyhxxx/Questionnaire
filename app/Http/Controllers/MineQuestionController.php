@@ -253,7 +253,7 @@ class MineQuestionController extends Controller
                     $questions = Question::getquestions($qnid);
                     if(count($questions) >= 1){
                         foreach ($questions as $key => $val){
-                            $formanswers[$keys][$val['qid']] = array();
+                            $formanswers[$keys][$val['qid']] = new answers($val, '', $val['qtype']);
                         }
                     }
                 }
