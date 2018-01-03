@@ -180,7 +180,7 @@ class MineQuestionController extends Controller
 
         if(count($answer_ques) >= 1) {
             foreach ($answer_ques as $keys => $value) {
-             //   if(count($answer_ques[$keys]) >= 1) {
+                if(count($answer_ques[$keys]) >= 1) {
                     foreach ($answer_ques[$keys] as $qid => $info) {
                         if(count($answer_ques[$keys][$qid]) >= 1) {
                             foreach ($answer_ques[$keys][$qid] as $num => $val1) {
@@ -248,10 +248,15 @@ class MineQuestionController extends Controller
                             $formanswers[$keys][$qid] = array();
                         }
                     }
-//                }
-//                elseif(count($answer_ques[$keys]) < 1){
-//                    $formanswers[$keys][] = array();
-//                }
+                }
+                elseif(count($answer_ques[$keys]) < 1){
+                    $questions = Question::getquestions($qnid);
+                    if(count($questions) >= 1){
+                        foreach ($questions as $key => $val){
+                            $formanswers[$keys][$val['qid']] = array();
+                        }
+                    }
+                }
 //                else{
 //                    $ishidden = Submit::submitIshidden($keys);
 //                    if($ishidden = 1){
