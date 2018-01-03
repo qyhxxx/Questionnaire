@@ -127,13 +127,13 @@ class MineQuestionController extends Controller
         $editors = Editor::getdata($qnid);
         $submit_answers = Submit::answers($qnid);
         $count_answers = count($submit_answers);
-        $created_at = date('Y-m-d', $questionnaire_data['created_at']);
+        $created_at = date('Y-m-d', strtotime($questionnaire_data['created_at']));
         $created_day = strtotime($created_at);
-        $today_at = date('Y-m-d', Carbon::now());
+        $today_at = date('Y-m-d', strtotime(Carbon::now()));
         $today_day = strtotime($today_at);
         $everyday_ans = array();
         $submit_time = array();
-        for($i = $created_at;$i <= $today_at;$i = date('Y-m-d', strtotime('+1 day', $i))){
+        for($i = $created_at;$i <= $today_at;$i = date('Y-m-d', strtotime("$i +1 day"))){
             if(count($submit_answers) >= 1){
                 foreach ($submit_answers as $key => $val){
                     $time = date('Y-m-d', strtotime($val['created_at']));
