@@ -134,8 +134,6 @@ class MineQuestionController extends Controller
         $everyday_ans = array();
         $submit_time = array();
         for($i = $created_at;$i <= $today_at;$i = date('Y-m-d', strtotime("$i +1 day"))){
-            $everyday_ans[$i]['number'] = 0;
-            $everyday_ans[$i]['time'] = $i;
             if(count($submit_answers) >= 1){
                 foreach ($submit_answers as $key => $val){
                     $time = date('Y-m-d', strtotime($val['created_at']));
@@ -255,10 +253,11 @@ class MineQuestionController extends Controller
                     $questions = Question::getquestions($qnid);
                     if(count($questions) >= 1){
                         foreach ($questions as $key => $val){
+                            $qtype = 0;
                             $finalanswer = [
                                 'option' => '',
                             ];
-                            $formanswers[$keys][$val['qid']] = new answers($val, $finalanswer, 0);
+                            $formanswers[$keys][$val['qid']] = new answers($val, $finalanswer, $qtype);
                         }
                     }
                 }
