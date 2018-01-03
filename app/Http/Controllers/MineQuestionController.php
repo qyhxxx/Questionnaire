@@ -127,9 +127,9 @@ class MineQuestionController extends Controller
         $editors = Editor::getdata($qnid);
         $submit_answers = Submit::answers($qnid);
         $count_answers = count($submit_answers);
-        $created_at = $questionnaire_data['created_at'];
+        $created_at = date('Y-m-d', $questionnaire_data['created_at']);
         $created_day = strtotime($created_at);
-        $today_at = Carbon::now();
+        $today_at = date('Y-m-d', Carbon::now());
         $today_day = strtotime($today_at);
         $everyday_ans = array();
         $submit_time = array();
