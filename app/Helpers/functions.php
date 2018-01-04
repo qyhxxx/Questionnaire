@@ -37,7 +37,7 @@ class functions {
     public static function textValidation($text, $test) {
         switch ($test) {
             case 1:
-                if(!preg_match("/^1[34578]\d{9}$/", $text)) {
+                if(!preg_match("/^1\d{10}$/", $text)) {
                     return 1;
                 }
                 break;
@@ -47,7 +47,7 @@ class functions {
                 }
                 break;
             case 3:
-                if (preg_match ("/^1\d{10}$/", $text, $parts)) {
+                if (preg_match ("/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/", $text, $parts)) {
                     if(!checkdate($parts[2],$parts[3],$parts[1])) {
                         return 3;
                     }
