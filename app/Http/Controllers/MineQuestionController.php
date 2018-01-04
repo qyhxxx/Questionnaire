@@ -36,6 +36,8 @@ class MineQuestionController extends Controller
                         $status = 1;
                         $update = Questionnaire::updateByQnid($val->qnid, ['status' => $status]);
                     }
+                } else {
+                    array_splice($questionnaire, $key, 1);
                 }
             }
         }
