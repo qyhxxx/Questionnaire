@@ -16,11 +16,17 @@ class Questionnaire extends Model {
     public $timestamps = false;
 
     public static function add($data) {
+        if ($data['remark'] == null) {
+            $data['remark'] = '';
+        }
         $questionnaire = self::create($data);
         return $questionnaire;
     }
 
     public static function updateByQnid($qnid, $data) {
+        if ($data['remark'] == null) {
+            $data['remark'] = '';
+        }
         $questionnaire = self::getQuestionnaire($qnid);
         $questionnaire->update($data);
         return $questionnaire;
