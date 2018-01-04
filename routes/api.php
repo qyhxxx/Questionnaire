@@ -74,3 +74,11 @@ Route::group(['middleware' => ['Authentication']], function () {
 
     Route::get('logout', 'LogoutController@logout');
 });
+
+Route::get('test', function () {
+    $questionnaire = DB::table('questionnaires')->where('qnid', 80)->get();
+    if ($questionnaire->remark == null) {
+        $questionnaire->remark = '';
+    }
+    dd($questionnaire);
+});
