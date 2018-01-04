@@ -74,3 +74,11 @@ Route::group(['middleware' => ['Authentication']], function () {
 
     Route::get('logout', 'LogoutController@logout');
 });
+
+Route::get('test', function () {
+    $question = new \App\Helpers\statistics('A', null, '', '', '');
+    if ($question->option == null) {
+        $question->option = '';
+    }
+    dd($question);
+});

@@ -70,7 +70,7 @@ class Question extends Model {
                 $data_questions[$i], $qcontents['options'], $qcontents['problems']
             );
         }
-        return $questions ?? null;
+        return $questions ?? array();
     }
 
     public static function deleteAll($qnid) {

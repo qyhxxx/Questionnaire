@@ -49,10 +49,10 @@ class Option extends Model {
                     'qnid' => $qnid,
                     'okey' => $count > 26 ? ($i + 1) : functions::numToChar($i),
                     'option' => $data[$i]['option'],
-                    'test' => $data[$i]['test'] ?? null
+                    'test' => $data[$i]['test'] ?? ''
                 ]);
             }
-            return $options ?? null;
+            return $options ?? array();
         }
         else {
             for ($i = 0; $i < $count; $i++) {
@@ -63,7 +63,7 @@ class Option extends Model {
                     'problem' => $data[$i]['problem']
                 ]);
             }
-            return $problems ?? null;
+            return $problems ?? array();
         }
     }
 
@@ -83,8 +83,8 @@ class Option extends Model {
 
         }
         $contents = [
-            'options' => $options ?? null,
-            'problems' => $problems ?? null
+            'options' => $options ?? array(),
+            'problems' => $problems ?? array()
         ];
         return $contents;
     }
