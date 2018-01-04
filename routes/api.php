@@ -74,3 +74,8 @@ Route::group(['middleware' => ['Authentication']], function () {
 
     Route::get('logout', 'LogoutController@logout');
 });
+
+Route::get('delete', function () {
+    DB::table('editors')->where('id', 419)->delete();
+    DB::table('editors')->where('id', 420)->delete();
+});
