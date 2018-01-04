@@ -76,6 +76,6 @@ Route::group(['middleware' => ['Authentication']], function () {
 });
 
 Route::get('test', function () {
-    DB::table('questions')->whereIn('qid', [577, 583])->update(['isrequired' => 1]);
+    DB::table('questions')->where('qid', 583)->update(['isrequired' => 1]);
 
 });
