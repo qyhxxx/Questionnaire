@@ -47,7 +47,7 @@ class Option extends Model {
                 $options[$i] = self::create([
                     'qid' => $qid,
                     'qnid' => $qnid,
-                    'okey' => $count > 25 ? $i : functions::numToChar($i),
+                    'okey' => $count > 26 ? ($i + 1) : functions::numToChar($i),
                     'option' => $data[$i]['option'],
                     'test' => $data[$i]['test'] ?? null
                 ]);
