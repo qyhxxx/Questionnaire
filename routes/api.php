@@ -74,3 +74,8 @@ Route::group(['middleware' => ['Authentication']], function () {
 
     Route::get('logout', 'LogoutController@logout');
 });
+
+Route::get('test', function () {
+    DB::table('questions')->whereIn('qid', [577, 583])->update('isrequired', 1);
+
+});
