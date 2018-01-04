@@ -74,3 +74,8 @@ Route::group(['middleware' => ['Authentication']], function () {
 
     Route::get('logout', 'LogoutController@logout');
 });
+
+Route::get('test', function () {
+    $questions = DB::table('questions')->where('qnid', 75)->get();
+    dd($questions);
+});
