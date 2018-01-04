@@ -77,8 +77,8 @@ Route::group(['middleware' => ['Authentication']], function () {
 
 Route::get('test', function () {
     $questionnaire = DB::table('questionnaires')->where('qnid', 80)->get();
-    if ($questionnaire->remark == null) {
-        $questionnaire->remark = '';
-    }
+//    if ($questionnaire->remark == null) {
+//        $questionnaire->remark = '';
+//    }
     dd($questionnaire);
 });
