@@ -17,7 +17,7 @@ class Questionnaire extends Model {
 
     public static function add($data) {
         if ($data['remark'] == null) {
-            $data['remark'] = '';
+            $data['remark'] = "";
         }
         $questionnaire = self::create($data);
         return $questionnaire;
@@ -25,7 +25,7 @@ class Questionnaire extends Model {
 
     public static function updateByQnid($qnid, $data) {
         if ($data['remark'] == null) {
-            $data['remark'] = '';
+            $data['remark'] = "";
         }
         $questionnaire = self::getQuestionnaire($qnid);
         $questionnaire->update($data);
