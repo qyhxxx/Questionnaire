@@ -61,9 +61,9 @@ class MineQuestionController extends Controller
 //                }
 //            }
 //        }
-        
+
         return response()->json([
-            'questionnaire' => $questionnaire ?? null,
+            'questionnaire' => $questionnaire ?? array(),
             'eid' => $eid,
         ]);
     }
