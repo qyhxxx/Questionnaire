@@ -112,21 +112,32 @@ class MineQuestionController extends Controller
     //问卷展开[概述、设置]
     public function overview($qnid){
         $questionnaire_data = Questionnaire::getdata($qnid);
+        if ($questionnaire_data['recovery_at'] != null) {
+            $today_at = Carbon::now();
+            if ($questionnaire_data['recovery_at'] <= $today_at) {
+                $status = 2;
+                $update = Questionnaire::updateByQnid($qnid, ['status' => $status]);
+            } else {
+                $status = 1;
+                $update = Questionnaire::updateByQnid($qnid, ['status' => $status]);
+            }
+        }
         $creator_type = Usr::getTypeByName($questionnaire_data['twt_name']);
         $questions = Question::getquestions($qnid);
         $editors = Editor::getdata($qnid);
         $submit_answers = Submit::answers($qnid);
         $count_answers = count($submit_answers);
-        $created_at = $questionnaire_data['created_at'];
+        $created_at = date('Y-m-d', strtotime($questionnaire_data['created_at']));
         $created_day = strtotime($created_at);
-        $today_at = Carbon::now();
+        $today_at = date('Y-m-d', strtotime(Carbon::now()));
         $today_day = strtotime($today_at);
         $everyday_ans = array();
-        for($i = $created_day;$i <= $today_day;$i = strtotime('+1 day', $i)){
+        $submit_time = array();
+        for($i = $created_at;$i <= $today_at;$i = date('Y-m-d', strtotime("$i +1 day"))){
             if(count($submit_answers) >= 1){
                 foreach ($submit_answers as $key => $val){
                     $time = date('Y-m-d', strtotime($val['created_at']));
-                    if($time == date('Y-m-d',$i)){
+                    if($time == $i){
                         if(!isset($everyday_ans[$time]['number'])){
                             $everyday_ans[$time]['number'] = 1;
                             $everyday_ans[$time]['time'] = $time;
@@ -239,7 +250,16 @@ class MineQuestionController extends Controller
                     }
                 }
                 elseif(count($answer_ques[$keys]) < 1){
-                    $formanswers[$keys][] = array();
+                    $questions = Question::getquestions($qnid);
+                    if(count($questions) >= 1){
+                        foreach ($questions as $key => $val){
+                            $qtype = 0;
+                            $finalanswer = [
+                                'option' => '',
+                            ];
+                            $formanswers[$keys][$val['qid']] = new answers($val, $finalanswer, $qtype);
+                        }
+                    }
                 }
 //                else{
 //                    $ishidden = Submit::submitIshidden($keys);
@@ -340,8 +360,19 @@ class MineQuestionController extends Controller
     }
 
     //设置问卷收集状态
-    public function installCollect($qnid, Request $request){
+    public function installCollect($qnid, Request $request)
+    {
         $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
+        if ($questionnaire_data['recovery_at'] != null) {
+            $today_at = Carbon::now();
+            if ($questionnaire_data['recovery_at'] <= $today_at) {
+                $status = 2;
+                $update = Questionnaire::updateByQnid($qnid, ['status' => $status]);
+            } else {
+                $status = 1;
+                $update = Questionnaire::updateByQnid($qnid, ['status' => $status]);
+            }
+        }
         if($request->isMethod('POST')) {
             $iscollect = $request->input('iscollect');
             if ($questionnaire_data['status'] == 2) {
