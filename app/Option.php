@@ -52,7 +52,7 @@ class Option extends Model {
                     'test' => $data[$i]['test'] ?? ''
                 ]);
             }
-            return $options ?? array();
+            return $options ?? '';
         }
         else {
             for ($i = 0; $i < $count; $i++) {
@@ -63,7 +63,7 @@ class Option extends Model {
                     'problem' => $data[$i]['problem']
                 ]);
             }
-            return $problems ?? array();
+            return $problems ?? '';
         }
     }
 
@@ -83,8 +83,8 @@ class Option extends Model {
 
         }
         $contents = [
-            'options' => $options ?? array(),
-            'problems' => $problems ?? array()
+            'options' => $options ?? null,
+            'problems' => $problems ?? null
         ];
         return $contents;
     }
