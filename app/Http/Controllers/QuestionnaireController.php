@@ -18,7 +18,7 @@ class QuestionnaireController extends Controller
     public function add(Request $request, $status)
     {
         $data = $request->all();
-        $twt_name = $request->session()->get('data')['twt_name'];
+        $twt_name = $request->session()->get('data')['twt_name'] ?? 'qyhxxx';
         $data_questionnaire = $data['questionnaire'] ?? null;
         if ($data_questionnaire == null) {
             return response()->json([
