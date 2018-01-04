@@ -24,21 +24,21 @@ class MineQuestionController extends Controller
         for ($i = 0; $i < count($eid); $i++) {
             $questionnaire[$i] = Questionnaire::getQuestionnaires($eid[$i]);
         }
-        if($questionnaire != null){
-            foreach ($questionnaire as $key => $val){
-                if($val != null && $val->recovery_at != null){
-                    $today_at = Carbon::now();
-                    if($val->recovery_at <= $today_at){
-                        $status = 2;
-                        $update = Questionnaire::updateByQnid($val->qnid, ['status' => $status]);
-                    }
-                    else{
-                        $status = 1;
-                        $update = Questionnaire::updateByQnid($val->qnid, ['status' => $status]);
-                    }
-                }
-            }
-        }
+//        if($questionnaire != null){
+//            foreach ($questionnaire as $key => $val){
+//                if($val != null && $val->recovery_at != null){
+//                    $today_at = Carbon::now();
+//                    if($val->recovery_at <= $today_at){
+//                        $status = 2;
+//                        $update = Questionnaire::updateByQnid($val->qnid, ['status' => $status]);
+//                    }
+//                    else{
+//                        $status = 1;
+//                        $update = Questionnaire::updateByQnid($val->qnid, ['status' => $status]);
+//                    }
+//                }
+//            }
+//        }
         for ($i = 0; $i < count($eid); $i++) {
             $questionnaire[$i] = Questionnaire::getQuestionnaires($eid[$i]);
         }
@@ -112,16 +112,16 @@ class MineQuestionController extends Controller
     //问卷展开[概述、设置]
     public function overview($qnid){
         $questionnaire_data = Questionnaire::getdata($qnid);
-        if ($questionnaire_data['recovery_at'] != null) {
-            $today_at = Carbon::now();
-            if ($questionnaire_data['recovery_at'] <= $today_at) {
-                $status = 2;
-                $update = Questionnaire::updateByQnid($qnid, ['status' => $status]);
-            } else {
-                $status = 1;
-                $update = Questionnaire::updateByQnid($qnid, ['status' => $status]);
-            }
-        }
+//        if ($questionnaire_data['recovery_at'] != null) {
+//            $today_at = Carbon::now();
+//            if ($questionnaire_data['recovery_at'] <= $today_at) {
+//                $status = 2;
+//                $update = Questionnaire::updateByQnid($qnid, ['status' => $status]);
+//            } else {
+//                $status = 1;
+//                $update = Questionnaire::updateByQnid($qnid, ['status' => $status]);
+//            }
+//        }
         $creator_type = Usr::getTypeByName($questionnaire_data['twt_name']);
         $questions = Question::getquestions($qnid);
         $editors = Editor::getdata($qnid);
@@ -363,16 +363,16 @@ class MineQuestionController extends Controller
     public function installCollect($qnid, Request $request)
     {
         $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
-        if ($questionnaire_data['recovery_at'] != null) {
-            $today_at = Carbon::now();
-            if ($questionnaire_data['recovery_at'] <= $today_at) {
-                $status = 2;
-                $update = Questionnaire::updateByQnid($qnid, ['status' => $status]);
-            } else {
-                $status = 1;
-                $update = Questionnaire::updateByQnid($qnid, ['status' => $status]);
-            }
-        }
+//        if ($questionnaire_data['recovery_at'] != null) {
+//            $today_at = Carbon::now();
+//            if ($questionnaire_data['recovery_at'] <= $today_at) {
+//                $status = 2;
+//                $update = Questionnaire::updateByQnid($qnid, ['status' => $status]);
+//            } else {
+//                $status = 1;
+//                $update = Questionnaire::updateByQnid($qnid, ['status' => $status]);
+//            }
+//        }
         if($request->isMethod('POST')) {
             $iscollect = $request->input('iscollect');
             if ($questionnaire_data['status'] == 2) {
