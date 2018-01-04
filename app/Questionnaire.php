@@ -97,7 +97,7 @@ class Questionnaire extends Model {
                         ->get();
                 }
             }
-            return $questionnaire ?? array();
+            return $questionnaire ?? null;
         }
         elseif ($order_status ==0){
             if($order_sequence==1) {
@@ -120,7 +120,7 @@ class Questionnaire extends Model {
                         ->get();
                 }
             }
-            return $questionnaire ?? array();
+            return $questionnaire ?? null;
         }
         elseif ($order_status == 1){
             if($order_sequence==1) {
@@ -143,7 +143,7 @@ class Questionnaire extends Model {
                         ->get();
                 }
             }
-            return $questionnaire ?? array();
+            return $questionnaire ?? null;
         }
         else{
             if($order_sequence==1) {
@@ -166,7 +166,7 @@ class Questionnaire extends Model {
                         ->get();
                 }
             }
-            return $questionnaire ?? array();
+            return $questionnaire ?? null;
         }
     }
 
