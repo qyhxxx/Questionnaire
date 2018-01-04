@@ -24,43 +24,20 @@ class MineQuestionController extends Controller
         for ($i = 0; $i < count($eid); $i++) {
             $questionnaire[$i] = Questionnaire::getQuestionnaires($eid[$i]);
         }
-        $key = array_search(null, $questionnaire);
-        if ($key != false) {
-            array_splice($questionnaire, $key, 1);
-        }
         if($questionnaire != null){
-            for ($i = 0; $i < count($questionnaire); $i++) {
-                $val = $questionnaire[$i];
-                if ($val == null) {
-                    array_splice($questionnaire, $i, 1);
+            foreach ($questionnaire as $key => $val){
+                if($val != null && $val->recovery_at != null){
+                    $today_at = Carbon::now();
+                    if($val->recovery_at <= $today_at){
+                        $status = 2;
+                        $update = Questionnaire::updateByQnid($val->qnid, ['status' => $status]);
+                    }
+                    else{
+                        $status = 1;
+                        $update = Questionnaire::updateByQnid($val->qnid, ['status' => $status]);
+                    }
                 }
-//                if($val != null && $val->recovery_at != null){
-//                    $today_at = Carbon::now();
-//                    if($val->recovery_at <= $today_at){
-//                        $status = 2;
-//                        $update = Questionnaire::updateByQnid($val->qnid, ['status' => $status]);
-//                    }
-//                    else{
-//                        $status = 1;
-//                        $update = Questionnaire::updateByQnid($val->qnid, ['status' => $status]);
-//                    }
-//                }
             }
-//            foreach ($questionnaire as $key => $val){
-//                if($val != null && $val->recovery_at != null){
-//                    $today_at = Carbon::now();
-//                    if($val->recovery_at <= $today_at){
-//                        $status = 2;
-//                        $update = Questionnaire::updateByQnid($val->qnid, ['status' => $status]);
-//                    }
-//                    else{
-//                        $status = 1;
-//                        $update = Questionnaire::updateByQnid($val->qnid, ['status' => $status]);
-//                    }
-//                } else {
-//                    array_splice($questionnaire, $key, 1);
-//                }
-//            }
         }
         for ($i = 0; $i < count($eid); $i++) {
             $questionnaire[$i] = Questionnaire::getQuestionnaires($eid[$i]);
