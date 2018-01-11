@@ -100,5 +100,6 @@ class Submit extends Model {
 
     public static function top500($qnid) {
         $submits = self::where('qnid', $qnid)->take(500)->get();
+        return $submits;
     }
 }
