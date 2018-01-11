@@ -13,6 +13,7 @@ use App\Usr;
 use App\Editor;
 use Carbon\Carbon;
 use App\Helpers\answers;
+use Illuminate\Support\Facades\DB;
 
 class MineQuestionController extends Controller
 {
@@ -155,7 +156,8 @@ class MineQuestionController extends Controller
         $answer_ques = array();
         $stu_info = array();
         $answer_final = array();
-        $answers = Answer::getmanyanswers($qnid);
+        DB::connection()->disableQueryLog();
+        $answers = DB::table('answer')->where('qnid', $qnid)->get();
         if(count($answers) >= 1) {
             foreach ($answers as $val) {
                 $answer_ques[$val['sid']][$val['qid']][] = $val;
