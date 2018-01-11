@@ -260,8 +260,8 @@ class Answer extends Model {
 
 
     public static function getmanyanswers($qnid){
-        $answers = self::where('qnid', $qnid)->take(10000)->get()->toArray();
-        return $answers;
+        $answers = self::where('qnid', $qnid)->get()->toArray();
+        return count($answers);
     }
 
     public static function getoneanswer($sid, $qid){
