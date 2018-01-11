@@ -256,4 +256,9 @@ class QuestionnaireController extends Controller
             'info' => $info,
         ]);
     }
+
+    public function show($qnid) {
+        $submits = DB::table('submits')->where('qnid', $qnid)->chunk(100);
+        dd($submits);
+    }
 }
