@@ -13,7 +13,6 @@ use App\Usr;
 use App\Editor;
 use Carbon\Carbon;
 use App\Helpers\answers;
-use Illuminate\Support\Facades\DB;
 
 class MineQuestionController extends Controller
 {
@@ -112,6 +111,7 @@ class MineQuestionController extends Controller
 //    }
     //问卷展开[概述、设置]
     public function overview($qnid){
+        ini_set('memory_limit', '1024M');
         $questionnaire_data = Questionnaire::getdata($qnid);
 //        if ($questionnaire_data['recovery_at'] != null) {
 //            $today_at = Carbon::now();
@@ -156,8 +156,7 @@ class MineQuestionController extends Controller
         $answer_ques = array();
         $stu_info = array();
         $answer_final = array();
-        DB::connection()->disableQueryLog();
-        $answers = DB::table('answer')->where('qnid', $qnid)->get();
+        $answers = Answer::getmanyanswers($qnid);
         if(count($answers) >= 1) {
             foreach ($answers as $val) {
                 $answer_ques[$val['sid']][$val['qid']][] = $val;
