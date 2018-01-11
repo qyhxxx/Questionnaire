@@ -156,10 +156,6 @@ class MineQuestionController extends Controller
         $stu_info = array();
         $answer_final = array();
         $answers = Answer::getmanyanswers($qnid);
-<<<<<<< HEAD
-=======
-//        dd($answers);
->>>>>>> 4c4b6da92162e6920274da4a665a2748aa0ce190
         if(count($answers) >= 1) {
             foreach ($answers as $val) {
                 if(count($answer_ques) < 0){
@@ -290,10 +286,6 @@ class MineQuestionController extends Controller
                 $answer_final[$key] = array_values($formanswers_special[$key]);
             }
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> 4c4b6da92162e6920274da4a665a2748aa0ce190
         return response()->json([
             'questionnaire_data' => $questionnaire_data,
             'questions' => $questions,
