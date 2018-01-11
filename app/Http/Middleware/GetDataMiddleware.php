@@ -29,6 +29,11 @@ class GetDataMiddleware
         }
         if ($qnid != null) {
             $questionnaire = Questionnaire::getQuestionnaire($qnid);
+            if ($questionnaire == null) {
+                return response()->json([
+                    'info' => 0
+                ]);
+            }
 //            if ($questionnaire->recovery_at != null && time() > $questionnaire->recovery_at) {
 //                Questionnaire::updateByQnid($qnid, ['status' => 2]);
 //            }
