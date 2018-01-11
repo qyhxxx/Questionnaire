@@ -283,7 +283,7 @@ class MineQuestionController extends Controller
         $formanswers_special = array_values($formanswers_special);
         if($formanswers_special != null) {
             foreach ($formanswers_special as $key => $val) {
-                for($i = 0; $i <= 250; $i++){
+                for($i = 0; $i <= 10; $i++){
                     $answer_final[$key] = array_values($formanswers_special[$key]);
                 }
             }
