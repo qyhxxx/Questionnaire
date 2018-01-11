@@ -260,6 +260,7 @@ class Answer extends Model {
 
 
     public static function getmanyanswers($qnid){
+        ini_set('memory_limit', '1024M');
         $answers = self::where('qnid', $qnid)->get();
         return $answers;
     }
