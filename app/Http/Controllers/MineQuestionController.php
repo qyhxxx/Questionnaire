@@ -156,9 +156,6 @@ class MineQuestionController extends Controller
         $stu_info = array();
         $answer_final = array();
         $answers = Answer::getmanyanswers($qnid);
-        DB::table('answers')->chunk(24, function($answers) {
-
-        });
         if(count($answers) >= 1) {
             foreach ($answers as $val) {
                 $answer_ques[$val['sid']][$val['qid']][] = $val;
