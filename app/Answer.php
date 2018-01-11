@@ -261,7 +261,7 @@ class Answer extends Model {
 
     public static function getmanyanswers($qnid){
         $answers = self::where('qnid', $qnid)->get()->toArray();
-        return $answers ?? null;
+        return $answers;
     }
 
     public static function getoneanswer($sid, $qid){
