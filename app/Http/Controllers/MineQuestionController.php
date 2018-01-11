@@ -158,7 +158,7 @@ class MineQuestionController extends Controller
         $answers = Answer::getmanyanswers($qnid);
         if(count($answers) >= 1) {
             foreach ($answers as $val) {
-                if(count($answer_ques) < 10){
+                if(count($answer_ques) < 1){
                     $answer_ques[$val['sid']][$val['qid']][] = $val;
                 }
                 $submit_time[$val['sid']]['date']['qid'] = 'date';
