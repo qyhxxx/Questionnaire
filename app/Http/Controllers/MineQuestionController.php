@@ -149,7 +149,6 @@ class MineQuestionController extends Controller
                 }
             }
         }
-        dd($everyday_ans);
         $everyday_ans = array_values($everyday_ans);
         $answer = array();
         $formanswers = array();
@@ -157,6 +156,7 @@ class MineQuestionController extends Controller
         $stu_info = array();
         $answer_final = array();
         $answers = Answer::getmanyanswers($qnid);
+        dd($answers);
         if(count($answers) >= 1) {
             foreach ($answers as $val) {
                 if(count($answer_ques) < 0){
