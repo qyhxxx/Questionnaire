@@ -194,6 +194,7 @@ class QuestionnaireController extends Controller
                     return response()->json([
                         'message' => '有未答的题目',
                         'qnum' => $i + 1,
+                        'info' => 2
                     ]);
                 } else if ($answers[$i] == 0) {
                     continue;
@@ -203,7 +204,7 @@ class QuestionnaireController extends Controller
                     return response()->json([
                         'message' => '文本验证',
                         'qnum' => $i + 1,
-                        'error' => $answers[$i],
+                        'info' => 3,
                     ]);
                 }
             }

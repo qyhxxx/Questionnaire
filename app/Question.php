@@ -64,13 +64,16 @@ class Question extends Model {
             ->orderBy('qnum')
             ->get();
         for ($i = 0; $i < count($data_questions); $i++) {
+            if ($data_questions[$i]->remark == null) {
+                $data_questions[$i]->remark = '';
+            }
             $qid = $data_questions[$i]->qid;
             $qcontents = Option::getQcontentsByQid($qid);
             $questions[$i] = new \App\Helpers\question(
                 $data_questions[$i], $qcontents['options'], $qcontents['problems']
             );
         }
-        return $questions ?? array();
+        return $questions ?? null;
     }
 
     public static function deleteAll($qnid) {

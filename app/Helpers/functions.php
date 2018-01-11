@@ -37,49 +37,45 @@ class functions {
     public static function textValidation($text, $test) {
         switch ($test) {
             case 1:
-                if(!preg_match("/^1[34578]\d{9}$/", $text)) {
+                if(!preg_match("/^1\d{10}$/", $text)) {
                     return 1;
                 }
                 break;
             case 2:
-                if (!is_numeric($text)) {
+                if (!preg_match("/^[0-9]+\.?[0-9]*$/", $text)) {
                     return 2;
                 }
                 break;
             case 3:
-                if (preg_match ("/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/", $text, $parts)) {
-                    if(!checkdate($parts[2],$parts[3],$parts[1])) {
-                        return 3;
-                    }
-                } else {
+                if (!preg_match("/^\d{4}-\d{1,2}-\d{1,2}/", $text)) {
                     return 3;
                 }
                 break;
             case 4:
-                if (!filter_var($text, FILTER_VALIDATE_EMAIL)) {
+                if (!preg_match("/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/", $text)) {
                     return 4;
                 }
                 break;
             case 5:
-                if (!preg_match("/^[\x{4e00}-\x{9fa5}]+$/u", $text)) {
+                if (!preg_match("/^[\u4e00-\u9fa5]{0,}$/", $text)) {
                     return 5;
                 }
                 break;
             case 6:
-                if (!preg_match("^[A-Za-z]+$", $text)) {
+                if (!preg_match("/^[A-Za-z]+$/", $text)) {
                     return 6;
                 }
                 break;
             case 7:
-                $regex = '@(?i)\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))@';
-                if (!preg_match($regex, $text)) {
+                if (!preg_match("/^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/", $text)) {
                     return 7;
                 }
                 break;
             case 8:
-                if (!self::is_idcard($text)) {
+                if (!preg_match("/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/", $text)) {
                     return 8;
                 }
+                break;
             default:
         }
         return 0;
