@@ -261,7 +261,7 @@ class QuestionnaireController extends Controller
     public function show($qnid) {
         $submits = Submit::top500($qnid);
         for ($i = 0; $i < count($submits); $i++) {
-            $sid = $submits->sid;
+            $sid = $submits[$i]->sid;
             $answers[$sid] = Answer::getAnswersQQ($sid);
         }
         return response()->json($answers ?? null);
