@@ -157,7 +157,7 @@ class MineQuestionController extends Controller
         $stu_info = array();
         $answer_final = array();
         $answers = Answer::getmanyanswers($qnid);
-        dd($answers);
+//        dd($answers);
         if(count($answers) >= 1) {
             foreach ($answers as $val) {
                 if(count($answer_ques) < 0){
@@ -289,14 +289,14 @@ class MineQuestionController extends Controller
             }
         }
 
-//        return response()->json([
-//            'questionnaire_data' => $questionnaire_data,
-//            'questions' => $questions,
-//            'editors' => $editors,
-//            'answers' => $answer_final,
-//            'count_answers' => $count_answers,
-//            'everyday_ans' => $everyday_ans,
-//        ]);
+        return response()->json([
+            'questionnaire_data' => $questionnaire_data,
+            'questions' => $questions,
+            'editors' => $editors,
+            'answers' => $answer_final,
+            'count_answers' => $count_answers,
+            'everyday_ans' => $everyday_ans,
+        ]);
     }
 
 //    public function installInfo($qnid){
