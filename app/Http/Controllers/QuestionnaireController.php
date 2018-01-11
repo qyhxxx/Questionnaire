@@ -259,7 +259,7 @@ class QuestionnaireController extends Controller
     }
 
     public function show($qnid) {
-        $submits = Submit::getSidArr($qnid);
+        $submits = Submit::top500($qnid);
         dd($submits);
     }
 }

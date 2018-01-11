@@ -98,4 +98,7 @@ class Submit extends Model {
         return $time;
     }
 
+    public static function top500($qnid) {
+        $submits = self::where('qnid', $qnid)->take(500)->get();
+    }
 }
