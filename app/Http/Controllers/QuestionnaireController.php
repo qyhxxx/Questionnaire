@@ -259,7 +259,7 @@ class QuestionnaireController extends Controller
     }
 
     public function show($qnid) {
-        $submits = DB::table('submits')->where('qnid', $qnid)->chunk(100);
+        $submits = Submit::getSidArr($qnid);
         dd($submits);
     }
 }
