@@ -286,7 +286,7 @@ class MineQuestionController extends Controller
                 $answer_final[$key] = array_values($formanswers_special[$key]);
             }
         }
-        dd($answer_final);
+        dd($answer_ques);
 //        return response()->json([
 //            'questionnaire_data' => $questionnaire_data,
 //            'questions' => $questions,
