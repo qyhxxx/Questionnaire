@@ -260,11 +260,7 @@ class Answer extends Model {
 
 
     public static function getmanyanswers($qnid){
-<<<<<<< HEAD
         $answers = self::where('qnid', $qnid)->take(40000)->get()->toArray();
-=======
-        $answers = self::where('qnid', $qnid)->take(480)->get()->toArray();
->>>>>>> 0790106865d60acfcbc4212d1c841044da55695d
         return $answers;
     }
 
