@@ -175,6 +175,7 @@ class MineQuestionController extends Controller
                 }
             }
         }
+        dd($answer_ques);
 //        $answer_sub = array_values($answer);
 //        foreach ($answer_sub as $key => $val){
 //            $answer_ques[$key] = array_values($answer_sub[$key]);
@@ -286,14 +287,14 @@ class MineQuestionController extends Controller
                 $answer_final[$key] = array_values($formanswers_special[$key]);
             }
         }
-        return response()->json([
-            'questionnaire_data' => $questionnaire_data,
-            'questions' => $questions,
-            'editors' => $editors,
-            'answers' => $answer_final,
-            'count_answers' => $count_answers,
-            'everyday_ans' => $everyday_ans,
-        ]);
+//        return response()->json([
+//            'questionnaire_data' => $questionnaire_data,
+//            'questions' => $questions,
+//            'editors' => $editors,
+//            'answers' => $answer_final,
+//            'count_answers' => $count_answers,
+//            'everyday_ans' => $everyday_ans,
+//        ]);
     }
 
 //    public function installInfo($qnid){
