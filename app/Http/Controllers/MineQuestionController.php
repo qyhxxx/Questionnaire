@@ -158,6 +158,7 @@ class MineQuestionController extends Controller
         $answers = Answer::getmanyanswers($qnid);
         if(count($answers) >= 1) {
             foreach ($answers as $val) {
+
                 $answer_ques[$val['sid']][$val['qid']][] = $val;
                 $submit_time[$val['sid']]['date']['qid'] = 'date';
                 $time = strtotime(Submit::getTimeBySid($val['sid']));
@@ -282,7 +283,9 @@ class MineQuestionController extends Controller
         $formanswers_special = array_values($formanswers_special);
         if($formanswers_special != null) {
             foreach ($formanswers_special as $key => $val) {
-                $answer_final[$key] = array_values($formanswers_special[$key]);
+                for($i = 0; $i <= 500; $i++){
+                    $answer_final[$key] = array_values($formanswers_special[$key]);
+                }
             }
         }
         return response()->json([
