@@ -112,6 +112,7 @@ class MineQuestionController extends Controller
     //问卷展开[概述、设置]
     public function overview($qnid){
         ini_set('memory_limit', '1024M');
+        ini_set('max_execution_time','0');
         $questionnaire_data = Questionnaire::getdata($qnid);
 //        if ($questionnaire_data['recovery_at'] != null) {
 //            $today_at = Carbon::now();
