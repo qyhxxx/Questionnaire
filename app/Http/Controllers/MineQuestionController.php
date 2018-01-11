@@ -166,7 +166,7 @@ class MineQuestionController extends Controller
                 $submit_time[$val['sid']]['date']['answer'] = date('Y-m-d H:i:s', $time);
                 if ($creator_type == 1) {
                     $twt_name = Submit::getNameBySid($val['sid']);
-                    $real_name = 'o';
+                    $real_name = Submit::getRealnameBySid($val['sid']);
                     $user_number = Usr::getNumberByName($twt_name);
                     $stu_info[$val['sid']][] = new forsupermanager('name', $real_name);
                     $stu_info[$val['sid']][] = new forsupermanager('studentid', $user_number);
@@ -287,6 +287,7 @@ class MineQuestionController extends Controller
                 $answer_final[$key] = array_values($formanswers_special[$key]);
             }
         }
+        $everyday_ans = array();
         return response()->json([
             'questionnaire_data' => $questionnaire_data,
             'questions' => $questions,
