@@ -12,6 +12,7 @@ use App\Submit;
 use App\Usr;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class QuestionnaireController extends Controller
 {
