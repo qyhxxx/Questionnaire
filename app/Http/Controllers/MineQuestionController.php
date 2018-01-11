@@ -179,7 +179,6 @@ class MineQuestionController extends Controller
 //        foreach ($answer_sub as $key => $val){
 //            $answer_ques[$key] = array_values($answer_sub[$key]);
 //        }
-
         if(count($answer_ques) >= 1) {
             foreach ($answer_ques as $keys => $value) {
                 if(count($answer_ques[$keys]) >= 1) {
@@ -287,15 +286,15 @@ class MineQuestionController extends Controller
                 $answer_final[$key] = array_values($formanswers_special[$key]);
             }
         }
-        $everyday_ans = array();
-        return response()->json([
-            'questionnaire_data' => $questionnaire_data,
-            'questions' => $questions,
-            'editors' => $editors,
-            'answers' => $answer_final,
-            'count_answers' => $count_answers,
-            'everyday_ans' => $everyday_ans,
-        ]);
+        dd($answer_final);
+//        return response()->json([
+//            'questionnaire_data' => $questionnaire_data,
+//            'questions' => $questions,
+//            'editors' => $editors,
+//            'answers' => $answer_final,
+//            'count_answers' => $count_answers,
+//            'everyday_ans' => $everyday_ans,
+//        ]);
     }
 
 //    public function installInfo($qnid){
