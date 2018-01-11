@@ -112,7 +112,6 @@ class MineQuestionController extends Controller
     //问卷展开[概述、设置]
     public function overview($qnid){
         $questionnaire_data = Questionnaire::getdata($qnid);
-        dd($questionnaire_data);
 //        if ($questionnaire_data['recovery_at'] != null) {
 //            $today_at = Carbon::now();
 //            if ($questionnaire_data['recovery_at'] <= $today_at) {
@@ -150,6 +149,7 @@ class MineQuestionController extends Controller
                 }
             }
         }
+        dd($everyday_ans);
         $everyday_ans = array_values($everyday_ans);
         $answer = array();
         $formanswers = array();
