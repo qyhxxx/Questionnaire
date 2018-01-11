@@ -286,15 +286,14 @@ class MineQuestionController extends Controller
                 $answer_final[$key] = array_values($formanswers_special[$key]);
             }
         }
-        dd($answer_final);
-//        return response()->json([
-//            'questionnaire_data' => $questionnaire_data,
-//            'questions' => $questions,
-//            'editors' => $editors,
-//            'answers' => $answer_final,
-//            'count_answers' => $count_answers,
-//            'everyday_ans' => $everyday_ans,
-//        ]);
+        return response()->json([
+            'questionnaire_data' => $questionnaire_data,
+            'questions' => $questions,
+            'editors' => $editors,
+            'answers' => $answer_final,
+            'count_answers' => $count_answers,
+            'everyday_ans' => $everyday_ans,
+        ]);
     }
 
 //    public function installInfo($qnid){
