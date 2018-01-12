@@ -271,6 +271,11 @@ class Answer extends Model {
         return $answer;
     }
 
+    public static function getAnswerBySid($sid){
+        $answer = self::where('sid', $sid)->get();
+        return $answer;
+    }
+
     public static function deleteBySid($sid) {
         self::where('sid', $sid)->delete();
     }

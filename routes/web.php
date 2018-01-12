@@ -49,6 +49,8 @@ Route::group(['middleware' => ['Authentication']], function () {
 
         //问卷展开[概述、设置]
         Route::get('/overview/{id}', 'MineQuestionController@overview')->middleware('VerifyAuthority');
+        Route::get('/submitNum/{id}', 'MineQuestionController@submitNum')->middleware('VerifyAuthority');
+        Route::get('/browseAndSubmit/{id}', 'MineQuestionController@browseAndSubmit')->middleware('VerifyAuthority');
   //      Route::post('/overview/{id}', 'MineQuestionController@overview');
         Route::any('/install/{id}', 'MineQuestionController@install')->middleware('VerifyAuthority');
     //    Route::get('/install/{id}', 'MineQuestionController@installInfo');

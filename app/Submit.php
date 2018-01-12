@@ -3,6 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Answer;
+use App\Usr;
+use App\Helpers\forsupermanager;
 
 class Submit extends Model {
     protected $table = 'submits';
@@ -101,5 +104,42 @@ class Submit extends Model {
     public static function top500($qnid) {
         $submits = self::where('qnid', $qnid)->take(2400)->get();
         return $submits;
+    }
+
+//    public static function copeAnswer($qnid){
+//        $submit = self::where('qnid', $qnid)->get();
+//        $questionnaire_data = Questionnaire::getdata($qnid);
+//        $creator_type = Usr::getTypeByName($questionnaire_data['twt_name']);
+//        $answer_cope = array();
+//        $answers = self::chunk(100, function ($submit, $creator_type){
+//            foreach($submit as $key=>$val){
+//                $answer = Answer::getAnswerBySid($val['sid']);
+//                $submit_time[$val['sid']]['date']['qid'] = 'date';
+//                $time = strtotime(Submit::getTimeBySid($val['sid']));
+//                $submit_time[$val['sid']]['date']['answer'] = date('Y-m-d H:i:s', $time);
+//                if ($creator_type == 1) {
+//                    $twt_name = Submit::getNameBySid($val['sid']);
+//                    $real_name = Submit::getRealnameBySid($val['sid']);
+//                    $user_number = Usr::getNumberByName($twt_name);
+//                    $stu_info[$val['sid']][] = new forsupermanager('name', $real_name);
+//                    $stu_info[$val['sid']][] = new forsupermanager('studentid', $user_number);
+//                } else {
+//                    $stu_info = array([]);
+//                }
+//                foreach ($answer as $keys=>$vals){
+//                    $answer_cope[$val['sid']][$vals['qid']][] = $vals;
+//                }
+//            }
+//        });
+//        return $answer = array(
+//            'answer' => $answer_cope,
+//            'stu_info' => $stu_info,
+//
+//        );
+//    }
+
+    public static function copeSubmit($qnid, $page){
+        $submit = self::where('qnid', $qnid)->forPage($page, 200)->get();
+        return $submit;
     }
 }

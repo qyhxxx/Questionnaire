@@ -109,32 +109,14 @@ class MineQuestionController extends Controller
 //            'find' => $find,
 //        ]);
 //    }
-    //问卷展开[概述、设置]
-    public function overview($qnid){
-        ini_set('memory_limit', '1024M');
-        ini_set('max_execution_time','0');
+
+    //问卷展开 提交数据折线图
+    public function submitNum($qnid){
         $questionnaire_data = Questionnaire::getdata($qnid);
-//        if ($questionnaire_data['recovery_at'] != null) {
-//            $today_at = Carbon::now();
-//            if ($questionnaire_data['recovery_at'] <= $today_at) {
-//                $status = 2;
-//                $update = Questionnaire::updateByQnid($qnid, ['status' => $status]);
-//            } else {
-//                $status = 1;
-//                $update = Questionnaire::updateByQnid($qnid, ['status' => $status]);
-//            }
-//        }
-        $creator_type = Usr::getTypeByName($questionnaire_data['twt_name']);
-        $questions = Question::getquestions($qnid);
-        $editors = Editor::getdata($qnid);
         $submit_answers = Submit::answers($qnid);
-        $count_answers = count($submit_answers);
         $created_at = date('Y-m-d', strtotime($questionnaire_data['created_at']));
-        $created_day = strtotime($created_at);
         $today_at = date('Y-m-d', strtotime(Carbon::now()));
-        $today_day = strtotime($today_at);
         $everyday_ans = array();
-        $submit_time = array();
         for($i = $created_at;$i <= $today_at;$i = date('Y-m-d', strtotime("$i +1 day"))){
             if(count($submit_answers) >= 1){
                 foreach ($submit_answers as $key => $val){
@@ -152,15 +134,41 @@ class MineQuestionController extends Controller
             }
         }
         $everyday_ans = array_values($everyday_ans);
-        $answer = array();
+        return response()->json([
+            'everyday_ans' => $everyday_ans,
+        ]);
+    }
+
+    //问卷展开 浏览量和提交量
+    public function browseAndSubmit($qnid){
+        $questionnaire_data = Questionnaire::getdata($qnid);
+        $submit_answers = Submit::answers($qnid);
+        $count_answers = count($submit_answers);
+        return response()->json([
+            'questionnaire_data' => $questionnaire_data,
+            'count_answers' => $count_answers,
+        ]);
+    }
+
+    //问卷展开 表单
+    public function overview($qnid, $page){
+        ini_set('memory_limit', '1024M');
+        ini_set('max_execution_time','0');
+        $questionnaire_data = Questionnaire::getdata($qnid);
+        $creator_type = Usr::getTypeByName($questionnaire_data['twt_name']);
+        $questions = Question::getquestions($qnid);
+        $editors = Editor::getdata($qnid);
+        $submit_time = array();
         $formanswers = array();
         $answer_ques = array();
         $stu_info = array();
         $answer_final = array();
-        $answers = Answer::getmanyanswers($qnid);
-        if(count($answers) >= 1) {
-            foreach ($answers as $val) {
-                $answer_ques[$val['sid']][$val['qid']][] = $val;
+        $submit = Submit::copeSubmit($qnid, $page);
+        $submit_count = Submit::count_answers($qnid);
+        $page = ceil($submit_count/200);
+        if(count($submit) > 0){
+            foreach($submit as $key=>$val){
+                $answer = Answer::getAnswerBySid($val['sid']);
                 $submit_time[$val['sid']]['date']['qid'] = 'date';
                 $time = strtotime(Submit::getTimeBySid($val['sid']));
                 $submit_time[$val['sid']]['date']['answer'] = date('Y-m-d H:i:s', $time);
@@ -173,11 +181,30 @@ class MineQuestionController extends Controller
                 } else {
                     $stu_info = array([]);
                 }
+                if(count($answer) > 0){
+                    foreach ($answer as $keys=>$vals){
+                        $answer_ques[$val['sid']][$vals['qid']][] = $vals;
+                    }
+                }
             }
         }
-//        $answer_sub = array_values($answer);
-//        foreach ($answer_sub as $key => $val){
-//            $answer_ques[$key] = array_values($answer_sub[$key]);
+
+//        if(count($answers) >= 1) {
+//            foreach ($answers as $val) {
+//                $answer_ques[$val['sid']][$val['qid']][] = $val;
+//                $submit_time[$val['sid']]['date']['qid'] = 'date';
+//                $time = strtotime(Submit::getTimeBySid($val['sid']));
+//                $submit_time[$val['sid']]['date']['answer'] = date('Y-m-d H:i:s', $time);
+//                if ($creator_type == 1) {
+//                    $twt_name = Submit::getNameBySid($val['sid']);
+//                    $real_name = Submit::getRealnameBySid($val['sid']);
+//                    $user_number = Usr::getNumberByName($twt_name);
+//                    $stu_info[$val['sid']][] = new forsupermanager('name', $real_name);
+//                    $stu_info[$val['sid']][] = new forsupermanager('studentid', $user_number);
+//                } else {
+//                    $stu_info = array([]);
+//                }
+//            }
 //        }
         if(count($answer_ques) >= 1) {
             foreach ($answer_ques as $keys => $value) {
@@ -287,12 +314,10 @@ class MineQuestionController extends Controller
             }
         }
         return response()->json([
-            'questionnaire_data' => $questionnaire_data,
             'questions' => $questions,
             'editors' => $editors,
             'answers' => $answer_final,
-            'count_answers' => $count_answers,
-            'everyday_ans' => $everyday_ans,
+            'page' => $page,
         ]);
     }
 
@@ -360,7 +385,7 @@ class MineQuestionController extends Controller
         ]);
     }
 
-    //设置问卷收集状态
+    //问卷展开 设置问卷收集状态
     public function installCollect($qnid, Request $request)
     {
         $questionnaire_data = Questionnaire::getQuestionnaire($qnid);
