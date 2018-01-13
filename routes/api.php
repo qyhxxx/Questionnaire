@@ -29,7 +29,7 @@ Route::post('submit/qnid/{qnid}', 'QuestionnaireController@submit')->middleware(
 Route::get('ifAnswered/{qnid}', 'QuestionnaireController@ifAnswered');
 Route::get('verify/{qnid}', 'MineQuestionController@verify');
 
-//Route::group(['middleware' => ['Authentication']], function () {
+Route::group(['middleware' => ['Authentication']], function () {
     Route::group(['prefix' => 'status/{status}'], function () {
         Route::post('edit', 'QuestionnaireController@add');
         Route::post('update/qnid/{qnid}', 'QuestionnaireController@update')->middleware('Update');
@@ -56,9 +56,9 @@ Route::get('verify/{qnid}', 'MineQuestionController@verify');
         Route::get('/mine', 'MineQuestionController@questionnaire');
 
         //问卷展开[概述、设置]
-        Route::get('/overview/{qnid}/page/{page}', 'MineQuestionController@overview')->middleware('VerifyAuthority');
+        Route::get('/overview/{id}/page/{page}', 'MineQuestionController@overview')->middleware('VerifyAuthority');
         Route::get('/submitNum/{id}', 'MineQuestionController@submitNum')->middleware('VerifyAuthority');
-        Route::get('/browseAndSubmit/{id}', 'MineQuestionController@browseAndSubmit');
+        Route::get('/browseAndSubmit/{id}', 'MineQuestionController@browseAndSubmit')->middleware('VerifyAuthority');
         Route::get('/install/{id}', 'MineQuestionController@install')->middleware('VerifyAuthority');
         Route::post('/install/{id}', 'MineQuestionController@install')->middleware('VerifyAuthority');
         Route::get('/installCollect/{id}', 'MineQuestionController@installCollect')->middleware('VerifyAuthority');
@@ -74,6 +74,6 @@ Route::get('verify/{qnid}', 'MineQuestionController@verify');
     });
 
     Route::get('logout', 'LogoutController@logout');
-//});
+});
 
 Route::get('show/{qnid}', 'QuestionnaireController@show');
