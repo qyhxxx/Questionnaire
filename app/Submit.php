@@ -139,7 +139,8 @@ class Submit extends Model {
                         $stu_info[$val['sid']][] = new forsupermanager('name', $real_name);
                         $stu_info[$val['sid']][] = new forsupermanager('studentid', $user_number);
                     } else {
-                        $stu_info = array([]);
+                        $stu_info[$val['sid']][] = new forsupermanager('name', '空');
+                        $stu_info[$val['sid']][] = new forsupermanager('studentid', '空');
                     }
                     if(count($answer) > 0){
                         foreach ($answer as $keys=>$vals){
@@ -252,6 +253,15 @@ class Submit extends Model {
         if($formanswers_special != null) {
             foreach ($formanswers_special as $key => $val) {
                 $answer_final[$key] = array_values($formanswers_special[$key]);
+            }
+        }
+        if(count($answer_final) >= 1){
+            foreach ($answer_final as $keys=>$vals){
+                foreach ($answer_final[$keys] as $key=>$val){
+                    if($answer_final[$keys][$key] == null||$answer_final[$keys][$key] == ''){
+                        $answer_final[$keys][$key] = '空';
+                    }
+                }
             }
         }
         return $answer = array(
