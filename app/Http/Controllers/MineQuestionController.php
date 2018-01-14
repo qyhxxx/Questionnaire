@@ -459,6 +459,7 @@ class MineQuestionController extends Controller
     }
 
     public function export($qnid){
+        $start_time = microtime(true);
         ini_set('memory_limit', '1024M');
         ini_set('max_execution_time','0');
 
@@ -472,6 +473,7 @@ LEFT JOIN questions d ON c.qid = d.qid
 LEFT JOIN usrs e ON b.twt_name = e.twt_name
 WHERE (c.answer IS NOT NULL OR c.option IS NOT NULL)
 AND b.qnid = ?', [$qnid]);
+
         $topicMap = [];
         $res = [];
         if($creator_type == 0){
@@ -480,7 +482,7 @@ AND b.qnid = ?', [$qnid]);
         }
         else{
             $topic = ['姓名', '学号', '回收时间'];
-            $topicCount = 4;
+            $topicCount = 3;
         }
         foreach($data as $i => $v){
             if($v->answer == null && $v->option == null)
@@ -506,11 +508,11 @@ AND b.qnid = ?', [$qnid]);
             }
 
             // 考虑到多选题的情况，可能有多个答案，用分号分割
-            if(isset($res[$v->b_name][$topicMap[$v_topic]]))
+            // TODO 需要解决多选题和重复答题的情况
+//            if(!isset($res[$v->b_name][$topicMap[$v_topic]]))
                 $res[$v->b_name][$topicMap[$v_topic]] = $v->answer . $v->option;
-            else
-                $res[$v->b_name][$topicMap[$v_topic]] .= ";" . $v->answer . $v->option;
-
+//            else
+//                $res[$v->b_name][$topicMap[$v_topic]] .= ";" . $v->answer . $v->option;
         }
         foreach($res as $k => $v){
             for($i = 0; $i < $topicCount; $i ++){
@@ -520,11 +522,13 @@ AND b.qnid = ?', [$qnid]);
             }
             ksort($res[$k]);
         }
-        array_unshift($res, $topic);
 
-        return Excel::create('问卷回答',function($excel) use ($res){
-            $excel->sheet('score', function($sheet) use ($res) {
-                $sheet->rows($res);
+        $tmp = array_values($res);
+        array_unshift($tmp, $topic);
+
+        return Excel::create('问卷回答',function($excel) use ($tmp){
+            $excel->sheet('score', function($sheet) use ($tmp) {
+                $sheet->rows($tmp);
             });
         })->export('xls');
     }
