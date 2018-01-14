@@ -57,7 +57,6 @@ Route::group(['middleware' => ['Authentication']], function () {
 
         //问卷展开[概述、设置]
         Route::get('/overview/{id}/page/{page}', 'MineQuestionController@overview')->middleware('VerifyAuthority');
-
         Route::get('/export/{id}', 'MineQuestionController@export');
         Route::get('/submitNum/{id}', 'MineQuestionController@submitNum')->middleware('VerifyAuthority');
         Route::get('/browseAndSubmit/{id}', 'MineQuestionController@browseAndSubmit')->middleware('VerifyAuthority');
