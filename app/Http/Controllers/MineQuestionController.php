@@ -463,15 +463,15 @@ class MineQuestionController extends Controller
         $answers = Submit::copeAnswer($qnid);
         Excel::create('问卷回答',function($excel) use ($answers){
             $excel->sheet('score', function($sheet) use ($answers) {
-                $row = 1;
-                foreach ($answers as $keys => $vals) {
-                    $col = 1;
-                    foreach ($answers[$keys] as $key => $val) {
-                        $sheet->rows($row, $col, $answers[$keys][$key]['answer'] ?? '');
-                        $col++;
-                    }
-                    $row++;
-                }
+//                $row = 1;
+//                foreach ($answers as $keys => $vals) {
+//                    $col = 1;
+//                    foreach ($answers[$keys] as $key => $val) {
+                        $sheet->rows($answers);
+ //                       $col++;
+//                    }
+//                    $row++;
+//                }
 
             });
         })->export('xls');
