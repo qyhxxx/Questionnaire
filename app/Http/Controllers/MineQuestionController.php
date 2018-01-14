@@ -487,7 +487,11 @@ AND b.qnid = ?', [$qnid]);
                 $topic[] = $v_topic;
                 $topicMap[$v_topic] = $topicCount ++;
             }
-            $res[$v->b_name][$topicMap[$v_topic]] = $v->answer . $v->option;
+            // 考虑到多选题的情况，可能有多个答案，用分号分割
+            if(isset($res[$v->b_name][$topicMap[$v_topic]]))
+                $res[$v->b_name][$topicMap[$v_topic]] = $v->answer . $v->option;
+            else
+                $res[$v->b_name][$topicMap[$v_topic]] .= ";" . $v->answer . $v->option;
         }
         foreach($res as $k => $v){
             for($i = 0; $i < $topicCount; $i ++){
