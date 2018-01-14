@@ -99,9 +99,12 @@ class Question extends Model {
         $data = self::where('qnid',$qnid)->get();
         return $data;
     }
+<<<<<<< HEAD
 
     public static function getTopicByQid($qid){
         $data = self::where('qid', $qid)->get();
         return $data->topic;
     }
+=======
+>>>>>>> 4486f3084896f72d377ba45db6d6c9fb7625ab44
 }

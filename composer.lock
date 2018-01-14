@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "6aca753eaf55ae54a2c1daf8b041426f",
+=======
+    "content-hash": "c3a35c0247f351e75edd5e2bd6d222ca",
+>>>>>>> 4486f3084896f72d377ba45db6d6c9fb7625ab44
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -446,6 +450,7 @@
             "time": "2015-04-20T18:58:01+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "jeremeamia/SuperClosure",
             "version": "2.3.0",
             "source": {
@@ -504,6 +509,8 @@
             "time": "2016-12-07T09:37:55+00:00"
         },
         {
+=======
+>>>>>>> 4486f3084896f72d377ba45db6d6c9fb7625ab44
             "name": "laravel/framework",
             "version": "v5.5.2",
             "source": {
@@ -782,6 +789,7 @@
             "time": "2017-08-06T17:41:04+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "maatwebsite/excel",
             "version": "2.1.24",
             "source": {
@@ -860,6 +868,8 @@
             "time": "2018-01-10T11:58:11+00:00"
         },
         {
+=======
+>>>>>>> 4486f3084896f72d377ba45db6d6c9fb7625ab44
             "name": "monolog/monolog",
             "version": "1.23.0",
             "source": {
@@ -1134,6 +1144,7 @@
             "time": "2017-03-13T16:27:32+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "phpoffice/phpexcel",
             "version": "1.8.1",
             "source": {
@@ -1191,6 +1202,8 @@
             "time": "2015-05-01T07:00:55+00:00"
         },
         {
+=======
+>>>>>>> 4486f3084896f72d377ba45db6d6c9fb7625ab44
             "name": "psr/container",
             "version": "1.0.0",
             "source": {
@@ -2083,6 +2096,7 @@
             "time": "2017-06-14T15:44:48+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "symfony/polyfill-php56",
             "version": "v1.6.0",
             "source": {
@@ -2191,6 +2205,8 @@
             "time": "2017-10-11T12:05:26+00:00"
         },
         {
+=======
+>>>>>>> 4486f3084896f72d377ba45db6d6c9fb7625ab44
             "name": "symfony/process",
             "version": "v3.3.8",
             "source": {
@@ -2793,7 +2809,11 @@
             "version": "0.9.9",
             "source": {
                 "type": "git",
+<<<<<<< HEAD
                 "url": "https://github.com/mockery/mockery.git",
+=======
+                "url": "https://github.com/padraic/mockery.git",
+>>>>>>> 4486f3084896f72d377ba45db6d6c9fb7625ab44
                 "reference": "6fdb61243844dc924071d3404bb23994ea0b6856"
             },
             "dist": {

@@ -13,8 +13,11 @@ use App\Usr;
 use App\Editor;
 use Carbon\Carbon;
 use App\Helpers\answers;
+<<<<<<< HEAD
 use PHPExcel;
 use Maatwebsite\Excel\Facades\Excel;
+=======
+>>>>>>> 4486f3084896f72d377ba45db6d6c9fb7625ab44
 
 class MineQuestionController extends Controller
 {
@@ -167,7 +170,11 @@ class MineQuestionController extends Controller
         $answer_final = array();
         $submit = Submit::copeSubmit($qnid, $page);
         $submit_count = Submit::count_answers($qnid);
+<<<<<<< HEAD
         $page = ceil($submit_count/25);
+=======
+        $page = ceil($submit_count/200);
+>>>>>>> 4486f3084896f72d377ba45db6d6c9fb7625ab44
         if(count($submit) > 0){
             foreach($submit as $key=>$val){
                 $answer = Answer::getAnswerBySid($val['sid']);
@@ -457,6 +464,7 @@ class MineQuestionController extends Controller
         return response()->json($response);
     }
 
+<<<<<<< HEAD
     public function export($qnid){
         ini_set('memory_limit', '1024M');
         ini_set('max_execution_time','0');
@@ -488,6 +496,8 @@ class MineQuestionController extends Controller
 //        }
       //  return response()->json($obj);
     }
+=======
+>>>>>>> 4486f3084896f72d377ba45db6d6c9fb7625ab44
 
 
 }
