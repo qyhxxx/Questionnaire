@@ -495,16 +495,21 @@ AND b.qnid = ?', [$qnid]);
                 $topic[] = $v_topic;
                 $topicMap[$v_topic] = $topicCount ++;
             }
+
             if($creator_type == 0){
                 $res[$v->b_name][0] = $v->created_at;
-                $res[$v->b_name][$topicMap[$v_topic]] = $v->answer . $v->option;
             }
             else{
                 $res[$v->b_name][0] = $v->real_name;
                 $res[$v->b_name][1] = $v->user_number;
                 $res[$v->b_name][2] = $v->created_at;
-                $res[$v->b_name][$topicMap[$v_topic]] = $v->answer . $v->option;
             }
+
+            // 考虑到多选题的情况，可能有多个答案，用分号分割
+            if(isset($res[$v->b_name][$topicMap[$v_topic]]))
+                $res[$v->b_name][$topicMap[$v_topic]] = $v->answer . $v->option;
+            else
+                $res[$v->b_name][$topicMap[$v_topic]] .= ";" . $v->answer . $v->option;
 
         }
         foreach($res as $k => $v){
