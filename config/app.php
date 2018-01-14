@@ -177,11 +177,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
-<<<<<<< HEAD
         Maatwebsite\Excel\ExcelServiceProvider::class,
-=======
 
->>>>>>> 4486f3084896f72d377ba45db6d6c9fb7625ab44
     ],
 
     /*
@@ -231,10 +228,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
-<<<<<<< HEAD
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-=======
->>>>>>> 4486f3084896f72d377ba45db6d6c9fb7625ab44
+
 
     ],
 
