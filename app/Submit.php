@@ -60,9 +60,8 @@ class Submit extends Model {
 
     //用了别删
     public static function count_answers($qnid){
-        $data = self::where('qnid',$qnid)->get();
-        $count = count($data);
-        return $count;
+        $data = self::where('qnid',$qnid)->count();
+        return $data;
     }
 
     public static function answers($qnid){

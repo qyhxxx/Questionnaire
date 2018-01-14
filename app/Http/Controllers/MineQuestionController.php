@@ -13,6 +13,7 @@ use App\Usr;
 use App\Editor;
 use Carbon\Carbon;
 use App\Helpers\answers;
+use Illuminate\Support\Facades\DB;
 use PHPExcel;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -460,177 +461,49 @@ class MineQuestionController extends Controller
     public function export($qnid){
         ini_set('memory_limit', '1024M');
         ini_set('max_execution_time','0');
-        $number = Submit::count_answers($qnid);
-        $page = ceil($number/25);
-        $questionnaire_data = Questionnaire::getdata($qnid);
-        $creator_type = Usr::getTypeByName($questionnaire_data['twt_name']);
-        $answer_ques = array();
-        $questions = Question::getquestions($qnid);
-        $count_question = count($questions);
-        $formanswers = array();
-        $answer_final = array();
-        if(count($questions) >= 1){
-            foreach ($questions as $qkey=>$qval){
-                $formanswers['first'][$qval['qid']] = $qval['topic'];
-            }
-        }
-        $formanswers['first'] = array_collapse(['name', 'studentid', 'submitTime'], $formanswers['first']);
-        for($i = 1;$i <= $page;$i++){
-            $submit = Submit::copeSubmit($qnid, $i);
-            if(count($submit) > 0){
-                foreach($submit as $key=>$val){
-                    $answer = Answer::getAnswerBySid($val['sid']);
-                    //     $submit_time[$val['sid']]['date']['qid'] = 'date';
-                    $time = strtotime(Submit::getTimeBySid($val['sid']));
-                    //    $submit_time[$val['sid']]['date']['answer'] = date('Y-m-d H:i:s', $time);
-                    $submit_time[$val['sid']]['date'] = new forsupermanager('date', date('Y-m-d H:i:s', $time));
-                    if ($creator_type == 1) {
-                        $twt_name = Submit::getNameBySid($val['sid']);
-                        $real_name = Submit::getRealnameBySid($val['sid']);
-                        $user_number = Usr::getNumberByName($twt_name);
-                        $stu_info[$val['sid']][] = new forsupermanager('name', $real_name);
-                        $stu_info[$val['sid']][] = new forsupermanager('studentid', $user_number);
-                    } else {
-                        $stu_info[$val['sid']] = array();
-                    }
-                    if(count($answer) > 0){
-                        foreach ($answer as $keys=>$vals){
-                            $answer_ques[$val['sid']][$vals['qid']][] = $vals;
-                        }
-                    }
-                    else{
-                        $answer_ques = array([]);
-                    }
-                }
-                if(count($answer_ques) >= 1) {
-                    foreach ($answer_ques as $keys => $value) {
-                        if(count($answer_ques[$keys]) >= 1) {
-                            foreach ($answer_ques[$keys] as $qid => $info) {
-                                if(count($answer_ques[$keys][$qid]) >= 1) {
-                                    foreach ($answer_ques[$keys][$qid] as $num => $val1) {
-                                        $question = Question::getonequestion($qnid, $val1['qid']);
-                                        $qtype = $question['qtype'];
-                                        if ($qtype == 0) {
-                                            $finalanswer0 = $val1['option'];
-                                            $formanswers[$keys][$qid] = new answers($question, $finalanswer0, $qtype);
-                                        } elseif ($qtype == 1) {
-                                            $finalanswer1[$num] = $val1['option'];
-                                            $formanswers[$keys][$qid] = new answers($question, $finalanswer1, $qtype);
-                                        } elseif ($qtype == 2) {
-                                            $finalanswer2[] = [
-                                                'okey' => $val1['okey'],
-                                                'answer' => $val1['answer'],
-                                            ];
-                                            $formanswers[$keys][$qid] = new answers($question, $finalanswer2, $qtype);
-                                        } elseif ($qtype == 3) {
-                                            $finalanswer3 = $val1['answer'];
-                                            $formanswers[$keys][$qid] = new answers($question, $finalanswer3, $qtype);
-                                        } elseif ($qtype == 4) {
-                                            $finalanswer4 = $val1['answer'];
-                                            $formanswers[$keys][$qid] = new answers($question, $finalanswer4, $qtype);
-                                        } elseif ($qtype == 5) {
-                                            $finalanswer5 = $val1['answer'];
-                                            $formanswers[$keys][$qid] = new answers($question, $finalanswer5, $qtype);
-                                        } elseif ($qtype == 6) {
-                                            $finalanswer6[$num] = $val1['option'];
-                                            $formanswers[$keys][$qid] = new answers($question, $finalanswer6, $qtype);
-                                        } elseif ($qtype == 7) {
-                                            // $option[$val1['pkey']] = $val1['option'];
-                                            $finalanswer7[$num] = [
-                                                'pkey' => $val1['pkey'],
-                                                'problem' => $val1['problem'],
-                                                'okey' => $val1['okey'],
-                                                //     'option' => $option,
-                                            ];
-                                            $formanswers[$keys][$qid] = new answers($question, $finalanswer7, $qtype);
-                                        } elseif ($qtype == 8) {
-                                            //    $option[$val1['pkey']][] = $val1['option'];
-                                            $finalanswer8[$num] = [
-                                                'pkey' => $val1['pkey'],
-                                                'problem' => $val1['problem'],
-                                                'okey' => $val1['okey'],
-                                                //        'option' => $option,
-                                            ];
-                                            $formanswers[$keys][$qid] = new answers($question, $finalanswer8, $qtype);
-                                        } elseif ($qtype == 9) {
-                                            $finalanswer9[$num] = [
-                                                'pkey' => $val1['pkey'],
-                                                'problem' => $val1['problem'],
-                                                'answer' => $val1['answer'],
-                                            ];
-                                            $formanswers[$keys][$qid] = new answers($question, $finalanswer9, $qtype);
-                                        } elseif ($qtype == 10) {
-                                            $finalanswer10[$num] = [
-                                                'okey' => $val1['okey'],
-                                                'option' => $val1['option'],
-                                            ];
-                                            $formanswers[$keys][$qid] = new answers($question, $finalanswer10, $qtype);
-                                        }
-                                    }
-                                }
-                                elseif(count($answer_ques[$keys][$qid]) < 1){
-                                    $formanswers[$keys][$qid] = array();
-                                }
-                            }
-                        }
-                        elseif(count($answer_ques[$keys]) < 1){
-                            $questions = Question::getquestions($qnid);
-                            if(count($questions) >= 1){
-                                foreach ($questions as $key => $val){
-                                    $qtype = 0;
-                                    $finalanswer = [
-                                        'option' => '',
-                                    ];
-                                    $formanswers[$keys][$val['qid']] = new answers($val, $finalanswer, $qtype);
-                                }
-                            }
-                        }
-                    }
-                }
-                else{
-                    $formanswers = array();
-                }
 
+        $answer_final = [];
+        $ques = Questionnaire::findOrFail($qnid);
+        $data = DB::select('SELECT b.twt_name b_name, c.answer, d.topic, c.okey, c.option, d.qtype
+FROM submits b 
+LEFT JOIN answers c ON b.sid = c.sid
+LEFT JOIN questions d ON c.qid = d.qid
+WHERE (c.answer IS NOT NULL OR c.option IS NOT NULL)
+AND b.qnid = ?', [$qnid]);
+        $topicMap = [];
+        $topicCount = 0;
+        $topic = [];
+        $res = [];
+        foreach($data as $i => $v){
+            if($v->answer == null && $v->option == null)
+                continue;
+            if(intval($v->qtype) == 0 || intval($v->qtype) == 1){
+                $v_topic = $v->topic;
             }
-        };
-        if($creator_type == 0){
-            $formanswers_special = array_replace_recursive($formanswers, $submit_time);
-        }
-        else{
-            $formanswers_pro = array_replace_recursive($stu_info, $formanswers);
-            $formanswers_special = array_replace_recursive($formanswers_pro, $submit_time);
-        }
-        $formanswers_special = array_values($formanswers_special);
-        if($formanswers_special != null) {
-            foreach ($formanswers_special as $key => $val) {
-                $answer_final[$key] = array_values($formanswers_special[$key]);
-                $answer_final[$key] = array_map('get_object_vars', $answer_final[$key]);
+            else
+                $v_topic = $v->topic . $v->okey;
+
+            if(!isset($topicMap[$v_topic])){
+                $topic[] = $v_topic;
+                $topicMap[$v_topic] = $topicCount ++;
             }
+            $res[$v->b_name][$topicMap[$v_topic]] = $v->answer . $v->option;
         }
-        if(count($answer_final) >= 1){
-            foreach ($answer_final as $keys=>$vals){
-                if($answer_final[$keys] == null){
-                    for($i = 0;$i <= $count_question;$i++){
-                        $answer_final[$keys][$i] = ['answer' => '空'];
-                    }
+        foreach($res as $k => $v){
+            for($i = 0; $i < $topicCount; $i ++){
+                if(!isset($v[$i])){
+                    $res[$k][$i] = "";
                 }
-                foreach ($answer_final[$keys] as $key=>$val){
-                    if($answer_final[$keys][$key] == null||$answer_final[$keys][$key] == ''){
-                        $answer_final[$keys][$key] = ['空'];
-                    }
-                    else{
-                        $answer_final[$keys][$key] = $answer_final[$keys][$key]['answer'];
-                    }
-                }
             }
+            ksort($res[$k]);
         }
-    //    dd($answer_final);
-        return Excel::create('问卷回答',function($excel) use ($answer_final){
-            $excel->sheet('score', function($sheet) use ($answer_final) {
-                        $sheet->rows($answer_final);
+        array_unshift($res, $topic);
+
+        return Excel::create('问卷回答',function($excel) use ($res){
+            $excel->sheet('score', function($sheet) use ($res) {
+                $sheet->rows($res);
             });
-            })->export('xls');
-
+        })->export('xls');
     }
 
 
