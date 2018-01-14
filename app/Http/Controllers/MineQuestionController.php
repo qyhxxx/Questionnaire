@@ -157,15 +157,15 @@ class MineQuestionController extends Controller
     public function overview($qnid, $page){
         ini_set('memory_limit', '1024M');
         ini_set('max_execution_time','0');
-        $questionnaire_data = Questionnaire::getdata($qnid);
-        $creator_type = Usr::getTypeByName($questionnaire_data['twt_name']);
-        $questions = Question::getquestions($qnid);
-        $editors = Editor::getdata($qnid);
         $submit_time = array();
         $formanswers = array();
         $answer_ques = array();
         $stu_info = array();
         $answer_final = array();
+        $questionnaire_data = Questionnaire::getdata($qnid);
+        $creator_type = Usr::getTypeByName($questionnaire_data['twt_name']);
+        $questions = Question::getquestions($qnid);
+        $editors = Editor::getdata($qnid);
         $submit = Submit::copeSubmit($qnid, $page);
         $submit_count = Submit::count_answers($qnid);
         $page = ceil($submit_count/25);
@@ -464,16 +464,24 @@ class MineQuestionController extends Controller
 
         $answer_final = [];
         $ques = Questionnaire::findOrFail($qnid);
-        $data = DB::select('SELECT b.twt_name b_name, c.answer, d.topic, c.okey, c.option, d.qtype
+        $creator_type = Usr::getTypeByName($ques['twt_name']);
+        $data = DB::select('SELECT b.twt_name b_name, c.answer, d.topic, c.okey, c.option, d.qtype, b.created_at, b.real_name, e.user_number
 FROM submits b 
 LEFT JOIN answers c ON b.sid = c.sid
 LEFT JOIN questions d ON c.qid = d.qid
+LEFT JOIN usrs e ON b.twt_name = e.twt_name
 WHERE (c.answer IS NOT NULL OR c.option IS NOT NULL)
 AND b.qnid = ?', [$qnid]);
         $topicMap = [];
-        $topicCount = 0;
-        $topic = [];
         $res = [];
+        if($creator_type == 0){
+            $topic = ['回收时间'];
+            $topicCount = 1;
+        }
+        else{
+            $topic = ['姓名', '学号', '回收时间'];
+            $topicCount = 4;
+        }
         foreach($data as $i => $v){
             if($v->answer == null && $v->option == null)
                 continue;
@@ -487,7 +495,17 @@ AND b.qnid = ?', [$qnid]);
                 $topic[] = $v_topic;
                 $topicMap[$v_topic] = $topicCount ++;
             }
-            $res[$v->b_name][$topicMap[$v_topic]] = $v->answer . $v->option;
+            if($creator_type == 0){
+                $res[$v->b_name][0] = $v->created_at;
+                $res[$v->b_name][$topicMap[$v_topic]] = $v->answer . $v->option;
+            }
+            else{
+                $res[$v->b_name][0] = $v->real_name;
+                $res[$v->b_name][1] = $v->user_number;
+                $res[$v->b_name][2] = $v->created_at;
+                $res[$v->b_name][$topicMap[$v_topic]] = $v->answer . $v->option;
+            }
+
         }
         foreach($res as $k => $v){
             for($i = 0; $i < $topicCount; $i ++){
