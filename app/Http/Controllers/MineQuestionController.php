@@ -457,37 +457,37 @@ class MineQuestionController extends Controller
         return response()->json($response);
     }
 
-//    public function export($qnid){
-//        ini_set('memory_limit', '1024M');
-//        ini_set('max_execution_time','0');
-//        $answers = Submit::copeAnswer($qnid);
-//        Excel::create('问卷回答',function($excel) use ($answers){
-//            $excel->sheet('score', function($sheet) use ($answers) {
-//                $row = 1;
-//                foreach ($answers as $keys => $vals) {
-//                    $col = 1;
-//                    foreach ($answers[$keys] as $key => $val) {
-//                        $sheet->row($row, $col, $answers[$keys][$key]['answer'] ?? '');
-//                        $col++;
-//                    }
-//                    $row++;
-//                }
-//
-//            });
-//        })->export('xls');
-////        $obj = new PHPExcel();
-////        $obj->getProperties()-> setTitle("问卷回答");
-////        $row = 1;
-////        foreach ($answers as $keys=>$vals){
-////            $col = 1;
-////            foreach ($answers[$keys] as $key=>$val){
-////                $obj->getActiveSheet()-> setCellValueByColumnAndRow($col, $row, $answers[$keys][$key]['answer'] ?? '');
-////                $col++;
-////            }
-////            $row++;
-////        }
-//      //  return response()->json($obj);
-//    }
+    public function export($qnid){
+        ini_set('memory_limit', '1024M');
+        ini_set('max_execution_time','0');
+        $answers = Submit::copeAnswer($qnid);
+        Excel::create('问卷回答',function($excel) use ($answers){
+            $excel->sheet('score', function($sheet) use ($answers) {
+                $row = 1;
+                foreach ($answers as $keys => $vals) {
+                    $col = 1;
+                    foreach ($answers[$keys] as $key => $val) {
+                        $sheet->rows($row, $col, $answers[$keys][$key]['answer'] ?? '');
+                        $col++;
+                    }
+                    $row++;
+                }
+
+            });
+        })->export('xls');
+//        $obj = new PHPExcel();
+//        $obj->getProperties()-> setTitle("问卷回答");
+//        $row = 1;
+//        foreach ($answers as $keys=>$vals){
+//            $col = 1;
+//            foreach ($answers[$keys] as $key=>$val){
+//                $obj->getActiveSheet()-> setCellValueByColumnAndRow($col, $row, $answers[$keys][$key]['answer'] ?? '');
+//                $col++;
+//            }
+//            $row++;
+//        }
+      //  return response()->json($obj);
+    }
 
 
 }
