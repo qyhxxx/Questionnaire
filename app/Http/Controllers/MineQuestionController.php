@@ -466,13 +466,13 @@ class MineQuestionController extends Controller
         $answer_final = [];
         $ques = Questionnaire::findOrFail($qnid);
         $creator_type = Usr::getTypeByName($ques['twt_name']);
-        $data = DB::select('SELECT b.twt_name b_name, c.answer, d.topic, c.okey, c.option, d.qtype, b.created_at, b.real_name, e.user_number
+        $data = DB::select('SELECT b.sid, b.twt_name b_name, c.answer, d.topic, c.okey, c.option, d.qtype, b.created_at, b.real_name, e.user_number
 FROM submits b 
 LEFT JOIN answers c ON b.sid = c.sid
 LEFT JOIN questions d ON c.qid = d.qid
 LEFT JOIN usrs e ON b.twt_name = e.twt_name
 WHERE (c.answer IS NOT NULL OR c.option IS NOT NULL)
-AND b.qnid = ?', [$qnid]);
+AND b.qnid = ? ORDER BY b.sid, d.qid', [$qnid]);
 
         $topicMap = [];
         $res = [];
@@ -499,18 +499,18 @@ AND b.qnid = ?', [$qnid]);
             }
 
             if($creator_type == 0){
-                $res[$v->b_name][0] = $v->created_at;
+                $res[$v->sid][0] = $v->created_at;
             }
             else{
-                $res[$v->b_name][0] = $v->real_name;
-                $res[$v->b_name][1] = $v->user_number;
-                $res[$v->b_name][2] = $v->created_at;
+                $res[$v->sid][0] = $v->real_name;
+                $res[$v->sid][1] = $v->user_number;
+                $res[$v->sid][2] = $v->created_at;
             }
 
             // 考虑到多选题的情况，可能有多个答案，用分号分割
             // TODO 需要解决多选题和重复答题的情况
 //            if(!isset($res[$v->b_name][$topicMap[$v_topic]]))
-                $res[$v->b_name][$topicMap[$v_topic]] = $v->answer . $v->option;
+                $res[$v->sid][$topicMap[$v_topic]] = $v->answer . $v->option;
 //            else
 //                $res[$v->b_name][$topicMap[$v_topic]] .= ";" . $v->answer . $v->option;
         }
@@ -525,7 +525,6 @@ AND b.qnid = ?', [$qnid]);
 
         $tmp = array_values($res);
         array_unshift($tmp, $topic);
-
         return Excel::create('问卷回答',function($excel) use ($tmp){
             $excel->sheet('score', function($sheet) use ($tmp) {
                 $sheet->rows($tmp);
