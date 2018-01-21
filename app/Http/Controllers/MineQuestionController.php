@@ -168,7 +168,7 @@ class MineQuestionController extends Controller
         $editors = Editor::getdata($qnid);
         $submit = Submit::copeSubmit($qnid, $page);
         $submit_count = Submit::count_answers($qnid);
-        $page = ceil($submit_count/25);
+        $page = ceil($submit_count/15);
         if(count($submit) > 0){
             foreach($submit as $key=>$val){
                 $answer = Answer::getAnswerBySid($val['sid']);
@@ -217,48 +217,28 @@ class MineQuestionController extends Controller
                             foreach ($answer_ques[$keys][$qid] as $num => $val1) {
                                 $question = Question::getonequestion($qnid, $val1['qid']);
                                 $qtype = $question['qtype'];
-                                if ($qtype == 0) {
-                                    $finalanswer0 = $val1['option'];
+                                if ($qtype == 0 || $qtype == 1) {
+                                    $finalanswer0[$num] = $val1['option'];
                                     $formanswers[$keys][$qid] = new answers($question, $finalanswer0, $qtype);
-                                } elseif ($qtype == 1) {
-                                    $finalanswer1[$num] = $val1['option'];
-                                    $formanswers[$keys][$qid] = new answers($question, $finalanswer1, $qtype);
                                 } elseif ($qtype == 2) {
                                     $finalanswer2[] = [
                                         'okey' => $val1['okey'],
                                         'answer' => $val1['answer'],
                                     ];
                                     $formanswers[$keys][$qid] = new answers($question, $finalanswer2, $qtype);
-                                } elseif ($qtype == 3) {
+                                } elseif ($qtype == 3 || $qtype == 4 || $qtype == 5) {
                                     $finalanswer3 = $val1['answer'];
                                     $formanswers[$keys][$qid] = new answers($question, $finalanswer3, $qtype);
-                                } elseif ($qtype == 4) {
-                                    $finalanswer4 = $val1['answer'];
-                                    $formanswers[$keys][$qid] = new answers($question, $finalanswer4, $qtype);
-                                } elseif ($qtype == 5) {
-                                    $finalanswer5 = $val1['answer'];
-                                    $formanswers[$keys][$qid] = new answers($question, $finalanswer5, $qtype);
-                                } elseif ($qtype == 6) {
+                                }  elseif ($qtype == 6) {
                                     $finalanswer6[$num] = $val1['option'];
                                     $formanswers[$keys][$qid] = new answers($question, $finalanswer6, $qtype);
-                                } elseif ($qtype == 7) {
-                                    // $option[$val1['pkey']] = $val1['option'];
+                                } elseif ($qtype == 7 || $qtype == 8) {
                                     $finalanswer7[$num] = [
                                         'pkey' => $val1['pkey'],
                                         'problem' => $val1['problem'],
                                         'okey' => $val1['okey'],
-                                        //     'option' => $option,
                                     ];
                                     $formanswers[$keys][$qid] = new answers($question, $finalanswer7, $qtype);
-                                } elseif ($qtype == 8) {
-                                    //    $option[$val1['pkey']][] = $val1['option'];
-                                    $finalanswer8[$num] = [
-                                        'pkey' => $val1['pkey'],
-                                        'problem' => $val1['problem'],
-                                        'okey' => $val1['okey'],
-                                        //        'option' => $option,
-                                    ];
-                                    $formanswers[$keys][$qid] = new answers($question, $finalanswer8, $qtype);
                                 } elseif ($qtype == 9) {
                                     $finalanswer9[$num] = [
                                         'pkey' => $val1['pkey'],
@@ -509,10 +489,10 @@ AND b.qnid = ? ORDER BY b.sid, d.qid', [$qnid]);
 
             // 考虑到多选题的情况，可能有多个答案，用分号分割
             // TODO 需要解决多选题和重复答题的情况
-//            if(!isset($res[$v->b_name][$topicMap[$v_topic]]))
-                $res[$v->sid][$topicMap[$v_topic]] = $v->answer . $v->option;
-//            else
-//                $res[$v->b_name][$topicMap[$v_topic]] .= ";" . $v->answer . $v->option;
+            if(!isset($res[$v->sid][$topicMap[$v_topic]]))
+            $res[$v->sid][$topicMap[$v_topic]] = $v->answer . $v->option;
+            else
+                $res[$v->sid][$topicMap[$v_topic]] .= ";" . $v->answer . $v->option;
         }
         foreach($res as $k => $v){
             for($i = 0; $i < $topicCount; $i ++){
