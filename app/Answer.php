@@ -130,54 +130,6 @@ class Answer extends Model {
                 $answer['nd'] = self::create($data);
                 break;
         }
-//        if ($qtype == 0) {
-//            $data['sid'] = $sid;
-//            $okey = $submit_answer;
-//            $data['okey'] = $okey;
-//            $data['option'] = Option::getOption($qid, $okey);
-//            $answer = self::create($data);
-//        }
-//        else if ($qtype == 1 || $qtype == 6 || $qtype == 7 || $qtype == 9) {
-//            for ($i = 0; $i < count($submit_answer); $i++) {
-//                $data['sid'] = $sid;
-//                if ($qtype != 9) {
-//                    $okey = $submit_answer[$i];
-//                    $data['okey'] = $okey;
-//                    $data['option'] = Option::getOption($qid, $okey);
-//                }
-//                if ($qtype == 6) {
-//                    $data['answer'] = $i + 1;
-//                }
-//                if ($qtype == 7 || $qtype == 9) {
-//                    $pkey = $i + 1;
-//                    $data['pkey'] = $pkey;
-//                    $data['problem'] = Option::getProblem($qid, $pkey);
-//                    if ($qtype == 9) {
-//                        $data['answer'] = $submit_answer[$i];
-//                    }
-//                }
-//                $answer[$i] = self::create($data);
-//            }
-//        }
-//        else if ($qtype == 3 || $qtype == 4 || $qtype == 5) {
-//            $data['sid'] = $sid;
-//            $answer = self::create($data);
-//        }
-//        else {
-//            for ($i = 0; $i < count($submit_answer); $i++) {
-//                for ($j = 0; $j < count($submit_answer[$i]); $j++) {
-//                    $data['sid'] = $sid;
-//                    $okey = $submit_answer[$i][$j];
-//                    $data['okey'] = $okey;
-//                    $data['option'] = Option::getOption($qid, $okey);
-//                    $pkey = $i + 1;
-//                    $data['pkey'] = $pkey;
-//                    $data['problem'] = Option::getProblem($qid, $pkey);
-//                    $answerOfOnePro[$j] = self::create($data);
-//                }
-//                $answer[$i] = $answerOfOnePro ?? null;
-//            }
-//        }
         return $answer ?? null;
     }
 

@@ -9,6 +9,7 @@ use App\Question;
 use App\Questionnaire;
 use App\Submit;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Classes\Cache;
 
 class StatisticsController extends Controller {
     public function init($qnid) {
@@ -18,7 +19,12 @@ class StatisticsController extends Controller {
             $statistics = null;
         }
         else {
-            $statistics = $this->statisticsOfAllQuestions($qnid);
+            if (Cache::has($qnid)) {
+                $statistics = Cache::get($qnid);
+            }
+            else {
+                $statistics = $this->statisticsOfAllQuestions($qnid);
+            }
         }
         return response()->json([
             'questionnaire' => $questionnaire->name,
@@ -35,6 +41,9 @@ class StatisticsController extends Controller {
     }
 
     public function statistics($sidArr, $qid) {
+        if (Cache::has($qid)) {
+            return Cache::get($qid);
+        }
         $options = Option::getOptionsByQid($qid);
         $data = array();
         if (empty($sidArr)) {
@@ -58,11 +67,13 @@ class StatisticsController extends Controller {
                 $statistics[] = new statistics($okey, $option, $count, $sum, $proportion);
             }
         }
-        return [
+        $return = [
             'options' => $options,
             'data' => $data,
             'statistics' => $statistics
         ];
+        Cache::put($qid, $return);
+        return $return;
     }
 
     public function statisticsOfOneQuestion(Request $request, $qid) {
@@ -86,6 +97,9 @@ class StatisticsController extends Controller {
     }
 
     public function statisticsOfAllQuestions($qnid) {
+        if (Cache::has($qnid)) {
+            return Cache::get($qnid);
+        }
         $sidArr = Answer::getSidArr(null, $qnid);
         $questions = Question::getquestions($qnid);
         $statistics = array();
@@ -93,6 +107,7 @@ class StatisticsController extends Controller {
             $qid = $question->qid;
             $statistics[] = $this->statistics($sidArr, $qid);
         }
+        Cache::put($qnid, $statistics);
         return $statistics;
     }
 }
