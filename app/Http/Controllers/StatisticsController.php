@@ -13,18 +13,15 @@ use Maatwebsite\Excel\Classes\Cache;
 
 class StatisticsController extends Controller {
     public function init($qnid) {
+        ini_set('memory_limit', '1024M');
+        ini_set('max_execution_time','0');
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
         $questions = Question::getChoiceQuestions($qnid);
         if ($questionnaire->status == 0 || Submit::count_answers($qnid) == 0) {
             $statistics = null;
         }
         else {
-            if (Cache::has($qnid)) {
-                $statistics = Cache::get($qnid);
-            }
-            else {
-                $statistics = $this->statisticsOfAllQuestions($qnid);
-            }
+            $statistics = $this->statisticsOfAllQuestions($qnid);
         }
         return response()->json([
             'questionnaire' => $questionnaire->name,
@@ -41,6 +38,8 @@ class StatisticsController extends Controller {
     }
 
     public function statistics($sidArr, $qid) {
+        ini_set('memory_limit', '1024M');
+        ini_set('max_execution_time','0');
         if (Cache::has($qid)) {
             return Cache::get($qid);
         }
@@ -77,6 +76,8 @@ class StatisticsController extends Controller {
     }
 
     public function statisticsOfOneQuestion(Request $request, $qid) {
+        ini_set('memory_limit', '1024M');
+        ini_set('max_execution_time','0');
         $question = Question::getQuestionByQid($qid);
         $answers = Answer::getdata($qid);
         if (count($answers) == 0) {
@@ -97,6 +98,8 @@ class StatisticsController extends Controller {
     }
 
     public function statisticsOfAllQuestions($qnid) {
+        ini_set('memory_limit', '1024M');
+        ini_set('max_execution_time','0');
         if (Cache::has($qnid)) {
             return Cache::get($qnid);
         }

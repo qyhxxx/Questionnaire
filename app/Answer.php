@@ -178,6 +178,8 @@ class Answer extends Model {
     }
 
     public static function statistics($sidArr, $qid, $okey) {
+        ini_set('memory_limit', '1024M');
+        ini_set('max_execution_time','0');
         $answer = self::whereIn('sid', $sidArr)
             ->where([
                 'qid' => $qid,
