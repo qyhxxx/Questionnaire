@@ -76,5 +76,3 @@ Route::group(['middleware' => ['Authentication']], function () {
 
     Route::get('logout', 'LogoutController@logout');
 });
-
-Route::get('show/{qnid}', 'QuestionnaireController@show');

@@ -13,21 +13,21 @@ use Maatwebsite\Excel\Classes\Cache;
 
 class StatisticsController extends Controller {
     public function init($qnid) {
-        ini_set('memory_limit', '1024M');
-        ini_set('max_execution_time','0');
-        $questionnaire = Questionnaire::getQuestionnaire($qnid);
-        $questions = Question::getChoiceQuestions($qnid);
-        if ($questionnaire->status == 0 || Submit::count_answers($qnid) == 0) {
-            $statistics = null;
-        }
-        else {
-            $statistics = $this->statisticsOfAllQuestions($qnid);
-        }
+//        ini_set('memory_limit', '1024M');
+//        ini_set('max_execution_time','0');
+//        $questionnaire = Questionnaire::getQuestionnaire($qnid);
+//        $questions = Question::getChoiceQuestions($qnid);
+//        if ($questionnaire->status == 0 || Submit::count_answers($qnid) == 0) {
+//            $statistics = null;
+//        }
+//        else {
+//            $statistics = $this->statisticsOfAllQuestions($qnid);
+//        }
         return response()->json([
             'questionnaire' => $questionnaire->name,
             'questions' => $questions,
             'statistics' => $statistics
-        ]);
+        ])
     }
 
     public function getOptions($qid) {
