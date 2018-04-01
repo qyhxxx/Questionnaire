@@ -40,9 +40,6 @@ class StatisticsController extends Controller {
     public function statistics($sidArr, $qid) {
         ini_set('memory_limit', '1024M');
         ini_set('max_execution_time','0');
-        if (Cache::has($qid)) {
-            return Cache::get($qid);
-        }
         $options = Option::getOptionsByQid($qid);
         $data = array();
         if (empty($sidArr)) {
@@ -71,7 +68,6 @@ class StatisticsController extends Controller {
             'data' => $data,
             'statistics' => $statistics
         ];
-        Cache::put($qid, $return);
         return $return;
     }
 
@@ -100,9 +96,6 @@ class StatisticsController extends Controller {
     public function statisticsOfAllQuestions($qnid) {
         ini_set('memory_limit', '1024M');
         ini_set('max_execution_time','0');
-        if (Cache::has($qnid)) {
-            return Cache::get($qnid);
-        }
         $sidArr = Answer::getSidArr(null, $qnid);
         $questions = Question::getquestions($qnid);
         $statistics = array();
@@ -110,7 +103,6 @@ class StatisticsController extends Controller {
             $qid = $question->qid;
             $statistics[] = $this->statistics($sidArr, $qid);
         }
-        Cache::put($qnid, $statistics);
         return $statistics;
     }
 }
