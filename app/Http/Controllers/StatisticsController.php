@@ -97,7 +97,7 @@ class StatisticsController extends Controller {
         ini_set('memory_limit', '1024M');
         ini_set('max_execution_time','0');
         $sidArr = Answer::getSidArr(null, $qnid);
-        $questions = Question::getquestions($qnid);
+        $questions = Question::getChoiceQuestions($qnid);
         $statistics = array();
         foreach ($questions as $question) {
             $qid = $question->qid;
