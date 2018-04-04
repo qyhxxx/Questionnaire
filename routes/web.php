@@ -18,52 +18,28 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/', function () {
-    //
+    return view('layouts');
 });
 
 Route::get('login', 'LoginController@login');
-Route::get('loginStatus', 'LoginController@loginStatus');
-Route::get('qnid/{qnid}', 'QuestionnaireController@getDataOfQuestionnaire')->middleware('GetDataMiddleware');
-Route::any('submit/qnid/{qnid}', 'QuestionnaireController@submit');
-Route::get('qinfo/{qnid}', 'QuestionnaireController@qinfo');
-Route::get('ifAnswered/{qnid}', 'QuestionnaireController@ifAnswered');
-Route::get('verify/{qnid}', 'MineQuestionController@verify');
+Route::get('logout', 'LogoutController@logout')->middleware('Authentication');
 
-Route::group(['middleware' => ['Authentication']], function () {
-    Route::group(['prefix' => 'status/{status}'], function () {
-        Route::post('edit', 'QuestionnaireController@add');
-        Route::post('update/qnid/{qnid}', 'QuestionnaireController@update');
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'Authentication'], function () {
+    Route::group(['prefix' => 'questionnaire'], function () {
+        Route::get('list', 'QuestionnaireManagementController@listOfQuestionnaires');
+        Route::get('deletedList', 'QuestionnaireManagementController@deletedList');
+        Route::get('check/{qnid}', 'QuestionnaireManagementController@check');
+        Route::get('softDelete/{qnid}', 'QuestionnaireManagementController@softDelete');
+        Route::get('restore/{qnid}', 'QuestionnaireManagementController@restore');
+        Route::get('forceDelete/{qnid}', 'QuestionnaireManagementController@forceDelete');
+
+        Route::get('test/{qnid}', function ($qnid) {
+            \App\Questionnaire::restore($qnid);
+            $questionnaires = \App\Questionnaire::paginate(15);
+            dd($questionnaires);
+        });
     });
-    Route::group(['prefix' => 'statistics'], function () {
-        Route::get('qnid/{qnid}/init', 'StatisticsController@init');
-        Route::get('qid/{qid}/getOptions', 'StatisticsController@getOptions');
-        Route::post('qid/{qid}/data', 'StatisticsController@statisticsOfOneQuestion');
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('list', 'UserController@listOfUsers');
     });
-
-    //我的问卷
-    Route::group(['prefix' => 'minequestion'], function () {
-        //问卷缩略图页面
-        //     Route::post('/mine', 'MineQuestionController@reach');
-        Route::post('/mine', 'MineQuestionController@mine');
-        Route::get('/mine', 'MineQuestionController@questionnaire');
-
-        //问卷展开[概述、设置]
-        Route::get('/overview/{id}', 'MineQuestionController@overview')->middleware('VerifyAuthority');
-        Route::get('/submitNum/{id}', 'MineQuestionController@submitNum')->middleware('VerifyAuthority');
-        Route::get('/browseAndSubmit/{id}', 'MineQuestionController@browseAndSubmit')->middleware('VerifyAuthority');
-  //      Route::post('/overview/{id}', 'MineQuestionController@overview');
-        Route::any('/install/{id}', 'MineQuestionController@install')->middleware('VerifyAuthority');
-    //    Route::get('/install/{id}', 'MineQuestionController@installInfo');
-        Route::post('/killed/{id}', 'MineQuestionController@killed')->middleware('VerifyAuthority');
-        Route::get('/killed/{id}', 'MineQuestionController@killed')->middleware('VerifyAuthority');
-//        Route::get('/overview/{id}', function () {
-//            return view('minequestion.overview');
-//        });
-
-//        //问卷展开[数据]
-//        Route::get('/answerdata/{id}','MineQuestionController@answerdata');
-    });
-
-    Route::get('logout', 'LogoutController@logout');
 });
-

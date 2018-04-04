@@ -34,19 +34,17 @@ class GetDataMiddleware
                     'info' => 0
                 ]);
             }
-//            if ($questionnaire->recovery_at != null && time() > $questionnaire->recovery_at) {
-//                Questionnaire::updateByQnid($qnid, ['status' => 2]);
-//            }
             if ($questionnaire->status != 1) {
                 if ($request->session()->has('data')) {
-                    $twt_name = $request->session()->get('data')['twt_name'];
-                    $hasPower = Editor::hasPower($qnid, $twt_name);
-                    if (!$hasPower) {
-                        return response()->json([
-                            'info' => 0
-                        ]);
+                    if ($request->session()->get('data')['type'] != 1) {
+                        $twt_name = $request->session()->get('data')['twt_name'];
+                        $hasPower = Editor::hasPower($qnid, $twt_name);
+                        if (!$hasPower) {
+                            return response()->json([
+                                'info' => 0
+                            ]);
+                        }
                     }
-
                 } else {
                     return response()->json([
                         'info' => 0

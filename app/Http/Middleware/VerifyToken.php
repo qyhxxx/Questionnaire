@@ -19,26 +19,26 @@ class VerifyToken
         if ($request->has('token') && strlen($request->get('token')) > 45) {
             $token = $request->input('token');
             $status = LoginController::storage($token);
-//            if ($request->session()->has('url')) {
-//                $url = $request->session()->pull('url');
-//            } else {
-//                $url = "https://survey.twtstudio.com/";
-//            }
             if ($status) {
                 $url = urldecode($request->get('from'));
-//                return response()->json([
-//                    'url' => $url
-//                ]);
-                header("Location:".$url);
-                exit;
+                if (strpos($url, 'admin') == false) {
+                    header("Location:".$url);
+                    exit;
+                } else {
+                    if ($request->session()->get('data')['type'] == 1) {
+                        header("Location:".$url);
+                        exit;
+                    } else {
+                        $url = "https://survey.twtstudio.com/index";
+                        header("Location:".$url);
+                        exit;
+                    }
+                }
             } else {
                 return response()->json([
                     'message' => '登录失败'
                 ]);
             }
-//            return response()->json([
-//                'status' => $status
-//            ]);
         }
         return $next($request);
     }

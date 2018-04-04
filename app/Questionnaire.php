@@ -4,16 +4,21 @@ namespace App;
 
 use App\Helpers\functions;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Questionnaire extends Model {
+    use SoftDeletes;
+
     protected $table = 'questionnaires';
 
     protected $primaryKey = 'qnid';
 
     protected $fillable = ['twt_name', 'name', 'remark', 'qcount', 'status', 'hasnumber', 'recover_at', 'ischecked',
-            'onceanswer', 'num', 'eid', 'recovery', 'issetddl', 'verifiedphone', 'created_at', 'updated_at'];
+            'onceanswer', 'num', 'eid', 'recovery', 'issetddl', 'verifiedphone', 'created_at', 'updated_at', 'ishidden'];
 
     public $timestamps = false;
+
+    protected $dates = ['delete_at'];
 
     public static function add($data) {
         $questionnaire = self::create($data);
@@ -187,5 +192,32 @@ class Questionnaire extends Model {
     public static function getQuestionnaireByname($twt_name){
         $questionnaires = self::where('twt_name', $twt_name)->get();
         return $questionnaires;
+    }
+
+    public static function getAllQuestionnaires() {
+        $questionnaires = self::paginate(15);
+        return $questionnaires;
+    }
+
+    public static function getDeletedList() {
+        $questionnaires = self::onlyTrashed()->paginate(15);
+        return $questionnaires;
+    }
+
+    public static function getDeletedQuestionnaires() {
+        $questionnaires = self::onlyTrashed()->paginate(15);
+        return $questionnaires;
+    }
+
+    public static function forceDeleteByQnid($qnid) {
+        self::where('qnid', $qnid)->forceDelete();
+    }
+
+    public static function restore($qnid) {
+        self::where('qnid', $qnid)->restore();
+    }
+
+    public static function softDeleteByQnid($qnid) {
+        self::where('qnid', $qnid)->delete();
     }
 }
