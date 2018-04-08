@@ -49,7 +49,7 @@ class Usr extends Model {
     }
 
     public static function getAllUsrs() {
-        $usrs = self::orderBy('type', 'asc')
+        $usrs = self::orderBy('type', 'desc')
             ->orderBy('updated_at', 'desc')
             ->paginate(15);
         return $usrs;

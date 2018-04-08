@@ -37,8 +37,8 @@
                             </tr>
                         @endforeach
                         </tbody>
-                        {!! $questionnaires->links() !!}
                     </table>
+                    {!! $questionnaires->links() !!}
                 </div><!-- /content-panel -->
             </div><!-- /col-md-12 -->
         </div><!-- /row -->

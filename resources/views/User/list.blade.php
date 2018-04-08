@@ -31,8 +31,8 @@
                             </tr>
                         @endforeach
                         </tbody>
-                        {!! $users->links() !!}
                     </table>
+                    {!! $users->links() !!}
                 </div><!-- /content-panel -->
             </div><!-- /col-md-12 -->
         </div><!-- /row -->
