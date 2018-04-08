@@ -24,22 +24,22 @@ class QuestionnaireManagementController {
     public function softDelete($qnid) {
         Questionnaire::softDeleteByQnid($qnid);
         functions::popup("隐藏成功");
-        functions::skip(url('admin/questionnaire/list'));
+        functions::skip(url('questionnaire/list'));
     }
 
     public function restore($qnid) {
         Questionnaire::restore($qnid);
         functions::popup("恢复成功");
-        functions::skip(url('admin/questionnaire/deletedList'));
+        functions::skip(url('questionnaire/deletedList'));
     }
 
     public function forceDelete($qnid, $src = null) {
         Questionnaire::forceDeleteByQnid($qnid);
         functions::popup("删除成功");
         if ($src) {
-            functions::skip(url('admin/questionnaire/list'));
+            functions::skip(url('questionnaire/list'));
         } else {
-            functions::skip(url('admin/questionnaire/deletedList'));
+            functions::skip(url('questionnaire/deletedList'));
         }
     }
 }
