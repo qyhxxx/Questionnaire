@@ -222,6 +222,12 @@ class QuestionnaireController extends Controller
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
         $name = $questionnaire->name;
         $qstatus = $questionnaire->status;
+        if (session()->has('data')) {
+            $type = session()->get('data')['type'];
+            if ($type) {
+                $qstatus = 1;
+            }
+        }
         $ischecked = $questionnaire->ischecked;
         $onceanswer = $questionnaire->onceanswer;
         $verifiedphone = $questionnaire->verifiedphone;
