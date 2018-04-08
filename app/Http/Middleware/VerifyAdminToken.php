@@ -20,7 +20,7 @@ class VerifyAdminToken
             $token = $request->input('token');
             $status = LoginController::storage($token);
             if ($status) {
-                $url = "https://survey-api.175.twtapps.net";
+                $url = urldecode($request->get('from'));
                 header("Location:".$url);
                 exit;
             } else {
