@@ -16,9 +16,11 @@ class Authentication
      */
     public function handle($request, Closure $next)
     {
+        /*
         if (!$request->session()->has('data')) {
             LoginController::login();
         }
+        */
         return $next($request);
     }
 }

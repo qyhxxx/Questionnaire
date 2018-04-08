@@ -33,9 +33,9 @@ class LoginController extends Controller {
             $data['user_number'] = $result->user_number;
             $data['twt_name'] = $result->twt_name;
             $data['type'] = 0;
+            $data['real_name'] = $result->user_info->username;
             Usr::add($data);
             $data['token'] = $token;
-            $data['real_name'] = $result->user_info->username;
             session(['data' => $data]);
             session()->save();
             return 1;

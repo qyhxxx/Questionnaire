@@ -3,6 +3,7 @@
 namespace app\Http\Controllers\Admin;
 
 use App\Answer;
+use App\Helpers\functions;
 use App\Option;
 use App\Question;
 use App\Questionnaire;
@@ -26,16 +27,23 @@ class QuestionnaireManagementController {
 
     public function softDelete($qnid) {
         Questionnaire::softDeleteByQnid($qnid);
-        return redirect('admin/questionnaire/list');
+        functions::popup("隐藏成功");
+        functions::skip(url('admin/questionnaire/list'));
     }
 
     public function restore($qnid) {
         Questionnaire::restore($qnid);
-        return redirect('admin/questionnaire/deletedList');
+        functions::popup("恢复成功");
+        functions::skip(url('admin/questionnaire/deletedList'));
     }
 
-    public function forceDelete($qnid) {
+    public function forceDelete($qnid, $src = null) {
         Questionnaire::forceDeleteByQnid($qnid);
-        return 1;
+        functions::popup("删除成功");
+        if ($src) {
+            functions::skip(url('admin/questionnaire/list'));
+        } else {
+            functions::skip(url('admin/questionnaire/deletedList'));
+        }
     }
 }

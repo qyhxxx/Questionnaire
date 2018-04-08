@@ -9,7 +9,7 @@ class Usr extends Model {
 
     protected $primaryKey = 'id';
 
-    protected $fillable = ['id', 'twt_name', 'user_number', 'type', 'phone'];
+    protected $fillable = ['id', 'twt_name', 'user_number', 'type', 'phone', 'real_name'];
 
     public $timestamps = true;
 
@@ -46,5 +46,12 @@ class Usr extends Model {
         $data = self::where('twt_name', $twt_name)->first();
         $type = $data['type'];
         return $type;
+    }
+
+    public static function getAllUsrs() {
+        $usrs = self::orderBy('type', 'asc')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(15);
+        return $usrs;
     }
 }

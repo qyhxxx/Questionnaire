@@ -31,15 +31,11 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'Auth
         Route::get('check/{qnid}', 'QuestionnaireManagementController@check');
         Route::get('softDelete/{qnid}', 'QuestionnaireManagementController@softDelete');
         Route::get('restore/{qnid}', 'QuestionnaireManagementController@restore');
-        Route::get('forceDelete/{qnid}', 'QuestionnaireManagementController@forceDelete');
-
-        Route::get('test/{qnid}', function ($qnid) {
-            \App\Questionnaire::restore($qnid);
-            $questionnaires = \App\Questionnaire::paginate(15);
-            dd($questionnaires);
-        });
+        Route::get('forceDelete/{qnid}/{src?}', 'QuestionnaireManagementController@forceDelete');
     });
     Route::group(['prefix' => 'user'], function () {
         Route::get('list', 'UserController@listOfUsers');
+        Route::get('toSupMng/{twt_name}', 'UserController@toSupMng');
+        Route::get('toOrdMng/{twt_name}', 'UserController@toOrdMng');
     });
 });

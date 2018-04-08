@@ -22,7 +22,13 @@
                                 <td><a>{{ $questionnaire->name }}</a></td>
                                 <td class="hidden-phone">{{ $questionnaire->remark }}</td>
                                 <td>{{ $questionnaire->twt_name }} </td>
-                                <td><span class="label label-info label-mini">{{ $questionnaire->status }}</span></td>
+                                @if($questionnaire->status == 0)
+                                    <td><span class="label label-info label-mini">未发布</span></td>
+                                @elseif($questionnaire->status == 1)
+                                    <td><span class="label label-success label-mini">收集中</span></td>
+                                @else
+                                    <td><span class="label label-warning label-mini">停止收集</span></td>
+                                @endif
                                 <td>
                                     <a href="{{ url('admin/questionnaire/check/' . $questionnaire->qnid) }}"><span class="badge bg-info">查看</span></a>
                                     <a href="{{ url('admin/questionnaire/restore/' . $questionnaire->qnid) }}"><span class="badge bg-warning">恢复</span></a>
@@ -31,8 +37,8 @@
                             </tr>
                         @endforeach
                         </tbody>
+                        {!! $questionnaires->links() !!}
                     </table>
-                    {!! $questionnaires->links() !!}
                 </div><!-- /content-panel -->
             </div><!-- /col-md-12 -->
         </div><!-- /row -->

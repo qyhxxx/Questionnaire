@@ -73,8 +73,8 @@
                         <span>问卷管理</span>
                     </a>
                     <ul class="sub">
-                        <li class="active"><a  href="{{ url('admin/questionnaire/list') }}">问卷列表</a></li>
-                        <li class="active"><a  href="{{ url('admin/questionnaire/deletedList') }}">已删除问卷列表</a></li>
+                        <li><a  href="{{ url('admin/questionnaire/list') }}">问卷列表</a></li>
+                        <li><a  href="{{ url('admin/questionnaire/deletedList') }}">已删除问卷列表</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
@@ -83,8 +83,8 @@
                         <span>用户管理</span>
                     </a>
                     <ul class="sub">
-                        <li><a  href="calendar.html">用户列表</a></li>
-                        <li><a  href="gallery.html">添加用户</a></li>
+                        <li><a  href="{{ url('admin/user/list') }}">用户列表</a></li>
+                        <li><a  href="{{ url('admin/user/add') }}">添加超管</a></li>
                     </ul>
                 </li>
 

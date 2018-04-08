@@ -32,13 +32,13 @@
                                 <td>
                                     <a href="{{ url('admin/questionnaire/check/' . $questionnaire->qnid) }}"><span class="badge bg-info">查看</span></a>
                                     <a href="{{ url('admin/questionnaire/softDelete/' . $questionnaire->qnid) }}"><span class="badge bg-warning">隐藏</span></a>
-                                    <a href="{{ url('admin/questionnaire/forceDelete/' . $questionnaire->qnid) }}"><span class="badge bg-important">删除</span></a>
+                                    <a href="{{ url('admin/questionnaire/forceDelete/' . $questionnaire->qnid . '/1') }}"><span class="badge bg-important">删除</span></a>
                                 </td>
                             </tr>
                         @endforeach
                         </tbody>
+                        {!! $questionnaires->links() !!}
                     </table>
-                    {!! $questionnaires->links() !!}
                 </div><!-- /content-panel -->
             </div><!-- /col-md-12 -->
         </div><!-- /row -->
