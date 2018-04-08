@@ -2,12 +2,8 @@
 
 namespace app\Http\Controllers\Admin;
 
-use App\Answer;
 use App\Helpers\functions;
-use App\Option;
-use App\Question;
 use App\Questionnaire;
-use App\Submit;
 
 class QuestionnaireManagementController {
     public function listOfQuestionnaires() {

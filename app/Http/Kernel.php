@@ -9,6 +9,7 @@ use App\Http\Middleware\GetDataMiddleware;
 use App\Http\Middleware\submitAnswer;
 use App\Http\Middleware\test;
 use App\Http\Middleware\Update;
+use App\Http\Middleware\VerifyAdminToken;
 use App\Http\Middleware\VerifyAuthority;
 use App\Http\Middleware\VerifyToken;
 use App\Http\Middleware\StartSession;
@@ -55,6 +56,11 @@ class Kernel extends HttpKernel
             'throttle:600,1',
             'bindings',
         ],
+
+        'admin' => [
+            'AdminAuthentication' => Authentication::class,
+            'VerifyAdminToken' => VerifyAdminToken::class,
+        ],
     ];
 
     /**
@@ -76,5 +82,7 @@ class Kernel extends HttpKernel
         'GetDataMiddleware' => GetDataMiddleware::class,
         'submitAnswer' => submitAnswer::class,
         'VerifyAuthority' => VerifyAuthority::class,
+        'AdminAuthentication' => Authentication::class,
+        'VerifyAdminToken' => VerifyAdminToken::class,
     ];
 }

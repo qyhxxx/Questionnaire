@@ -23,10 +23,10 @@
                                 <td>{{ $user->real_name }} </td>
                                 @if($user->type == 1)
                                     <td><span class="label label-success label-mini">是</span></td>
-                                    <td><a href="{{ url('admin/user/toOrdMng/' . $user->twt_name) }}"><span class="badge bg-info">取消超管</span></a></td>
+                                    <td><a href="{{ url('user/toOrdMng/' . $user->twt_name) }}"><span class="badge bg-info">取消超管</span></a></td>
                                 @else
                                     <td><span class="label label-warning label-mini">否</span></td>
-                                    <td><a href="{{ url('admin/user/toSupMng/' . $user->twt_name) }}"><span class="badge bg-info">设为超管</span></a></td>
+                                    <td><a href="{{ url('user/toSupMng/' . $user->twt_name) }}"><span class="badge bg-info">设为超管</span></a></td>
                                 @endif
                             </tr>
                         @endforeach

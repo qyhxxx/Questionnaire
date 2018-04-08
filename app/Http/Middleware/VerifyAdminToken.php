@@ -2,10 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Controllers\LoginController;
+use app\Http\Controllers\Admin\LoginController;
 use Closure;
 
-class VerifyToken
+class VerifyAdminToken
 {
     /**
      * Handle an incoming request.
@@ -16,11 +16,11 @@ class VerifyToken
      */
     public function handle($request, Closure $next)
     {
-        if ($request->has('token') && strlen($request->get('token')) > 45) {
+        if ($request->has('token')) {
             $token = $request->input('token');
             $status = LoginController::storage($token);
             if ($status) {
-                $url = urldecode($request->get('from'));
+                $url = "https://survey-api.175.twtapps.net";
                 header("Location:".$url);
                 exit;
             } else {

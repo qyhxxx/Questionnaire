@@ -17,14 +17,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/', function () {
-    return view('layouts');
-});
-
-Route::get('login', 'LoginController@login');
-Route::get('logout', 'LogoutController@logout')->middleware('Authentication');
-
-Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => 'Authentication'], function () {
+Route::group(['namespace' => 'Admin', 'middleware' => 'admin'], function () {
+    Route::get('/', function () {
+        return view('layouts');
+    });
     Route::group(['prefix' => 'questionnaire'], function () {
         Route::get('list', 'QuestionnaireManagementController@listOfQuestionnaires');
         Route::get('deletedList', 'QuestionnaireManagementController@deletedList');

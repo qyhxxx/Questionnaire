@@ -30,9 +30,9 @@
                                     <td><span class="label label-warning label-mini">停止收集</span></td>
                                 @endif
                                 <td>
-                                    <a href="{{ url('admin/questionnaire/check/' . $questionnaire->qnid) }}"><span class="badge bg-info">查看</span></a>
-                                    <a href="{{ url('admin/questionnaire/restore/' . $questionnaire->qnid) }}"><span class="badge bg-warning">恢复</span></a>
-                                    <a href="{{ url('admin/questionnaire/forceDelete/' . $questionnaire->qnid) }}"><span class="badge bg-important">删除</span></a>
+                                    <a href="{{ url('questionnaire/check/' . $questionnaire->qnid) }}"><span class="badge bg-info">查看</span></a>
+                                    <a href="{{ url('questionnaire/restore/' . $questionnaire->qnid) }}"><span class="badge bg-warning">恢复</span></a>
+                                    <a href="{{ url('questionnaire/forceDelete/' . $questionnaire->qnid) }}"><span class="badge bg-important">删除</span></a>
                                 </td>
                             </tr>
                         @endforeach
