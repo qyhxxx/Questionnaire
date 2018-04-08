@@ -10,7 +10,6 @@
                     <table class="table table-striped table-advance table-hover">
                         <tr>
                             <th><i class="fa fa-bullhorn"></i> 标题</th>
-                            <th class="hidden-phone"><i class="fa fa-question-circle"></i> 备注</th>
                             <th><i class="fa fa-bookmark"></i> 发起人</th>
                             <th><i class="fa fa-flag"></i> 状态</th>
                             <th><i class=" fa fa-edit"></i> 修改</th>
@@ -20,7 +19,6 @@
                         @foreach($questionnaires as $questionnaire)
                             <tr>
                                 <td><a>{{ $questionnaire->name }}</a></td>
-                                <td class="hidden-phone">{{ $questionnaire->remark }}</td>
                                 <td>{{ $questionnaire->twt_name }} </td>
                                 @if($questionnaire->status == 0)
                                     <td><span class="label label-info label-mini">未发布</span></td>
