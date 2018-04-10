@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['namespace' => 'Admin', 'middleware' => ['auth']], function () {
-    Route::get('home', function () {
+    Route::get('/', function () {
         return view('layouts');
     });
     Route::group(['prefix' => 'questionnaire'], function () {
