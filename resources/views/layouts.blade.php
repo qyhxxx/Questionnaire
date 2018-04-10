@@ -65,7 +65,7 @@
             <ul class="sidebar-menu" id="nav-accordion">
 
                 <p class="centered"><a href="profile.html"><img src="/bkt_1_dashgumfree/assets/img/ui-sam.jpg" class="img-circle" width="60"></a></p>
-                <h5 class="centered">{{ $twt_name }}</h5>
+                <h5 class="centered">qyhxxx</h5>
 
                 <li class="sub-menu">
                     <a href="javascript:;" >

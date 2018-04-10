@@ -17,8 +17,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['namespace' => 'Admin'], function () {
-    Route::get('/', function () {
+Route::group(['namespace' => 'Admin', 'middleware' => ['auth']], function () {
+    Route::get('home', function () {
         return view('layouts');
     });
     Route::group(['prefix' => 'questionnaire'], function () {
@@ -34,4 +34,10 @@ Route::group(['namespace' => 'Admin'], function () {
         Route::get('toSupMng/{twt_name}', 'UserController@toSupMng');
         Route::get('toOrdMng/{twt_name}', 'UserController@toOrdMng');
     });
+    Route::get('logout', function () {
+        \Illuminate\Support\Facades\Auth::logout();
+        return redirect('login');
+    });
 });
+
+Auth::routes();

@@ -224,7 +224,7 @@ class QuestionnaireController extends Controller
         $qstatus = $questionnaire->status;
         if (session()->has('data')) {
             $type = session()->get('data')['type'];
-            if ($type) {
+            if ($type == 1) {
                 $qstatus = 1;
             }
         }
