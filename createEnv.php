@@ -8,7 +8,7 @@ file_put_contents('.env', <<<EOF
 APP_NAME=Twt_Survey
 APP_ENV=local
 APP_KEY=base64:wYxpGSEhdhi1bnFuJWP71VA70Sk8g7trLH91zlzPPvY=
-APP_DEBUG=true
+APP_DEBUG=false
 APP_LOG_LEVEL=debug
 APP_URL=https://survey.twtstudio.com
 DB_CONNECTION=mysql
