@@ -22,10 +22,10 @@ class MineQuestionController extends Controller
     //初始返回数据
     public function questionnaire(Request $request){
         $twt_name = $request->session()->get('data')['twt_name'];
-        $eid = Editor::geteid($twt_name);
+        $qnid = Editor::getQnid($twt_name);
         $questionnaire = null;
-        for ($i = 0; $i < count($eid); $i++) {
-            $questionnaire[$i] = Questionnaire::getQuestionnaires($eid[$i]);
+        for ($i = 0; $i < count($qnid); $i++) {
+            $questionnaire[$i] = Questionnaire::getQuestionnaires($qnid[$i]);
         }
 //        if($questionnaire != null){
 //            foreach ($questionnaire as $key => $val){
@@ -42,9 +42,6 @@ class MineQuestionController extends Controller
 //                }
 //            }
 //        }
-        for ($i = 0; $i < count($eid); $i++) {
-            $questionnaire[$i] = Questionnaire::getQuestionnaires($eid[$i]);
-        }
 //        $questionnaires = Questionnaire::getQuestionnaireByname($twt_name);
 //        $qnid = array();
 //        foreach ($questionnaires as $keys=>$values){
@@ -65,9 +62,10 @@ class MineQuestionController extends Controller
 //            }
 //        }
 
+
         return response()->json([
             'questionnaire' => $questionnaire ?? array(),
-            'eid' => $eid,
+            'qnid' => $qnid,
         ]);
     }
 

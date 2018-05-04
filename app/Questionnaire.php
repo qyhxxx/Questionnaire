@@ -184,8 +184,8 @@ class Questionnaire extends Model {
         }
     }
 
-    public static function getQuestionnaires($eid){
-        $questionnaires = self::where('eid', $eid)->first();
+    public static function getQuestionnaires($qnid){
+        $questionnaires = self::where('qnid', $qnid)->first();
         return $questionnaires;
     }
 
