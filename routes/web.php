@@ -34,6 +34,9 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['auth']], function () {
         Route::get('toSupMng/{twt_name}', 'UserController@toSupMng');
         Route::get('toOrdMng/{twt_name}', 'UserController@toOrdMng');
     });
+    Route::grout(['prefix' => 'manager'], function (){
+        Route::get('data/{qnid}', 'ManagerController@data');
+    });
     Route::get('logout', function () {
         \Illuminate\Support\Facades\Auth::logout();
         return redirect('login');

@@ -103,4 +103,9 @@ class Submit extends Model {
         $submit = self::where('qnid', $qnid)->forPage($page, 15)->get();
         return $submit;
     }
+
+    public static function getAllSubmit($qnid){
+        $submit = self::where('qnid', $qnid)->paginate(20);
+        return $submit;
+    }
 }
