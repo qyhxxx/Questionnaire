@@ -41,8 +41,8 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['auth']], function () {
     });
 });
 
-Route::group(['prefix' => 'manager'], function (){
-    Route::get('data/{qnid}', 'ManagerController@data');
-});
+//Route::group(['prefix' => 'manager'], function (){
+//    Route::get('data/{qnid}', 'ManagerController@data');
+//});
 
 Auth::routes();
