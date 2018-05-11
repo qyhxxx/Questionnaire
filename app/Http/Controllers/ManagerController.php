@@ -123,23 +123,24 @@ class ManagerController extends Controller{
         } else {
             $formanswers = array();
         }
-        if ($creator_type == 0) {
-            $formanswers_special = array_replace_recursive($formanswers, $submit_time);
-        } else {
-            $formanswers_pro = array_replace_recursive($stu_info, $formanswers);
-            $formanswers_special = array_replace_recursive($formanswers_pro, $submit_time);
-        }
+        $formanswers_special = array_replace_recursive($formanswers, $submit_time);
+//        if ($creator_type == 0) {
+//
+//        } else {
+//            $formanswers_pro = array_replace_recursive($stu_info, $formanswers);
+//            $formanswers_special = array_replace_recursive($formanswers_pro, $submit_time);
+//        }
 //        $formanswers_special = array_values($formanswers_special);
 //        if ($formanswers_special != null) {
 //            foreach ($formanswers_special as $key => $val) {
 //                $answer_final[$key] = array_values($formanswers_special[$key]);
 //            }
 //        }
-        dd($formanswers_special);
+  //      dd($formanswers_special);
         return view('Mangager.data', [
             'questions' => $questions,
             'editors' => $editors,
-            'answers' => $answer_final,
+            'answers' => $formanswers_special,
             'page' => $page,
         ]);
     }
