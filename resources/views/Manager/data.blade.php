@@ -1,5 +1,6 @@
 
-
+@extends('Manager.layouts')
+@section('main_content')
     <div class="col-md-12">
         <div class="content-panel">
             <h4><i class="fa fa-angle-right"></i> 图片新闻</h4><hr><table class="table table-striped table-advance table-hover">
@@ -48,5 +49,5 @@
     </div>
     </body>
 
-
+@stop
 
