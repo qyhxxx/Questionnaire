@@ -137,7 +137,7 @@ class ManagerController extends Controller{
 //            }
 //        }
   //      dd($formanswers_special);
-        return view('Mangager.data', [
+        return view('Manager.data', [
             'questions' => $questions,
             'editors' => $editors,
             'answers' => $formanswers_special,
