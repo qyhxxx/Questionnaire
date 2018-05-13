@@ -91,7 +91,7 @@
     <!--main content start-->
     <section id="main-content">
         <section class="wrapper">
-            @yield('content')
+            @yield('main_content')
         </section>
     </section>
 
