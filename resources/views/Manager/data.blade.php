@@ -24,11 +24,14 @@
                             @if($key1 == 'date')
                                  <td style="position:relative;">{{$val1['answer']}}</td>
                             @endif
+                            @if($key1 != 'date')
                                 <td class="hidden-phone">
                                     @foreach($val1->answer as $key2 => $val2)
                                          {{$val1->answer[$key2]}}
                                     @endforeach
                                 </td>
+                                @endif
+
                         @endforeach
 
                         <td><a href="/manager/delete/{qnid}">修改</a>&nbsp;&nbsp;
