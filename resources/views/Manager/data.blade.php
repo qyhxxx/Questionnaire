@@ -41,7 +41,7 @@
                 </tbody>
 
             </table>
-            {{$answers->links()}}
+            {{--{{$answers->links()}}--}}
             <div class="shadowL"></div>
             <div class="shadowR"></div>
         </div><!-- /content-panel -->
