@@ -9,9 +9,9 @@
                 <tr>
                     <th><i class="fa fa-bullhorn"></i> 序号</th>
                     <th ><i class="fa fa-bookmark" ></i> 回答日期</th>
-                    {{--@foreach($questions as $keys => $val)--}}
-                    {{--<th class="hidden-phone"><i class="fa fa-question-circle"></i> {{$val->topic}}</th>--}}
-                    {{--@endforeach--}}
+                    @foreach($questions as $keys => $val)
+                    <th class="hidden-phone"><i class="fa fa-question-circle"></i> {{$val->topic}}</th>
+                    @endforeach
                     <th><i class=" fa fa-edit"></i> 操作</th>
                     <th></th>
                 </tr>
@@ -20,16 +20,16 @@
                 @foreach($answers as $key=>$value)
                     <tr >
                         <td class="hidden-phone">{{$key+1}}</td>
-                        {{--@foreach($value as $key1=>$val1)--}}
-                            {{--@if($key1 == 'date')--}}
-                                 {{--<td style="position:relative;">{{$val1->answer}}</td>--}}
-                            {{--@endif--}}
-                                {{--<td class="hidden-phone">--}}
-                                    {{--@foreach($val1->answer as $key2 => $val2)--}}
-                                         {{--{{$val1->answer[$key2]}}--}}
-                                    {{--@endforeach--}}
-                                {{--</td>--}}
-                        {{--@endforeach--}}
+                        @foreach($value as $key1=>$val1)
+                            @if($key1 == 'date')
+                                 <td style="position:relative;">{{$val1->answer}}</td>
+                            @endif
+                                <td class="hidden-phone">
+                                    @foreach($val1->answer as $key2 => $val2)
+                                         {{$val1->answer[$key2]}}
+                                    @endforeach
+                                </td>
+                        @endforeach
 
                         <td><a href="/manager/delete/{qnid}">修改</a>&nbsp;&nbsp;
                         </td>

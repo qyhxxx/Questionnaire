@@ -8,7 +8,7 @@
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>天津大学心理健康教育中心后台</title>
+    <title>天外天问卷系统后台</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/assets/css/bootstrap.css" rel="stylesheet">
@@ -40,47 +40,22 @@
             <ul class="sidebar-menu" id="nav-accordion">
 
                 <p class="centered"><a href="profile.html"><img src="/assets/img/ui-sam.jpg" class="img-circle" width="60"></a></p>
-                <h5 class="centered">心理中心后台</h5>
+                <h5 class="centered">问卷系统后台</h5>
 
                 <li class="sub-menu dcjq-parent-li">
                     <a href="javascript:;" class="dcjq-parent">
                         <i class="fa fa-desktop"></i>
-                        <span>新闻公告</span>
+                        <span>问卷管理</span>
                         <span class="dcjq-icon"></span></a>
                     <ul class="sub" style="display: none;">
-                        <li><a href="/manager/list_view/picnews">新闻列表</a></li>
-                        <li><a href="/manager/add_view/picnews">添加新闻</a></li>
-                        <li><a href="/manager/list_viewnp/notice">公告列表</a></li>
-                        <li><a href="/manager/add_viewnp/notice">添加公告</a></li>
+                        <li><a href="/manager/">新闻列表</a></li>
+                        <li><a href="/manager/">添加新闻</a></li>
+                        <li><a href="/manager/">公告列表</a></li>
+                        <li><a href="/manager/">添加公告</a></li>
                     </ul>
                 </li>
 
-                <li class="sub-menu dcjq-parent-li">
-                    <a href="javascript:;" class="dcjq-parent">
-                        <i class="fa fa-cogs"></i>
-                        <span>简介</span>
-                        <span class="dcjq-icon"></span></a>
-                    <ul class="sub" style="display: none;">
-                        <li><a href="/manager/list_view/info/1">中心简介</a></li>
-                        <li><a href="/manager/add_view/info/1">添加中心简介</a></li>
-                        <li><a href="/manager/list_view/info/2">心协简介</a></li>
-                        <li><a href="/manager/add_view/info/2">添加心协简介</a></li>
-                        <li><a href="/manager/list_view/info/3">成员介绍</a></li>
-                        <li><a href="/manager/add_view/info/3">添加成员介绍</a></li>
-                    </ul>
-                </li>
-                <li class="sub-menu dcjq-parent-li">
-                    <a href="javascript:;" class="dcjq-parent">
-                        <i class="fa fa-book"></i>
-                        <span>咨询导航栏</span>
-                        <span class="dcjq-icon"></span></a>
-                    <ul class="sub" style="display: none;">
-                        <li><a href="/manager/contentnp/daohang/1">服务范围</a></li>
-                        <li><a href="/manager/contentnp/daohang/2">来访须知</a></li>
-                        <li><a href="/manager/contentnp/daohang/3">预约方式</a></li>
-                        <li><a href="/manager/contentnp/daohang/4">专家介绍</a></li>
-                    </ul>
-                </li>
+
 
 
             </ul>
