@@ -91,9 +91,7 @@
     <!--main content start-->
     <section id="main-content">
         <section class="wrapper">
-            @section('main_content')
-
-            @show
+            @yield('content')
         </section>
     </section>
 
@@ -101,66 +99,64 @@
 
 </section>
 
-<!-- js placed at the end of the document so the pages load faster -->
+{{--<!-- js placed at the end of the document so the pages load faster -->--}}
 {{--<script src="/assets/js/jquery.js"></script>--}}
-<script src="/assets/js/jquery-1.8.3.min.js"></script>
-<script src="/assets/js/bootstrap.min.js"></script>
-<script class="include" type="text/javascript" src="/assets/js/jquery.dcjqaccordion.2.7.js"></script>
-<script src="/assets/js/jquery.scrollTo.min.js"></script>
-<script src="/assets/js/jquery.nicescroll.js" type="text/javascript"></script>
-<script src="/assets/js/jquery.sparkline.js"></script>
+{{--<script src="/assets/js/jquery-1.8.3.min.js"></script>--}}
+{{--<script src="/assets/js/bootstrap.min.js"></script>--}}
+{{--<script class="include" type="text/javascript" src="/assets/js/jquery.dcjqaccordion.2.7.js"></script>--}}
+{{--<script src="/assets/js/jquery.scrollTo.min.js"></script>--}}
+{{--<script src="/assets/js/jquery.nicescroll.js" type="text/javascript"></script>--}}
+{{--<script src="/assets/js/jquery.sparkline.js"></script>--}}
 
 
-<!--common script for all pages-->
-<script src="/assets/js/common-scripts.js"></script><div id="ascrail2000" class="nicescroll-rails" style="width: 3px; z-index: auto; background: rgb(64, 64, 64); cursor: default; position: fixed; top: 0px; left: 207px; height: 759px; display: none; opacity: 0;"><div style="position: relative; top: 0px; float: right; width: 3px; height: 0px; background-color: rgb(78, 205, 196); background-clip: padding-box; border-radius: 10px;"></div></div><div id="ascrail2000-hr" class="nicescroll-rails" style="height: 3px; z-index: auto; background: rgb(64, 64, 64); top: 756px; left: 0px; position: fixed; cursor: default; display: none; opacity: 0;"><div style="position: relative; top: 0px; height: 3px; width: 0px; background-color: rgb(78, 205, 196); background-clip: padding-box; border-radius: 10px; left: 0px;"></div></div><div id="ascrail2001" class="nicescroll-rails" style="width: 6px; z-index: 1000; background: rgb(64, 64, 64); cursor: default; position: fixed; top: 0px; height: 100%; right: 0px; opacity: 0;"><div style="position: relative; top: 590px; float: right; width: 6px; height: 169px; background-color: rgb(78, 205, 196); background-clip: padding-box; border-radius: 10px;"></div></div><div id="ascrail2001-hr" class="nicescroll-rails" style="height: 6px; z-index: 1000; background: rgb(64, 64, 64); position: fixed; left: 0px; width: 100%; bottom: 0px; cursor: default; display: block; opacity: 0;"><div style="position: relative; top: 0px; height: 6px; width: 966px; background-color: rgb(78, 205, 196); background-clip: padding-box; border-radius: 10px; left: 0px;"></div></div>
+{{--<!--common script for all pages-->--}}
+{{--<script src="/assets/js/common-scripts.js"></script><div id="ascrail2000" class="nicescroll-rails" style="width: 3px; z-index: auto; background: rgb(64, 64, 64); cursor: default; position: fixed; top: 0px; left: 207px; height: 759px; display: none; opacity: 0;"><div style="position: relative; top: 0px; float: right; width: 3px; height: 0px; background-color: rgb(78, 205, 196); background-clip: padding-box; border-radius: 10px;"></div></div><div id="ascrail2000-hr" class="nicescroll-rails" style="height: 3px; z-index: auto; background: rgb(64, 64, 64); top: 756px; left: 0px; position: fixed; cursor: default; display: none; opacity: 0;"><div style="position: relative; top: 0px; height: 3px; width: 0px; background-color: rgb(78, 205, 196); background-clip: padding-box; border-radius: 10px; left: 0px;"></div></div><div id="ascrail2001" class="nicescroll-rails" style="width: 6px; z-index: 1000; background: rgb(64, 64, 64); cursor: default; position: fixed; top: 0px; height: 100%; right: 0px; opacity: 0;"><div style="position: relative; top: 590px; float: right; width: 6px; height: 169px; background-color: rgb(78, 205, 196); background-clip: padding-box; border-radius: 10px;"></div></div><div id="ascrail2001-hr" class="nicescroll-rails" style="height: 6px; z-index: 1000; background: rgb(64, 64, 64); position: fixed; left: 0px; width: 100%; bottom: 0px; cursor: default; display: block; opacity: 0;"><div style="position: relative; top: 0px; height: 6px; width: 966px; background-color: rgb(78, 205, 196); background-clip: padding-box; border-radius: 10px; left: 0px;"></div></div>--}}
 
-<script type="text/javascript" src="/assets/js/gritter/js/jquery.gritter.js"></script>
-<script type="text/javascript" src="/assets/js/gritter-conf.js"></script>
+{{--<script type="text/javascript" src="/assets/js/gritter/js/jquery.gritter.js"></script>--}}
+{{--<script type="text/javascript" src="/assets/js/gritter-conf.js"></script>--}}
 
-<!--script for this page-->
-<script src="/assets/js/sparkline-chart.js"></script>
-<script src="/assets/js/zabuto_calendar.js"></script>
-
-
-
-<script type="application/javascript">
-    $(document).ready(function () {
-        $("#date-popover").popover({html: true, trigger: "manual"});
-        $("#date-popover").hide();
-        $("#date-popover").click(function (e) {
-            $(this).hide();
-        });
-
-        $("#my-calendar").zabuto_calendar({
-            action: function () {
-                return myDateFunction(this.id, false);
-            },
-            action_nav: function () {
-                return myNavFunction(this.id);
-            },
-            ajax: {
-                url: "show_data.php?action=1",
-                modal: true
-            },
-            legend: [
-                {type: "text", label: "Special event", badge: "00"},
-                {type: "block", label: "Regular event", }
-            ]
-        });
-    });
+{{--<!--script for this page-->--}}
+{{--<script src="/assets/js/sparkline-chart.js"></script>--}}
+{{--<script src="/assets/js/zabuto_calendar.js"></script>--}}
 
 
-    function myNavFunction(id) {
-        $("#date-popover").hide();
-        var nav = $("#" + id).data("navigation");
-        var to = $("#" + id).data("to");
-        console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
-    }
-</script>
 
-@section('js')
+{{--<script type="application/javascript">--}}
+    {{--$(document).ready(function () {--}}
+        {{--$("#date-popover").popover({html: true, trigger: "manual"});--}}
+        {{--$("#date-popover").hide();--}}
+        {{--$("#date-popover").click(function (e) {--}}
+            {{--$(this).hide();--}}
+        {{--});--}}
 
-@show
+        {{--$("#my-calendar").zabuto_calendar({--}}
+            {{--action: function () {--}}
+                {{--return myDateFunction(this.id, false);--}}
+            {{--},--}}
+            {{--action_nav: function () {--}}
+                {{--return myNavFunction(this.id);--}}
+            {{--},--}}
+            {{--ajax: {--}}
+                {{--url: "show_data.php?action=1",--}}
+                {{--modal: true--}}
+            {{--},--}}
+            {{--legend: [--}}
+                {{--{type: "text", label: "Special event", badge: "00"},--}}
+                {{--{type: "block", label: "Regular event", }--}}
+            {{--]--}}
+        {{--});--}}
+    {{--});--}}
+
+
+    {{--function myNavFunction(id) {--}}
+        {{--$("#date-popover").hide();--}}
+        {{--var nav = $("#" + id).data("navigation");--}}
+        {{--var to = $("#" + id).data("to");--}}
+        {{--console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);--}}
+    {{--}--}}
+{{--</script>--}}
+
+@yield('js')
 
 </body>
 </html>

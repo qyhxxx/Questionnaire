@@ -12,7 +12,7 @@ class Question extends Model {
 
     protected $primaryKey = 'qid';
 
-    protected $fillable = ['qnid', 'qnum', 'topic', 'remark', 'qtype', 'isrequired', 'stype', 'srange', 'min', 'max', 'test'];
+    protected $fillable = ['qnid', 'qnum', 'topic', 'remark', 'qtype', 'isrequired', 'stype', 'srange', 'min', 'max', 'test', 'left', 'right'];
 
     public $timestamps = false;
 
