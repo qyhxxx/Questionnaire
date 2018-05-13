@@ -25,8 +25,8 @@
                                  <td style="position:relative;">{{$val1['answer']}}</td>
                             @endif
                                 <td class="hidden-phone">
-                                    @foreach($val1['answer'] as $key2 => $val2)
-                                         {{$val1['answer'][$key2]}}
+                                    @foreach($val1->answer as $key2 => $val2)
+                                         {{$val1->answer[$key2]}}
                                     @endforeach
                                 </td>
                         @endforeach
