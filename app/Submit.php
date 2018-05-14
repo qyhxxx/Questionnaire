@@ -108,4 +108,5 @@ class Submit extends Model {
         $submit = self::where('qnid', $qnid)->get();
         return $submit;
     }
+
 }

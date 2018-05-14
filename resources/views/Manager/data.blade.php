@@ -19,7 +19,7 @@
                 <tbody>
                 @foreach($answers as $key=>$value)
                     <tr >
-                        <td class="hidden-phone">{{$key+1}}</td>
+                        <td class="hidden-phone">{{$key}}</td>
                         @foreach($value as $key1=>$val1)
                             @if($key1 == 'date')
                                     <td style="position:relative;">{{$val1['answer']}}</td>
@@ -38,7 +38,7 @@
                                 </td>
                             @endif
                         @endforeach
-                        <td><a href="/manager/delete/{sid}">删除</a>&nbsp;&nbsp;
+                        <td><a href="/manager/delete/{{$key}}">删除</a>&nbsp;&nbsp;
                         </td>
 
                     </tr>

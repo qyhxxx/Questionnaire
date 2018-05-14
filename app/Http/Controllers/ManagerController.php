@@ -150,4 +150,9 @@ class ManagerController extends Controller{
             'page' => $page,
         ]);
     }
+
+    public function delete($sid){
+        $detele_submit = Submit::deleteBySid($sid);
+        $detele_answer = Answer::deleteBySid($sid);
+    }
 }
