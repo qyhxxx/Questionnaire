@@ -148,7 +148,7 @@ class QuestionnaireController extends Controller
     public function getDataOfQuestionnaire($qnid) {
         $questionnaire = Questionnaire::getQuestionnaire($qnid);
         $questions = Question::getAllQuestions($qnid);
-        if (count($questions) == null) {
+        if ($questions == null) {
             $questions = array();
         }
         return [
