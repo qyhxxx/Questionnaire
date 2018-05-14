@@ -26,7 +26,9 @@
                                 @endif
                         @endforeach
                         @foreach($value as $key1=>$val1)
-                            @if($key1 != 'date')
+                            @if($key1 == 'date')
+                                continue;
+                            @elseif
                                 <td class="hidden-phone">
                                     @foreach($val1->answer as $key2 => $val2)
                                         {{$val2[$key2]}}
