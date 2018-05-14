@@ -14,7 +14,8 @@ class Option extends Model {
 
     protected $primaryKey = 'oid';
 
-    protected $fillable = ['qid', 'qnid', 'okey', 'option', 'test', 'pkey', 'problem', 'remark'];
+    protected $fillable = ['qid', 'qnid', 'okey', 'option', 'test', 'pkey', 'problem'];
+//    protected $fillable = ['qid', 'qnid', 'okey', 'option', 'test', 'pkey', 'problem', 'remark'];
 
     public $timestamps = false;
 
@@ -50,7 +51,7 @@ class Option extends Model {
                     'okey' => $count > 26 ? ($i + 1) : functions::numToChar($i),
                     'option' => $data[$i]['option'],
                     'test' => $data[$i]['test'] ?? null,
-                    'remark' => $data[$i]['remark'] ?? null,
+               //     'remark' => $data[$i]['remark'] ?? null,
                 ]);
             }
             return $options ?? null;
