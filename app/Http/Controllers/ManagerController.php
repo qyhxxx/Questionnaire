@@ -142,7 +142,7 @@ class ManagerController extends Controller{
 //                $answer_final[$key] = array_values($formanswers_special[$key]);
 //            }
 //        }
-        dd($formanswers_special);
+      //  dd($formanswers_special);
         return view('Manager.data', [
             'questions' => $questions,
             'editors' => $editors,
