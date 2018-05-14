@@ -104,7 +104,13 @@ class ManagerController extends Controller{
                                 }
                             }
                         } elseif (count($answer_ques[$keys][$qid]) < 1) {
-                            $formanswers[$keys][$qid] = ['空'];
+                            $question = Question::getonequestion($qnid, '975');
+                            $qtype = $question['qtype'];
+                            $finalanswer10[0] = [
+                                'qid' => $qid,
+                                'answer' => '空',
+                            ];
+                            $formanswers[$keys][$qid] = new answers($question, $finalanswer10, $qtype);
                         }
                     }
                 } elseif (count($answer_ques[$keys]) < 1) {
