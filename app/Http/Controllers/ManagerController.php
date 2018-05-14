@@ -104,7 +104,7 @@ class ManagerController extends Controller{
                                 }
                             }
                         } elseif (count($answer_ques[$keys][$qid]) < 1) {
-                            $formanswers[$keys][$qid] = array();
+                            $formanswers[$keys][$qid] = ['空'];
                         }
                     }
                 } elseif (count($answer_ques[$keys]) < 1) {
@@ -136,7 +136,7 @@ class ManagerController extends Controller{
 //                $answer_final[$key] = array_values($formanswers_special[$key]);
 //            }
 //        }
-  //      dd($formanswers_special);
+        dd($formanswers_special);
         return view('Manager.data', [
             'questions' => $questions,
             'editors' => $editors,
