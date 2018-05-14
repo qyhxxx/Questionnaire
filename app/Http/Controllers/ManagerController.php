@@ -115,7 +115,6 @@ class ManagerController extends Controller{
                     }
                 } else {
                     $questions = Question::getquestions($qnid);
-                    dd($questions);
                     if (count($questions) >= 1) {
                         foreach ($questions as $key => $val) {
                             $qtype = 0;

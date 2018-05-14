@@ -105,7 +105,7 @@ class Submit extends Model {
     }
 
     public static function getAllSubmit($qnid){
-        $submit = self::where('qnid', $qnid)->paginate(20);
+        $submit = self::where('qnid', $qnid)->get();
         return $submit;
     }
 }
