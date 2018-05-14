@@ -28,9 +28,13 @@
                         @foreach($value as $key1=>$val1)
                             @if($key1 == 'date')
 
-                            @else
+                            @elseif($val1->answer != null)
                                 <td class="hidden-phone">
                                     {{$val1->answer}}
+                                </td>
+                            @else
+                                <td class="hidden-phone">
+                                    无
                                 </td>
                             @endif
                         @endforeach
