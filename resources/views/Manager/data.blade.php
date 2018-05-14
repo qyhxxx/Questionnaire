@@ -30,9 +30,7 @@
 
                             @else
                                 <td class="hidden-phone">
-                                    @foreach($val1->answer as $key2 => $val2)
-                                        {{$val2[$key2]}}
-                                    @endforeach
+                                    {{$val1->answer}}
                                 </td>
                             @endif
                         @endforeach
