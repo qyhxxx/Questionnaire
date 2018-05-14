@@ -119,7 +119,7 @@ class ManagerController extends Controller{
                         foreach ($questions as $key => $val) {
                             $qtype = 0;
                             $finalanswer = [
-                                'option' => '',
+                                'answer' => '空',
                             ];
                             $formanswers[$keys][$val['qid']] = new answers($val, $finalanswer, $qtype);
                         }
@@ -127,7 +127,16 @@ class ManagerController extends Controller{
                 }
             }
         } else {
-            $formanswers = array();
+            $questions = Question::getquestions($qnid);
+            if (count($questions) >= 1) {
+                foreach ($questions as $key => $val) {
+                    $qtype = 0;
+                    $finalanswer = [
+                        'answer' => '空',
+                    ];
+                    $formanswers[$keys][$val['qid']] = new answers($val, $finalanswer, $qtype);
+                }
+            }
         }
         $formanswers_special = array_replace_recursive($formanswers, $submit_time);
 //        if ($creator_type == 0) {
