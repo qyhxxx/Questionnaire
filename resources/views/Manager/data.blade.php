@@ -8,10 +8,10 @@
                 <thead>
                 <tr>
                     <th><i class="fa fa-bullhorn"></i> 序号</th>
+                    <th ><i class="fa fa-bookmark" ></i> 回答日期</th>
                     @foreach($questions as $keys => $val)
                     <th class="hidden-phone"><i class="fa fa-question-circle"></i> {{$val->topic}}</th>
                     @endforeach
-                    <th ><i class="fa fa-bookmark" ></i> 回答日期</th>
                     <th><i class=" fa fa-edit"></i> 操作</th>
                     <th></th>
                 </tr>
@@ -29,7 +29,7 @@
                                 </td>
                             @endif
                             @if($key1 == 'date')
-                                    <td>{{$val1['answer']}}</td>
+                                    <td style="position:relative;">{{$val1['answer']}}</td>
                                 @endif
                         @endforeach
 
