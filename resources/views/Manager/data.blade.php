@@ -28,7 +28,7 @@
                         @foreach($value as $key1=>$val1)
                             @if($key1 == 'date')
 
-                            @elseif
+                            @else
                                 <td class="hidden-phone">
                                     @foreach($val1->answer as $key2 => $val2)
                                         {{$val2[$key2]}}
