@@ -29,7 +29,7 @@
                                 </td>
                             @endif
                             @if($key1 == 'date')
-                                    <td style="position:relative;">{{$val1['answer']}}</td>
+                                    <td>{{$val1['answer']}}</td>
                                 @endif
                         @endforeach
 
