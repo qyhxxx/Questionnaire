@@ -103,7 +103,7 @@ class ManagerController extends Controller{
                                     $formanswers[$keys][$qid] = new answers($question, $finalanswer10, $qtype);
                                 }
                             }
-                        } elseif (count($answer_ques[$keys][$qid]) < 1) {
+                        } else {
                             $question = Question::getonequestion($qnid, '975');
                             $qtype = $question['qtype'];
                             $finalanswer10[0] = [
@@ -113,8 +113,9 @@ class ManagerController extends Controller{
                             $formanswers[$keys][$qid] = new answers($question, $finalanswer10, $qtype);
                         }
                     }
-                } else{
+                } else {
                     $questions = Question::getquestions($qnid);
+                    dd($questions);
                     if (count($questions) >= 1) {
                         foreach ($questions as $key => $val) {
                             $qtype = 0;
