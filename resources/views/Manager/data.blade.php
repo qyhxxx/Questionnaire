@@ -21,19 +21,20 @@
                     <tr >
                         <td class="hidden-phone">{{$key+1}}</td>
                         @foreach($value as $key1=>$val1)
-                            @if($key1 != 'date')
-                                <td class="hidden-phone">
-                                    @foreach($val1->answer as $key2 => $val2)
-                                         {{$val2[$key2]}}
-                                    @endforeach
-                                </td>
-                            @endif
                             @if($key1 == 'date')
                                     <td style="position:relative;">{{$val1['answer']}}</td>
                                 @endif
                         @endforeach
-
-                        <td><a href="/manager/delete/{qnid}">删除</a>&nbsp;&nbsp;
+                        @foreach($value as $key1=>$val1)
+                            @if($key1 != 'date')
+                                <td class="hidden-phone">
+                                    @foreach($val1->answer as $key2 => $val2)
+                                        {{$val2[$key2]}}
+                                    @endforeach
+                                </td>
+                            @endif
+                        @endforeach
+                        <td><a href="/manager/delete/{sid}">删除</a>&nbsp;&nbsp;
                         </td>
 
                     </tr>
