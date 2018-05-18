@@ -60,6 +60,7 @@ Route::group(['middleware' => ['Authentication']], function () {
         Route::post('/installCollect/{id}', 'MineQuestionController@installCollect')->middleware('VerifyAuthority');
         Route::post('/killed/{id}', 'MineQuestionController@killed')->middleware('VerifyAuthority');
         Route::get('/killed/{id}', 'MineQuestionController@killed')->middleware('VerifyAuthority');
+        Route::get('/deleteQuestionnaire/{qnid}', 'ManagerController@deleteQuestionnaire')->middleware('VerifyAuthority');
 //        Route::get('/overview/{id}', function () {
 //            return view('minequestion.overview');
 //        });

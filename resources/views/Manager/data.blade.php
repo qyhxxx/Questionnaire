@@ -38,7 +38,7 @@
                                 </td>
                             @endif
                         @endforeach
-                        <td><a href="/manager/delete/{{$key}}">删除</a>&nbsp;&nbsp;
+                        <td><a href="/manager/deleteAnswer/{{$key}}">删除</a>&nbsp;&nbsp;
                         </td>
 
                     </tr>

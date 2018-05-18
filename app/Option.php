@@ -101,6 +101,10 @@ class Option extends Model {
         return 1;
     }
 
+    public static function deleteByQnid($qnid){
+        self::where('qnid', $qnid)->delete();
+    }
+
     public static function getOption($qid, $okey) {
         $option = self::where([
             'qid' => $qid,

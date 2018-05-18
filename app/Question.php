@@ -81,6 +81,10 @@ class Question extends Model {
         return 1;
     }
 
+    public static function deleteByQnid($qnid){
+        self::where('qnid', $qnid)->delete();
+    }
+
     public static function getChoiceQuestions($qnid) {
         $questions = self::where('qnid', $qnid)
             ->whereIn('qtype', [0, 1])

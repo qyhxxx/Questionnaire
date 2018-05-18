@@ -234,6 +234,10 @@ class Answer extends Model {
         self::where('sid', $sid)->delete();
     }
 
+    public static function deleteByQnid($qnid){
+        self::where('qnid', $qnid)->delete();
+    }
+
     public static function getAnswersQQ($sid) {
         $answers = self::where('sid', $sid)->get();
         for ($i = 0; $i < count($answers); $i++) {

@@ -71,6 +71,10 @@ class Submit extends Model {
         self::where('sid', $sid)->delete();
     }
 
+    public static function deleteByQnid($qnid){
+        self::where('qnid', $qnid)->delete();
+    }
+
     public static function allkilled($qnid){
         $allkilled = self::where('qnid', $qnid)->delete();
         return $allkilled;

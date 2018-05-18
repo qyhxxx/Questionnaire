@@ -151,9 +151,18 @@ class ManagerController extends Controller{
         ]);
     }
 
-    public function delete($sid){
+    public function deleteAnswer($sid){
         $detele_submit = Submit::deleteBySid($sid);
         $detele_answer = Answer::deleteBySid($sid);
         return redirect()->back();
+    }
+
+    public function deleteQuestionnaire($qnid){
+        $delete_questionnaire = Questionnaire::deleteQuestionnaire($qnid);
+        if($delete_questionnaire){
+            return 1;
+        } else {
+            return 'unknown wrong';
+        }
     }
 }

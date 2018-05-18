@@ -220,4 +220,13 @@ class Questionnaire extends Model {
     public static function softDeleteByQnid($qnid) {
         self::where('qnid', $qnid)->delete();
     }
+
+    public static function deleteQuestionnaire($qnid){
+        $questionnaire = self::where('qnid', $qnid)->delete();
+        $answers = Answer::deleteByQnid($qnid);
+        $submit = Submit::deleteByQnid($qnid);
+        $editor = Editor::deleteByQnid($qnid);
+        $option = Option::deleteByQnid($qnid);
+        $question = Question::deleteByQnid($qnid);
+    }
 }

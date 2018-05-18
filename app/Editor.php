@@ -52,4 +52,8 @@ class Editor extends Model{
             return 0;
         }
     }
+
+    public static function deleteByQnid($qnid){
+        self::where('qnid', $qnid)->delete();
+    }
 }
