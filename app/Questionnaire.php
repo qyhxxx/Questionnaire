@@ -228,5 +228,6 @@ class Questionnaire extends Model {
         $editor = Editor::deleteByQnid($qnid);
         $option = Option::deleteByQnid($qnid);
         $question = Question::deleteByQnid($qnid);
+        return 1;
     }
 }
