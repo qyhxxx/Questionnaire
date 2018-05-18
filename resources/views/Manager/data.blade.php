@@ -78,6 +78,6 @@
         });
 
     </script>
-
+    <div id="ascrail2001" class="nicescroll-rails" style="width: 6px; z-index: 1000; background: rgb(64, 64, 64); cursor: default; position: fixed; top: 0px; height: 100%; right: 0px; opacity: 0;"><div style="position: relative; top: 215px; float: right; width: 6px; height: 544px; background-color: rgb(78, 205, 196); background-clip: padding-box; border-radius: 10px;"></div></div>
 @stop
 
