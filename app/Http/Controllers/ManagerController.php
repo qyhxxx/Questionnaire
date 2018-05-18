@@ -159,10 +159,6 @@ class ManagerController extends Controller{
 
     public function deleteQuestionnaire($qnid){
         $delete_questionnaire = Questionnaire::deleteQuestionnaire($qnid);
-        if($delete_questionnaire){
-            return 1;
-        } else {
-            return 'unknown wrong';
-        }
+        dd($delete_questionnaire);
     }
 }
