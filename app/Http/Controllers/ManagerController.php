@@ -32,7 +32,7 @@ class ManagerController extends Controller{
         $creator_type = Usr::getTypeByName($questionnaire_data['twt_name']);
         $questions = Question::getquestions($qnid);
         $editors = Editor::getdata($qnid);
-        $submit = Submit::getAllSubmit($qnid);
+        $submit = Submit::getSubmits($qnid);
         $submit_count = Submit::count_answers($qnid);
         $page = ceil($submit_count / 15);
         if (count($submit) > 0) {
@@ -144,6 +144,7 @@ class ManagerController extends Controller{
 //        }
       //  dd($formanswers_special);
         return view('Manager.data', [
+            'submit' => $submit,
             'questions' => $questions,
             'editors' => $editors,
             'answers' => $formanswers_special,

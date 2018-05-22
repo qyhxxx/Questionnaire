@@ -48,6 +48,7 @@
                 </tbody>
 
             </table>
+            {!! $submit->links() !!}
             {{--{{$answers->links()}}--}}
             <div class="shadowL"></div>
             <div class="shadowR"></div>
