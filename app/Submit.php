@@ -114,7 +114,7 @@ class Submit extends Model {
     }
 
     public static function getSubmits($qnid){
-        $submit = self::where('qnid', $qnid)->paginate(15);
+        $submit = self::where('qnid', $qnid)->paginate(12);
         return $submit;
     }
 
