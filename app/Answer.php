@@ -76,7 +76,7 @@ class Answer extends Model {
                 $min = Question::getMinByQid($qid);
                 $max = Question::getMaxByQid($qid);
                 if ($min != null && $max != null) {
-                    if ($num <= $min || $num >= $max) {
+                    if ($num < $min || $num > $max) {
                         return -1;
                     }
                 }
