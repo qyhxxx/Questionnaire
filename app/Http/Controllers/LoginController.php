@@ -55,7 +55,7 @@ class LoginController extends Controller {
         }
         else {
             return response()->json([
-                'status' => 1
+                'status' => 0
             ]);
         }
     }
