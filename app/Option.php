@@ -120,4 +120,15 @@ class Option extends Model {
         ])->first()->problem;
         return $problem;
     }
+
+    public static function countProblemByQid($qid){
+        $problem = self::where('qid', $qid)->get();
+        $num = 0;
+        foreach ($problem as $val){
+            if($val->problem != null){
+                $num++;
+            }
+        }
+        return $num;
+    }
 }

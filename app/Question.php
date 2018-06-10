@@ -72,6 +72,11 @@ class Question extends Model {
             $questions[$i] = new \App\Helpers\question(
                 $data_questions[$i], $qcontents['options'], $qcontents['problems']
             );
+            if ($questions[$i]->question->qtype == 7 || $questions[$i]->question->qtype == 9){
+                foreach ($questions[$i]->problems as $key){
+                    $key->answer = '';
+                }
+            }
         }
         return $questions ?? null;
     }

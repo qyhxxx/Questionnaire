@@ -63,6 +63,15 @@ class Answer extends Model {
         $submit_answer = $data['answer'];
         $question = Question::getQuestionByQid($qid);
         $qtype = $question->qtype;
+        if ($question->isrequired){
+            if ($qtype == 7 || $qtype == 8 || $qtype == 9){
+                $num = count($data['answer']);
+                $problem_num = Option::countProblemByQid($qid);
+                if($num != $problem_num){
+                    return -1;
+                }
+            }
+        }
         if (self::getAnswerType($qtype) != 3) {
             unset($data['answer']);
         }

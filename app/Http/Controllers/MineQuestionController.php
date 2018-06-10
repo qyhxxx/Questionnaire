@@ -22,6 +22,7 @@ class MineQuestionController extends Controller
     //初始返回数据
     public function questionnaire(Request $request){
         $twt_name = $request->session()->get('data')['twt_name'];
+     //   $twt_name = 'hhh';
         $qnid = Editor::getQnid($twt_name);
         $questionnaire = null;
         for ($i = 0; $i < count($qnid); $i++) {
@@ -212,6 +213,7 @@ class MineQuestionController extends Controller
                 if(count($answer_ques[$keys]) >= 1) {
                     foreach ($answer_ques[$keys] as $qid => $info) {
                         if(count($answer_ques[$keys][$qid]) >= 1) {
+                            $finalanswer8 = array(array());
                             foreach ($answer_ques[$keys][$qid] as $num => $val1) {
                                 $question = Question::getonequestion($qnid, $val1['qid']);
                                 $qtype = $question['qtype'];
@@ -230,19 +232,16 @@ class MineQuestionController extends Controller
                                 }  elseif ($qtype == 6) {
                                     $finalanswer6[$num] = $val1['option'];
                                     $formanswers[$keys][$qid] = new answers($question, $finalanswer6, $qtype);
-                                } elseif ($qtype == 7 || $qtype == 8) {
-                                    $finalanswer7[$num] = [
-                                        'pkey' => $val1['pkey'],
-                                        'problem' => $val1['problem'],
-                                        'okey' => $val1['okey'],
-                                    ];
+                                } elseif ($qtype == 7) {
+                                    $finalanswer7[$num] = $val1['option'];
                                     $formanswers[$keys][$qid] = new answers($question, $finalanswer7, $qtype);
-                                } elseif ($qtype == 9) {
-                                    $finalanswer9[$num] = [
-                                        'pkey' => $val1['pkey'],
-                                        'problem' => $val1['problem'],
-                                        'answer' => $val1['answer'],
-                                    ];
+                                } elseif ($qtype == 8) {
+                                    $pkey = $val1['pkey']-1;
+                                    $finalanswer8[$pkey][] = $val1['option'];
+                                    $formanswers[$keys][$qid] = new answers($question, $finalanswer8, $qtype);
+                                    $formanswers[$keys][$qid]->answer = (array)$formanswers[$keys][$qid]->answer;
+                                }elseif ($qtype == 9) {
+                                    $finalanswer9[$num] = $val1['answer'];
                                     $formanswers[$keys][$qid] = new answers($question, $finalanswer9, $qtype);
                                 } elseif ($qtype == 10) {
                                     $finalanswer10[$num] = [
@@ -444,7 +443,7 @@ class MineQuestionController extends Controller
         $answer_final = [];
         $ques = Questionnaire::findOrFail($qnid);
         $creator_type = Usr::getTypeByName($ques['twt_name']);
-        $data = DB::select('SELECT b.sid, b.twt_name b_name, c.answer, d.topic, c.okey, c.option, d.qtype, b.created_at, b.real_name, e.user_number
+        $data = DB::select('SELECT b.sid, b.twt_name b_name, c.answer, d.topic, c.okey, c.option, c.problem, d.qtype, b.created_at, b.real_name, e.user_number
 FROM submits b 
 LEFT JOIN answers c ON b.sid = c.sid
 LEFT JOIN questions d ON c.qid = d.qid
@@ -467,8 +466,9 @@ AND b.qnid = ? ORDER BY b.sid, d.qid', [$qnid]);
                 continue;
             if(intval($v->qtype) == 0 || intval($v->qtype) == 1){
                 $v_topic = $v->topic;
-            }
-            else
+            } elseif(intval($v->qtype) == 7 || intval($v->qtype) == 8 || intval($v->qtype) == 9) {
+                $v_topic = $v->topic . $v->problem;
+            } else
                 $v_topic = $v->topic . $v->okey;
 
             if(!isset($topicMap[$v_topic])){
@@ -509,6 +509,7 @@ AND b.qnid = ? ORDER BY b.sid, d.qid', [$qnid]);
             });
         })->export('xls');
     }
+
 
 
 }

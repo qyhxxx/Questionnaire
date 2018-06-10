@@ -10,9 +10,9 @@ class question {
         $qtype = $data_question->qtype;
         if ($qtype == 10) {
             $this->answer = ['st' => '', 'nd' => ''];
-        } else if ($qtype == 1 || $qtype == 6 || $qtype == 8 || $qtype == 9) {
+        } else if ($qtype == 1 || $qtype == 6 || $qtype == 9) {
             $this->answer = array();
-        } else if ($qtype == 7) {
+        } else if ($qtype == 7 || $qtype == 8 ) {
             $this->answer = array(array());
         } else{
             $this->answer = '';

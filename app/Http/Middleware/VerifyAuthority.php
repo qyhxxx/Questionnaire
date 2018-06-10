@@ -20,6 +20,7 @@ class VerifyAuthority
     {
         $qnid = $request->route('id');
         $twt_name = $request->session()->get('data')['twt_name'];
+   //     $twt_name = 'hhh';
         $questionnaire = Editor::hasPower($qnid, $twt_name);
         if($questionnaire){
             return $next($request);

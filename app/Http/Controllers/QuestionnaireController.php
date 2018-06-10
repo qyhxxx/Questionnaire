@@ -29,6 +29,8 @@ class QuestionnaireController extends Controller
         $data_questions = $data['questions'] ?? null;
         $qcount = count($data_questions);
         $data_questionnaire['twt_name'] = $twt_name;
+    //    $twt_name = "hhh";
+    //    $data_questionnaire['twt_name'] = "hhh";
         $data_questionnaire['qcount'] = $qcount;
         $data_questionnaire['status'] = $status;
         $data_questionnaire['num'] = 0;
