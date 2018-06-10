@@ -64,18 +64,18 @@ class Answer extends Model {
         $question = Question::getQuestionByQid($qid);
         $qtype = $question->qtype;
         if ($question->isrequired){
-            if ($qtype == 7 || $qtype == 8 || $qtype == 9){
+            if ($qtype == 7 || $qtype == 8 || $qtype == 9) {
                 $num = count($data['answer']);
                 $problem_num = Option::countProblemByQid($qid);
                 if($num != $problem_num){
                     return -1;
                 }
             }
-            if ($qtype == 8){
+            if ($qtype == 8) {
                 $min = Question::getMinByQid($qid);
                 $max = Question::getMaxByQid($qid);
                 if ($min != null && $max != null) {
-                    foreach ($data['answer'] as $key => $val) {
+                    foreach ($submit_answer as $val) {
                         $num = count($val);
                         if ($num < $min || $num > $max) {
                             return -1;
