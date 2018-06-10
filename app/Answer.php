@@ -71,6 +71,16 @@ class Answer extends Model {
                     return -1;
                 }
             }
+            if ($qtype == 8){
+                $num = count($data['answer']);
+                $min = Question::getMinByQid($qid);
+                $max = Question::getMaxByQid($qid);
+                if ($min != null && $max != null) {
+                    if ($num <= $min || $num >= $max) {
+                        return -1;
+                    }
+                }
+            }
         }
         if (self::getAnswerType($qtype) != 3) {
             unset($data['answer']);

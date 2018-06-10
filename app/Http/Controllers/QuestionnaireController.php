@@ -187,6 +187,9 @@ class QuestionnaireController extends Controller
         $submit = Submit::add($data_submit);
         $sid = $submit->sid;
         $data_answers = $request->input('answers');
+        if (count($data_answers) == 0){
+            Submit::deleteBySid($sid);
+        }
         for ($i = 0; $i < count($data_answers); $i++) {
             $data_answer = $data_answers[$i];
             $answers[$i] = Answer::add($data_answer, $sid, $qnid, $i);
