@@ -114,14 +114,5 @@ class Question extends Model {
         return $data->topic;
     }
 
-    public static function getMinByQid($qid){
-        $data = self::where('qid', $qid)->get();
-        return $data->min;
-    }
-
-    public static function getMaxByQid($qid){
-        $data = self::where('qid', $qid)->get();
-        return $data->max;
-    }
 
 }

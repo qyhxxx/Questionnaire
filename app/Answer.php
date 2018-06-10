@@ -63,8 +63,8 @@ class Answer extends Model {
         $submit_answer = $data['answer'];
         $question = Question::getQuestionByQid($qid);
         $qtype = $question->qtype;
-        $min = Question::getMinByQid($qid);
-        $max = Question::getMaxByQid($qid);
+        $min = $question->min;
+        $max = $question->max;
         if ($question->isrequired){
             if ($qtype == 7 || $qtype == 8 || $qtype == 9) {
                 $num = count($data['answer']);
@@ -73,18 +73,18 @@ class Answer extends Model {
                     return -1;
                 }
             }
-            if ($qtype == 8) {
-                $i = $max;
-//                if ($min != null && $max != null) {
-////                    for ($i = 0; $i < count($data['answer']); $i++) {
-////                        $num = count($data['answer'][$i]);
-////                        if ($num < $min || $num > $max) {
-////                            return -1;
-////                        }
-////                    }
-//                    $i = $min;
-//                }
-            }
+//            if ($qtype == 8) {
+//
+////                if ($min != null && $max != null) {
+//////                    for ($i = 0; $i < count($data['answer']); $i++) {
+//////                        $num = count($data['answer'][$i]);
+//////                        if ($num < $min || $num > $max) {
+//////                            return -1;
+//////                        }
+//////                    }
+////                    $i = $min;
+////                }
+//            }
         }
         if (self::getAnswerType($qtype) != 3) {
             unset($data['answer']);
