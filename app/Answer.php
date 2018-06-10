@@ -75,8 +75,8 @@ class Answer extends Model {
                 $min = Question::getMinByQid($qid);
                 $max = Question::getMaxByQid($qid);
                 if ($min != null && $max != null) {
-                    foreach ($submit_answer as $val) {
-                        $num = count($val);
+                    for ($i = 0; $i < count($data['answer']); $i++) {
+                        $num = count($data['answer'][$i]);
                         if ($num < $min || $num > $max) {
                             return -1;
                         }
