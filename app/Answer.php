@@ -71,9 +71,9 @@ class Answer extends Model {
                     return -1;
                 }
             }
-//            if ($qtype == 8) {
-//                $min = Question::getMinByQid($qid);
-//                $max = Question::getMaxByQid($qid);
+            if ($qtype == 8) {
+                $min = Question::getMinByQid($qid);
+                $max = Question::getMaxByQid($qid);
 //                if ($min != null && $max != null) {
 ////                    for ($i = 0; $i < count($data['answer']); $i++) {
 ////                        $num = count($data['answer'][$i]);
@@ -83,7 +83,7 @@ class Answer extends Model {
 ////                    }
 //                    $i = $min;
 //                }
-//            }
+            }
         }
         if (self::getAnswerType($qtype) != 3) {
             unset($data['answer']);
