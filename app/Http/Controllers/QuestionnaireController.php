@@ -21,11 +21,6 @@ class QuestionnaireController extends Controller
         $data = $request->all();
         $twt_name = $request->session()->get('data')['twt_name'];
         $data_questionnaire = $data['questionnaire'] ?? null;
-        if ($data_questionnaire == null) {
-            return response()->json([
-                'message' => '请填写问卷标题'
-            ]);
-        }
         $data_questions = $data['questions'] ?? null;
         $qcount = count($data_questions);
         $data_questionnaire['twt_name'] = $twt_name;
@@ -61,11 +56,6 @@ class QuestionnaireController extends Controller
     {
         $data = $request->all();
         $data_questionnaire = $data['questionnaire'] ?? null;
-        if ($data_questionnaire == null) {
-            return response()->json([
-                'message' => '请填写问卷标题'
-            ]);
-        }
         $data_questions = $data['questions'] ?? null;
         $qcount = count($data_questions);
         $time = date('Y-m-d H:i:s', time());
